@@ -7,89 +7,95 @@ export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", handler);
-    return () => window.removeEventListener("scroll", handler);
+    const fn = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", fn);
+    return () => window.removeEventListener("scroll", fn);
   }, []);
 
   const links = [
     { href: "/stone-vault", label: "Stone Vault" },
     { href: "/limited-editions", label: "Limited Editions" },
     { href: "/appointment", label: "Appointments" },
-    { href: "/vip", label: "VIP Access" },
+    { href: "/vip", label: "VIP Circle" },
   ];
 
   return (
     <>
       <nav
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-700"
         style={{
-          background: scrolled
-            ? "rgba(21, 21, 21, 0.96)"
-            : "transparent",
-          backdropFilter: scrolled ? "blur(20px)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(184,138,114,0.15)" : "none",
+          background: scrolled ? "rgba(247,242,232,0.96)" : "transparent",
+          backdropFilter: scrolled ? "blur(24px)" : "none",
+          borderBottom: scrolled ? "1px solid rgba(196,150,90,0.2)" : "none",
         }}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between h-20">
+        <div className="container flex items-center justify-between h-20">
           {/* Logo */}
-          <Link href="/" className="flex flex-col leading-none">
+          <Link href="/" className="flex flex-col leading-none group">
             <span
-              className="heading-display text-ivory text-2xl"
-              style={{ color: "var(--ivory)" }}
+              className="display text-2xl transition-colors duration-300"
+              style={{ color: scrolled ? "var(--emerald)" : "var(--ivory)" }}
             >
               Lemure Blue
             </span>
-            <span className="label-luxury" style={{ fontSize: "0.5rem", marginTop: "2px" }}>
+            <span
+              className="eyebrow mt-0.5 transition-colors duration-300"
+              style={{
+                fontSize: "0.5rem",
+                color: scrolled ? "var(--champagne)" : "rgba(240,224,196,0.8)",
+              }}
+            >
               Lemurebleu.com
             </span>
           </Link>
 
-          {/* Desktop links */}
+          {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-10">
             {links.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
-                className="label-luxury hover:text-ivory transition-colors duration-300"
-                style={{ color: "rgba(248,243,234,0.7)" }}
+                className="eyebrow transition-colors duration-300 hover:opacity-100"
+                style={{
+                  color: scrolled ? "var(--emerald)" : "rgba(247,242,232,0.7)",
+                  fontSize: "0.58rem",
+                }}
               >
                 {l.label}
               </Link>
             ))}
           </div>
 
-          {/* CTA + hamburger */}
           <div className="flex items-center gap-4">
-            <Link href="/vip" className="hidden md:flex btn-primary py-2 px-6 text-xs">
+            <Link
+              href="/vip"
+              className="hidden md:flex btn-gold py-2.5 px-6"
+              style={{ fontSize: "0.58rem", letterSpacing: "0.22em" }}
+            >
               Join VIP
             </Link>
+            {/* Hamburger */}
             <button
-              className="md:hidden flex flex-col gap-1.5 p-2"
               onClick={() => setOpen(!open)}
+              className="md:hidden flex flex-col gap-1.5 p-2"
               aria-label="Menu"
             >
-              <span
-                className="block w-6 h-px transition-all duration-300"
-                style={{
-                  background: "var(--ivory)",
-                  transform: open ? "rotate(45deg) translate(3px, 3px)" : "none",
-                }}
-              />
-              <span
-                className="block w-6 h-px transition-all duration-300"
-                style={{
-                  background: "var(--ivory)",
-                  opacity: open ? 0 : 1,
-                }}
-              />
-              <span
-                className="block w-6 h-px transition-all duration-300"
-                style={{
-                  background: "var(--ivory)",
-                  transform: open ? "rotate(-45deg) translate(3px, -3px)" : "none",
-                }}
-              />
+              {[0, 1, 2].map((i) => (
+                <span
+                  key={i}
+                  className="block w-5 h-px transition-all duration-400"
+                  style={{
+                    background: scrolled ? "var(--emerald)" : "var(--ivory)",
+                    opacity: i === 1 && open ? 0 : 1,
+                    transform:
+                      i === 0 && open
+                        ? "rotate(45deg) translate(3px,4px)"
+                        : i === 2 && open
+                        ? "rotate(-45deg) translate(3px,-4px)"
+                        : "none",
+                  }}
+                />
+              ))}
             </button>
           </div>
         </div>
@@ -99,18 +105,18 @@ export default function Navigation() {
           <div
             className="md:hidden"
             style={{
-              background: "rgba(21,21,21,0.98)",
-              borderTop: "1px solid rgba(184,138,114,0.2)",
+              background: "var(--ivory)",
+              borderTop: "1px solid var(--stone)",
             }}
           >
-            <div className="px-6 py-8 flex flex-col gap-6">
+            <div className="container py-10 flex flex-col gap-8">
               {links.map((l) => (
                 <Link
                   key={l.href}
                   href={l.href}
                   onClick={() => setOpen(false)}
-                  className="heading-display text-2xl"
-                  style={{ color: "var(--ivory)" }}
+                  className="display text-3xl"
+                  style={{ color: "var(--emerald)" }}
                 >
                   {l.label}
                 </Link>
@@ -118,7 +124,7 @@ export default function Navigation() {
               <Link
                 href="/vip"
                 onClick={() => setOpen(false)}
-                className="btn-primary w-full text-center mt-4"
+                className="btn-gold w-full text-center mt-2"
               >
                 Join VIP List
               </Link>
@@ -127,15 +133,12 @@ export default function Navigation() {
         )}
       </nav>
 
-      {/* Sticky mobile bottom CTA */}
-      <div
-        className="md:hidden fixed bottom-0 left-0 right-0 z-50 flex"
-        style={{ borderTop: "1px solid rgba(184,138,114,0.2)" }}
-      >
+      {/* Mobile sticky bottom */}
+      <div className="mobile-cta">
         <Link
           href="/vip"
-          className="flex-1 py-4 text-center label-luxury text-ivory"
-          style={{ background: "var(--emerald)" }}
+          className="flex-1 py-4 text-center eyebrow"
+          style={{ background: "var(--emerald)", color: "var(--ivory)", fontSize: "0.55rem" }}
         >
           Join VIP
         </Link>
@@ -143,19 +146,15 @@ export default function Navigation() {
           href="https://wa.me/6500000000"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 py-4 text-center label-luxury text-ivory"
-          style={{ background: "var(--charcoal)", borderLeft: "1px solid rgba(184,138,114,0.2)" }}
+          className="flex-1 py-4 text-center eyebrow"
+          style={{ background: "var(--charcoal)", color: "var(--ivory)", fontSize: "0.55rem", borderLeft: "1px solid rgba(196,150,90,0.2)" }}
         >
           WhatsApp
         </a>
         <Link
           href="/appointment"
-          className="flex-1 py-4 text-center label-luxury"
-          style={{
-            background: "var(--champagne)",
-            color: "var(--ivory)",
-            borderLeft: "1px solid rgba(248,243,234,0.2)",
-          }}
+          className="flex-1 py-4 text-center eyebrow"
+          style={{ background: "var(--champagne)", color: "var(--ivory)", fontSize: "0.55rem", borderLeft: "1px solid rgba(247,242,232,0.2)" }}
         >
           Book Appt
         </Link>

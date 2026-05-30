@@ -4,22 +4,15 @@ import VipForm from "@/components/ui/VipForm";
 import Link from "next/link";
 
 const STONES = [
-  { name: "Blue Sapphire", origin: "Kashmir, India", carat: "5.2 ct", colour: "#1a3a5c" },
-  { name: "Colombian Emerald", origin: "Muzo, Colombia", carat: "3.8 ct", colour: "#1a4a2e" },
-  { name: "Burmese Ruby", origin: "Mogok, Myanmar", carat: "2.4 ct", colour: "#8b1a2a" },
-  { name: "Mahenge Spinel", origin: "Tanzania", carat: "4.1 ct", colour: "#9b3060" },
-  { name: "Tanzanite", origin: "Merelani Hills, Tanzania", carat: "7.6 ct", colour: "#3d2060" },
-  { name: "Paraíba Tourmaline", origin: "Brazil", carat: "1.9 ct", colour: "#007d8c" },
+  { name: "Blue Sapphire", origin: "Kashmir, India", carat: "5.20 ct", gem: "#1B3A5C" },
+  { name: "Colombian Emerald", origin: "Muzo, Colombia", carat: "3.80 ct", gem: "#1A4232" },
+  { name: "Burmese Ruby", origin: "Mogok, Myanmar", carat: "2.40 ct", gem: "#7A1E2E" },
+  { name: "Mahenge Spinel", origin: "Tanzania", carat: "4.10 ct", gem: "#7A2850" },
+  { name: "Tanzanite", origin: "Merelani Hills", carat: "7.60 ct", gem: "#2E1E60" },
+  { name: "Paraíba Tourmaline", origin: "Brazil", carat: "1.90 ct", gem: "#0A6B7A" },
 ];
 
-const TRUST_ITEMS = [
-  "Bespoke Jewellery",
-  "Rare Gemstones",
-  "Private Appointments",
-  "Limited Editions",
-  "Heirloom Redesign",
-  "VIP Preorders",
-];
+const TRUST = ["Bespoke Jewellery", "Rare Gemstones", "Private Appointments", "Limited Editions", "Heirloom Redesign", "VIP Preorders"];
 
 export default function HomePage() {
   return (
@@ -28,187 +21,140 @@ export default function HomePage() {
 
       {/* ── HERO ── */}
       <section
-        className="relative min-h-screen flex items-center justify-center overflow-hidden"
-        style={{ background: "linear-gradient(160deg, #002030 0%, #003F4F 50%, #001828 100%)" }}
+        className="relative min-h-screen flex flex-col justify-center overflow-hidden"
+        style={{ background: "linear-gradient(155deg, var(--emerald) 0%, #122C25 55%, #0D2020 100%)" }}
       >
-        {/* Ambient orbs */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 60% 60% at 70% 40%, rgba(184,138,114,0.12) 0%, transparent 70%), radial-gradient(ellipse 40% 50% at 20% 70%, rgba(0,63,79,0.8) 0%, transparent 60%)",
-          }}
-        />
+        {/* Subtle radial glow */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: "radial-gradient(ellipse 70% 60% at 65% 45%, rgba(196,150,90,0.08) 0%, transparent 65%)",
+        }} />
+        {/* Decorative corner lines */}
+        <div className="absolute top-32 left-12 w-px h-40 opacity-20" style={{ background: "linear-gradient(to bottom, transparent, var(--champagne), transparent)" }} />
+        <div className="absolute top-32 left-12 w-40 h-px opacity-20" style={{ background: "linear-gradient(to right, transparent, var(--champagne), transparent)" }} />
+        <div className="absolute bottom-24 right-12 w-px h-40 opacity-20" style={{ background: "linear-gradient(to bottom, transparent, var(--champagne), transparent)" }} />
+        <div className="absolute bottom-24 right-12 w-40 h-px opacity-20" style={{ background: "linear-gradient(to left, transparent, var(--champagne), transparent)" }} />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 text-center pt-32 pb-20">
-          {/* Monogram */}
-          <div
-            className="inline-flex items-center justify-center w-16 h-16 mb-8 mx-auto"
-            style={{
-              border: "1px solid rgba(184,138,114,0.4)",
-              background: "rgba(184,138,114,0.08)",
-            }}
-          >
-            <span
-              className="heading-display text-xl"
-              style={{ color: "var(--champagne)" }}
-            >
-              L
-            </span>
-          </div>
+        <div className="container pt-36 pb-24 relative z-10">
+          <div className="max-w-3xl">
+            <p className="eyebrow fade-up mb-8" style={{ color: "rgba(196,150,90,0.9)" }}>
+              Private Jewellery Maison · Singapore
+            </p>
 
-          <p className="label-luxury mb-6" style={{ color: "rgba(184,138,114,0.9)" }}>
-            Private Jewellery Maison · Est. Singapore
-          </p>
+            <h1 className="display fade-up-2 mb-4" style={{ fontSize: "clamp(4rem, 9vw, 8rem)", color: "var(--ivory)" }}>
+              Rare Gems.
+            </h1>
+            <h1 className="display-italic fade-up-3 mb-10" style={{ fontSize: "clamp(4rem, 9vw, 8rem)", color: "var(--champ-lt)" }}>
+              Refined Legacy.
+            </h1>
 
-          <h1
-            className="heading-display mb-6"
-            style={{
-              color: "var(--ivory)",
-              fontSize: "clamp(3.5rem, 8vw, 7rem)",
-            }}
-          >
-            Rare Gems.
-            <br />
-            <em>Refined Legacy.</em>
-          </h1>
+            <div className="fade-up-4 flex items-center gap-4 mb-10">
+              <span className="rule-champagne" style={{ opacity: 0.6 }} />
+              <p className="text-sm" style={{ color: "rgba(247,242,232,0.55)", fontWeight: 300, maxWidth: "420px", lineHeight: "1.8" }}>
+                A private jewellery maison for bespoke heirlooms, limited-edition gemstone pieces, and collectible rare stone ownership.
+              </p>
+            </div>
 
-          <div className="divider-champagne mx-auto mb-8" />
-
-          <p
-            className="text-base md:text-lg max-w-2xl mx-auto mb-12 leading-relaxed"
-            style={{ color: "rgba(248,243,234,0.65)", fontFamily: "var(--font-body)" }}
-          >
-            A private jewellery maison for bespoke heirlooms, limited-edition gemstone pieces,
-            and collectible rare stone ownership.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link href="/vip" className="btn-primary">
-              Join VIP List
-            </Link>
-            <Link href="/appointment" className="btn-outline">
-              Book Private Appointment
-            </Link>
+            <div className="fade-up-4 flex flex-col sm:flex-row gap-4">
+              <Link href="/vip" className="btn-gold">Join VIP List</Link>
+              <Link href="/appointment" className="btn-outline-ivory">Book Private Appointment</Link>
+            </div>
           </div>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-          <div
-            className="w-px h-12 animate-pulse"
-            style={{ background: "linear-gradient(to bottom, transparent, var(--champagne))" }}
-          />
+        {/* Scroll cue */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
+          <div className="w-px h-14" style={{ background: "linear-gradient(to bottom, transparent, rgba(196,150,90,0.6))" }} />
+          <p className="eyebrow" style={{ fontSize: "0.48rem", color: "rgba(196,150,90,0.5)" }}>Scroll</p>
         </div>
       </section>
 
-      {/* ── TRUST BAR ── */}
-      <section
-        className="py-5 overflow-hidden"
-        style={{ background: "var(--charcoal)", borderTop: "1px solid rgba(184,138,114,0.15)", borderBottom: "1px solid rgba(184,138,114,0.15)" }}
-      >
-        <div className="flex items-center gap-0 animate-[marquee_20s_linear_infinite]">
-          {[...TRUST_ITEMS, ...TRUST_ITEMS].map((item, i) => (
+      {/* ── TRUST MARQUEE ── */}
+      <section style={{ background: "var(--ivory-deep)", borderTop: "1px solid var(--stone)", borderBottom: "1px solid var(--stone)", overflow: "hidden" }}>
+        <div className="py-5 flex" style={{ animation: "marquee 22s linear infinite" }}>
+          {[...TRUST, ...TRUST].map((item, i) => (
             <div key={i} className="flex items-center flex-shrink-0 px-10">
-              <span className="label-luxury" style={{ color: "rgba(184,138,114,0.8)", whiteSpace: "nowrap" }}>
-                {item}
-              </span>
-              <span className="ml-10 w-1 h-1 rounded-full flex-shrink-0" style={{ background: "var(--champagne)", opacity: 0.4 }} />
+              <span className="eyebrow" style={{ color: "var(--champagne)", whiteSpace: "nowrap", fontSize: "0.58rem" }}>{item}</span>
+              <span className="ml-10 w-1 h-1 flex-shrink-0 rotate-45" style={{ background: "var(--champagne)", opacity: 0.4 }} />
             </div>
           ))}
         </div>
-        <style>{`
-          @keyframes marquee {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
-          }
-        `}</style>
       </section>
 
       {/* ── MAISON INTRO ── */}
-      <section className="section-padding" style={{ background: "var(--ivory)" }}>
-        <div className="max-w-4xl mx-auto px-6 lg:px-12 text-center">
-          <p className="label-luxury mb-6">The Maison</p>
-          <h2
-            className="heading-display mb-8"
-            style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)", color: "var(--charcoal)" }}
-          >
-            The Maison of Quiet Luxury
-          </h2>
-          <div className="divider-champagne mx-auto mb-8" />
-          <p
-            className="text-base md:text-lg leading-relaxed"
-            style={{ color: "rgba(21,21,21,0.65)", fontFamily: "var(--font-body)" }}
-          >
-            Lemure Blue creates jewellery designed not only to be worn, but to be inherited.
-            Each piece begins with rarity, provenance, and personal legacy.
-          </p>
+      <section className="section" style={{ background: "var(--ivory)" }}>
+        <div className="container">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+            {/* Text */}
+            <div>
+              <p className="eyebrow-dark mb-6">The Maison</p>
+              <h2 className="display mb-6" style={{ fontSize: "clamp(2.8rem, 5vw, 4.5rem)", color: "var(--emerald)" }}>
+                The Maison of<br /><em style={{ color: "var(--champagne)" }}>Quiet Luxury</em>
+              </h2>
+              <span className="rule-emerald block mb-8" />
+              <p className="leading-loose mb-4" style={{ color: "var(--warm-grey)", fontWeight: 300, fontSize: "0.95rem" }}>
+                Lemure Blue creates jewellery designed not only to be worn, but to be inherited. Each piece begins with rarity, provenance, and personal legacy.
+              </p>
+              <p className="leading-loose" style={{ color: "var(--warm-grey)", fontWeight: 300, fontSize: "0.95rem" }}>
+                Acquire beauty. Preserve legacy. Private access. Limited stones. Timeless value.
+              </p>
+            </div>
+
+            {/* Decorative panel */}
+            <div className="relative h-80 lg:h-[500px]" style={{ background: "var(--emerald)", border: "1px solid rgba(196,150,90,0.15)" }}>
+              {/* Inner frame */}
+              <div className="absolute inset-6" style={{ border: "1px solid rgba(196,150,90,0.15)" }} />
+              <div className="absolute inset-0 flex items-center justify-center flex-col gap-4">
+                {/* Diamond */}
+                <div className="w-24 h-24 rotate-45" style={{ border: "1px solid rgba(196,150,90,0.3)", background: "rgba(196,150,90,0.05)" }}>
+                  <div className="absolute inset-3" style={{ border: "1px solid rgba(196,150,90,0.2)" }} />
+                </div>
+                <p className="eyebrow mt-8" style={{ color: "rgba(196,150,90,0.6)", fontSize: "0.52rem" }}>
+                  Est. Singapore
+                </p>
+              </div>
+              {/* Corner accents */}
+              {["top-3 left-3","top-3 right-3","bottom-3 left-3","bottom-3 right-3"].map((pos,i) => (
+                <div key={i} className={`absolute ${pos} w-4 h-4`} style={{
+                  borderTop: i < 2 ? "1px solid rgba(196,150,90,0.4)" : "none",
+                  borderBottom: i >= 2 ? "1px solid rgba(196,150,90,0.4)" : "none",
+                  borderLeft: i % 2 === 0 ? "1px solid rgba(196,150,90,0.4)" : "none",
+                  borderRight: i % 2 === 1 ? "1px solid rgba(196,150,90,0.4)" : "none",
+                }} />
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
       {/* ── STONE VAULT PREVIEW ── */}
-      <section className="section-padding" style={{ background: "#F2EDE3" }}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+      <section className="section" style={{ background: "var(--ivory-deep)" }}>
+        <div className="container">
           <div className="text-center mb-16">
-            <p className="label-luxury mb-4">Curated Rarities</p>
-            <h2
-              className="heading-display"
-              style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", color: "var(--charcoal)" }}
-            >
+            <p className="eyebrow-dark mb-4">Curated Rarities</p>
+            <h2 className="display" style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)", color: "var(--emerald)" }}>
               The Stone Vault
             </h2>
+            <span className="rule-champagne mx-auto block mt-6" />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {STONES.map((stone) => (
-              <div
-                key={stone.name}
-                className="group relative overflow-hidden"
-                style={{
-                  background: "var(--ivory)",
-                  border: "1px solid var(--stone)",
-                  transition: "all 0.4s ease",
-                }}
-              >
-                {/* Colour swatch */}
-                <div
-                  className="w-full h-52 flex items-center justify-center relative overflow-hidden"
-                  style={{ background: stone.colour }}
-                >
-                  <div
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                    style={{
-                      background: "radial-gradient(ellipse at center, rgba(255,255,255,0.15) 0%, transparent 70%)",
-                    }}
-                  />
-                  <div
-                    className="w-20 h-20 rotate-45 group-hover:rotate-[90deg] transition-transform duration-700"
-                    style={{
-                      background: "rgba(255,255,255,0.12)",
-                      border: "1px solid rgba(255,255,255,0.2)",
-                    }}
-                  />
+              <div key={stone.name} className="group overflow-hidden" style={{ background: "var(--ivory)", border: "1px solid var(--stone)", transition: "all 0.4s ease" }}>
+                {/* Gem swatch */}
+                <div className="h-52 relative flex items-center justify-center overflow-hidden" style={{ background: stone.gem }}>
+                  <div className="w-20 h-20 rotate-45 transition-all duration-700 group-hover:rotate-90 group-hover:scale-110"
+                    style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)" }}>
+                    <div className="absolute inset-2" style={{ border: "1px solid rgba(255,255,255,0.1)" }} />
+                  </div>
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{ background: "radial-gradient(ellipse at center, rgba(196,150,90,0.12) 0%, transparent 70%)" }} />
                 </div>
-
                 {/* Info */}
                 <div className="p-6">
-                  <h3
-                    className="heading-display text-xl mb-1"
-                    style={{ color: "var(--charcoal)" }}
-                  >
-                    {stone.name}
-                  </h3>
-                  <p className="text-xs mb-1" style={{ color: "var(--champagne)" }}>
-                    {stone.origin}
-                  </p>
-                  <p className="text-xs mb-4" style={{ color: "rgba(21,21,21,0.5)" }}>
-                    {stone.carat} · Price on Request
-                  </p>
-                  <Link
-                    href="/appointment"
-                    className="btn-outline-dark w-full text-center py-2.5 text-xs"
-                    style={{ display: "block" }}
-                  >
+                  <h3 className="display text-xl mb-1" style={{ color: "var(--emerald)" }}>{stone.name}</h3>
+                  <p className="text-xs mb-1" style={{ color: "var(--champagne)", fontWeight: 300 }}>{stone.origin}</p>
+                  <p className="text-xs mb-4" style={{ color: "var(--warm-grey)", fontWeight: 300 }}>{stone.carat} · Price on Request</p>
+                  <Link href="/appointment" className="btn-outline-emerald w-full text-center block py-2.5" style={{ fontSize: "0.58rem", letterSpacing: "0.2em" }}>
                     Reserve Interest
                   </Link>
                 </div>
@@ -217,177 +163,125 @@ export default function HomePage() {
           </div>
 
           <div className="text-center mt-12">
-            <Link href="/stone-vault" className="btn-outline-dark">
-              View Stone Vault
-            </Link>
+            <Link href="/stone-vault" className="btn-outline-emerald">View Full Vault</Link>
           </div>
         </div>
       </section>
 
-      {/* ── LIMITED EDITION DROP ── */}
-      <section
-        className="section-padding"
-        style={{ background: "linear-gradient(160deg, #002030 0%, #003F4F 100%)" }}
-      >
-        <div className="max-w-4xl mx-auto px-6 lg:px-12">
-          <div className="glass-dark p-10 md:p-16 text-center">
-            <p className="label-luxury mb-6">Limited Edition</p>
-            <h2
-              className="heading-display mb-6"
-              style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)", color: "var(--ivory)" }}
-            >
-              The Blue Legacy Collection
+      {/* ── LIMITED EDITION ── */}
+      <section className="section relative overflow-hidden" style={{ background: "var(--emerald)" }}>
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: "radial-gradient(ellipse 50% 80% at 80% 50%, rgba(196,150,90,0.06) 0%, transparent 60%)"
+        }} />
+        <div className="container relative z-10">
+          <div className="max-w-2xl mx-auto text-center">
+            <p className="eyebrow mb-6" style={{ color: "rgba(196,150,90,0.8)" }}>Limited Edition</p>
+            <h2 className="display mb-6" style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)", color: "var(--ivory)" }}>
+              The Blue Legacy<br /><em style={{ color: "var(--champ-lt)" }}>Collection</em>
             </h2>
-            <div className="divider-champagne mx-auto mb-8" />
-            <p
-              className="text-base mb-10 leading-relaxed"
-              style={{ color: "rgba(248,243,234,0.65)" }}
-            >
+            <span className="rule-champagne mx-auto block mb-8" style={{ opacity: 0.5 }} />
+            <p className="mb-10 leading-loose" style={{ color: "rgba(247,242,232,0.6)", fontWeight: 300, fontSize: "0.9rem" }}>
               A limited preorder collection released only to VIP members before public access.
             </p>
 
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-12">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
               {[
-                "Limited Quantity",
-                "Reservation Deposit",
-                "Private Viewing",
-                "Certificate of Authenticity",
-                "Priority Stone Allocation",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="p-4 text-center"
-                  style={{ border: "1px solid rgba(184,138,114,0.2)", background: "rgba(184,138,114,0.05)" }}
-                >
-                  <p className="text-xs leading-relaxed" style={{ color: "rgba(248,243,234,0.7)" }}>
-                    {item}
-                  </p>
+                { n: "12", label: "Pieces Only" },
+                { n: "VIP", label: "Members First" },
+                { n: "COA", label: "Authenticated" },
+              ].map((s) => (
+                <div key={s.label} className="py-6 px-4" style={{ border: "1px solid rgba(196,150,90,0.2)", background: "rgba(196,150,90,0.04)" }}>
+                  <p className="display text-3xl mb-1" style={{ color: "var(--champ-lt)" }}>{s.n}</p>
+                  <p className="eyebrow" style={{ color: "rgba(247,242,232,0.45)", fontSize: "0.5rem" }}>{s.label}</p>
                 </div>
               ))}
             </div>
 
-            <Link href="/vip-preorder" className="btn-primary">
-              Register for VIP Preorder
-            </Link>
+            <Link href="/vip-preorder" className="btn-gold">Register for VIP Preorder</Link>
           </div>
         </div>
       </section>
 
       {/* ── BESPOKE HEIRLOOM ── */}
-      <section className="section-padding" style={{ background: "var(--ivory)" }}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <p className="label-luxury mb-6">Bespoke & Heirloom</p>
-              <h2
-                className="heading-display mb-6"
-                style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)", color: "var(--charcoal)" }}
-              >
-                Commission an Heirloom
+      <section className="section" style={{ background: "var(--ivory)" }}>
+        <div className="container">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+            {/* Left panel */}
+            <div className="relative h-72 lg:h-full min-h-80 order-2 lg:order-1" style={{ background: "var(--ivory-deep)", border: "1px solid var(--stone)" }}>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center">
+                  <p className="display" style={{ fontSize: "6rem", color: "var(--stone)", opacity: 0.5 }}>H</p>
+                  <p className="eyebrow-dark mt-2" style={{ fontSize: "0.5rem" }}>Heirloom by Design</p>
+                </div>
+              </div>
+              <div className="absolute inset-0" style={{ border: "8px solid var(--ivory)", outline: "1px solid var(--stone)" }} />
+            </div>
+
+            {/* Right content */}
+            <div className="order-1 lg:order-2">
+              <p className="eyebrow-dark mb-6">Bespoke & Heirloom</p>
+              <h2 className="display mb-6" style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)", color: "var(--emerald)" }}>
+                Commission<br /><em style={{ color: "var(--champagne)" }}>an Heirloom</em>
               </h2>
-              <div className="divider-champagne mb-8" />
-              <p className="text-base leading-relaxed mb-10" style={{ color: "rgba(21,21,21,0.6)" }}>
+              <span className="rule-champagne block mb-8" />
+              <p className="mb-10 leading-loose" style={{ color: "var(--warm-grey)", fontWeight: 300, fontSize: "0.9rem" }}>
                 Jewellery designed not only to be worn, but to be inherited.
               </p>
 
-              <div className="grid grid-cols-2 gap-3 mb-10">
-                {[
-                  "Bespoke Rings",
-                  "Bridal Jewellery",
-                  "Heirloom Redesign",
-                  "Gemstone Sourcing",
-                  "Private Collection",
-                  "Legacy Gifts",
-                ].map((item) => (
-                  <div
-                    key={item}
-                    className="flex items-center gap-2 py-3"
-                    style={{ borderBottom: "1px solid var(--stone)" }}
-                  >
-                    <div
-                      className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                      style={{ background: "var(--champagne)" }}
-                    />
-                    <span className="text-sm" style={{ color: "rgba(21,21,21,0.7)" }}>
-                      {item}
-                    </span>
+              <div className="space-y-0 mb-10">
+                {["Bespoke Rings", "Bridal Jewellery", "Heirloom Redesign", "Gemstone Sourcing", "Private Collection Pieces", "Legacy Gifts"].map((item) => (
+                  <div key={item} className="flex items-center gap-4 py-3.5" style={{ borderBottom: "1px solid var(--stone)" }}>
+                    <div className="w-1 h-1 rotate-45 flex-shrink-0" style={{ background: "var(--champagne)" }} />
+                    <span className="text-sm" style={{ color: "var(--emerald)", fontWeight: 300 }}>{item}</span>
                   </div>
                 ))}
               </div>
 
-              <Link href="/appointment" className="btn-primary">
-                Book a Private Consultation
-              </Link>
-            </div>
-
-            {/* Decorative panel */}
-            <div
-              className="relative h-96 lg:h-[600px] flex items-center justify-center"
-              style={{ background: "var(--emerald)", border: "1px solid rgba(184,138,114,0.2)" }}
-            >
-              <div className="text-center">
-                <p
-                  className="heading-display text-7xl md:text-9xl opacity-10"
-                  style={{ color: "var(--ivory)" }}
-                >
-                  L
-                </p>
-                <p className="label-luxury mt-4" style={{ color: "rgba(184,138,114,0.8)" }}>
-                  Acquire beauty.
-                  <br />
-                  Preserve legacy.
-                </p>
-              </div>
+              <Link href="/appointment" className="btn-gold">Book a Private Consultation</Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── VIP PREORDER CTA ── */}
-      <section className="section-padding" style={{ background: "var(--charcoal)" }}>
-        <div className="max-w-3xl mx-auto px-6 lg:px-12 text-center">
-          <p className="label-luxury mb-6">VIP Preorder</p>
-          <h2
-            className="heading-display mb-6"
-            style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", color: "var(--ivory)" }}
-          >
-            VIP Gemstone Preorder
-          </h2>
-          <div className="divider-champagne mx-auto mb-8" />
-          <p className="text-sm mb-4 leading-relaxed" style={{ color: "rgba(248,243,234,0.65)" }}>
-            Clients may place a preorder deposit to receive priority access to a future gemstone or jewellery allocation.
+      {/* ── VIP PREORDER BANNER ── */}
+      <section className="section-sm" style={{ background: "var(--champ-pale)", borderTop: "1px solid var(--stone)" }}>
+        <div className="container">
+          <div className="max-w-3xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+            <div>
+              <p className="eyebrow-dark mb-3">VIP Gemstone Preorder</p>
+              <h3 className="display text-3xl" style={{ color: "var(--emerald)" }}>
+                Reserve Priority Access
+              </h3>
+            </div>
+            <div className="flex-shrink-0">
+              <Link href="/vip-preorder" className="btn-gold">Place Preorder Deposit</Link>
+            </div>
+          </div>
+          <p className="text-xs text-center mt-8 leading-loose" style={{ color: "var(--warm-grey)", fontWeight: 300 }}>
+            Collectible gemstone preorder · Not a financial investment product · Priority access only
           </p>
-          <p className="text-xs mb-10 leading-relaxed" style={{ color: "rgba(248,243,234,0.4)" }}>
-            This is a collectible gemstone preorder and reservation model. This is not a guaranteed investment product
-            and does not promise financial returns.
-          </p>
-          <Link href="/vip-preorder" className="btn-primary">
-            Place VIP Preorder Deposit
-          </Link>
         </div>
       </section>
 
-      {/* ── VIP REGISTRATION FORM ── */}
-      <section
-        id="vip-form"
-        className="section-padding"
-        style={{ background: "linear-gradient(160deg, #002030 0%, #003F4F 100%)" }}
-      >
-        <div className="max-w-3xl mx-auto px-6 lg:px-12">
-          <div className="text-center mb-12">
-            <p className="label-luxury mb-6">Private Access</p>
-            <h2
-              className="heading-display mb-4"
-              style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)", color: "var(--ivory)" }}
-            >
-              Join the Private Circle
-            </h2>
-            <div className="divider-champagne mx-auto mb-8" />
-            <p className="text-sm" style={{ color: "rgba(248,243,234,0.6)" }}>
-              Private access. Limited stones. Timeless value.
-            </p>
+      {/* ── VIP FORM ── */}
+      <section className="section relative overflow-hidden" style={{ background: "var(--emerald)" }}>
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: "radial-gradient(ellipse 60% 50% at 30% 60%, rgba(196,150,90,0.07) 0%, transparent 65%)"
+        }} />
+        <div className="container relative z-10">
+          <div className="max-w-2xl mx-auto">
+            <div className="text-center mb-14">
+              <p className="eyebrow mb-6" style={{ color: "rgba(196,150,90,0.8)" }}>Private Access</p>
+              <h2 className="display mb-4" style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)", color: "var(--ivory)" }}>
+                Join the Private Circle
+              </h2>
+              <span className="rule-champagne mx-auto block mb-8" style={{ opacity: 0.5 }} />
+              <p className="text-sm" style={{ color: "rgba(247,242,232,0.5)", fontWeight: 300 }}>
+                Private access. Limited stones. Timeless value.
+              </p>
+            </div>
+            <VipForm dark />
           </div>
-          <VipForm dark />
         </div>
       </section>
 

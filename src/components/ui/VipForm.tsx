@@ -6,29 +6,19 @@ export default function VipForm({ dark = false }: { dark?: boolean }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const textClass = dark ? "text-ivory" : "text-charcoal";
-  const inputBg = dark
-    ? "bg-white/10 border-white/20 text-ivory placeholder:text-white/40 focus:border-champagne"
-    : "";
+  const fieldClass = dark ? "input-field-dark" : "input-field";
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     setError("");
-
-    const form = e.currentTarget;
-    const data = Object.fromEntries(new FormData(form));
-
+    const data = Object.fromEntries(new FormData(e.currentTarget));
     try {
-      const res = await fetch("/api/vip-register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) throw new Error("Submission failed");
+      const res = await fetch("/api/vip-register", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+      if (!res.ok) throw new Error();
       setSubmitted(true);
     } catch {
-      setError("Something went wrong. Please try again or contact us directly.");
+      setError("Something went wrong. Please contact hello@lemurebleu.com");
     } finally {
       setLoading(false);
     }
@@ -37,142 +27,69 @@ export default function VipForm({ dark = false }: { dark?: boolean }) {
   if (submitted) {
     return (
       <div className="text-center py-12">
-        <div className="divider-champagne mx-auto mb-8" />
-        <h3
-          className={`heading-display text-3xl mb-4 ${textClass}`}
-        >
+        <div className="w-12 h-12 rotate-45 mx-auto mb-8" style={{ border: "1px solid rgba(196,150,90,0.5)", background: "rgba(196,150,90,0.1)" }}>
+          <div className="absolute inset-0 flex items-center justify-center -rotate-45">
+            <span style={{ color: "var(--champagne)", fontSize: "1.2rem" }}>✓</span>
+          </div>
+        </div>
+        <h3 className="display text-2xl mb-4" style={{ color: dark ? "var(--ivory)" : "var(--emerald)" }}>
           Welcome to the Private Circle
         </h3>
-        <p
-          className="text-sm leading-relaxed max-w-md mx-auto"
-          style={{ color: dark ? "rgba(248,243,234,0.7)" : "rgba(21,21,21,0.6)" }}
-        >
-          Your private access request has been received. Our concierge will contact you shortly.
+        <p className="text-sm leading-loose" style={{ color: dark ? "rgba(247,242,232,0.55)" : "var(--warm-grey)", fontWeight: 300 }}>
+          Your private access request has been received.<br />Our concierge will contact you shortly.
         </p>
       </div>
     );
   }
 
+  const sel = (name: string, placeholder: string, opts: string[][]) => (
+    <div>
+      <select name={name} required className={fieldClass} style={{ width: "100%", background: "transparent", cursor: "pointer" }}>
+        <option value="">{placeholder}</option>
+        {opts.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+      </select>
+    </div>
+  );
+
   return (
-    <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div className="md:col-span-2 md:grid md:grid-cols-2 md:gap-4 flex flex-col gap-4">
-        <input
-          name="full_name"
-          required
-          placeholder="Full Name"
-          className={`input-luxury ${inputBg}`}
-          style={dark ? { background: "rgba(255,255,255,0.08)", borderColor: "rgba(255,255,255,0.2)", color: "var(--ivory)" } : {}}
-        />
-        <input
-          name="email"
-          type="email"
-          required
-          placeholder="Email Address"
-          className={`input-luxury ${inputBg}`}
-          style={dark ? { background: "rgba(255,255,255,0.08)", borderColor: "rgba(255,255,255,0.2)", color: "var(--ivory)" } : {}}
-        />
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <input name="full_name" required placeholder="Full Name" className={fieldClass} />
+        <input name="email" type="email" required placeholder="Email Address" className={fieldClass} />
+        <input name="phone" type="tel" required placeholder="Phone / WhatsApp" className={fieldClass} />
+        <input name="country" required placeholder="Country of Residence" className={fieldClass} />
       </div>
 
-      <input
-        name="phone"
-        type="tel"
-        required
-        placeholder="Phone / WhatsApp"
-        className="input-luxury"
-        style={dark ? { background: "rgba(255,255,255,0.08)", borderColor: "rgba(255,255,255,0.2)", color: "var(--ivory)" } : {}}
-      />
-      <input
-        name="country"
-        required
-        placeholder="Country of Residence"
-        className="input-luxury"
-        style={dark ? { background: "rgba(255,255,255,0.08)", borderColor: "rgba(255,255,255,0.2)", color: "var(--ivory)" } : {}}
-      />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {sel("preferred_contact", "Preferred Contact", [["whatsapp","WhatsApp"],["email","Email"],["phone","Phone"]])}
+        {sel("interest_type", "Interest Type", [
+          ["bespoke","Bespoke Jewellery"],["vip_preorder","VIP Preorder"],
+          ["rare_stone","Rare Stone Collection"],["heirloom","Heirloom Redesign"],
+          ["private_auction","Private Auction"],["trade","Trade / Consignment"],
+        ])}
+      </div>
 
-      <select
-        name="preferred_contact"
-        required
-        className="input-luxury"
-        style={dark ? { background: "rgba(255,255,255,0.08)", borderColor: "rgba(255,255,255,0.2)", color: "var(--ivory)" } : {}}
-      >
-        <option value="">Preferred Contact</option>
-        <option value="whatsapp">WhatsApp</option>
-        <option value="email">Email</option>
-        <option value="phone">Phone</option>
-      </select>
+      {sel("budget_range", "Budget Range", [
+        ["below_1k","Below SGD 1,000"],["1k_3k","SGD 1,000 – 3,000"],
+        ["3k_10k","SGD 3,000 – 10,000"],["10k_50k","SGD 10,000 – 50,000"],["50k_plus","SGD 50,000+"],
+      ])}
 
-      <select
-        name="interest_type"
-        required
-        className="input-luxury"
-        style={dark ? { background: "rgba(255,255,255,0.08)", borderColor: "rgba(255,255,255,0.2)", color: "var(--ivory)" } : {}}
-      >
-        <option value="">Interest Type</option>
-        <option value="bespoke">Bespoke Jewellery</option>
-        <option value="vip_preorder">VIP Preorder</option>
-        <option value="rare_stone">Rare Stone Collection</option>
-        <option value="heirloom">Heirloom Redesign</option>
-        <option value="private_auction">Private Auction</option>
-        <option value="trade">Trade / Consignment</option>
-      </select>
+      <textarea name="message" rows={3} placeholder="Message (optional)" className={fieldClass}
+        style={{ resize: "none", display: "block", width: "100%" }} />
 
-      <select
-        name="budget_range"
-        required
-        className="input-luxury md:col-span-2"
-        style={dark ? { background: "rgba(255,255,255,0.08)", borderColor: "rgba(255,255,255,0.2)", color: "var(--ivory)" } : {}}
-      >
-        <option value="">Budget Range</option>
-        <option value="below_1k">Below SGD 1,000</option>
-        <option value="1k_3k">SGD 1,000 – 3,000</option>
-        <option value="3k_10k">SGD 3,000 – 10,000</option>
-        <option value="10k_50k">SGD 10,000 – 50,000</option>
-        <option value="50k_plus">SGD 50,000+</option>
-      </select>
-
-      <textarea
-        name="message"
-        rows={4}
-        placeholder="Message (optional)"
-        className="input-luxury md:col-span-2 resize-none"
-        style={dark ? { background: "rgba(255,255,255,0.08)", borderColor: "rgba(255,255,255,0.2)", color: "var(--ivory)" } : {}}
-      />
-
-      <div className="md:col-span-2 flex items-start gap-3">
-        <input
-          type="checkbox"
-          name="consent"
-          id="consent"
-          required
-          className="mt-1 accent-champagne"
-        />
-        <label
-          htmlFor="consent"
-          className="text-xs leading-relaxed cursor-pointer"
-          style={{ color: dark ? "rgba(248,243,234,0.6)" : "rgba(21,21,21,0.55)" }}
-        >
-          I consent to receive marketing communications and private-client updates from Lemure Blue.
-          I understand my data will be handled in accordance with the{" "}
-          <a href="/privacy-policy" className="underline hover:text-champagne transition-colors">
-            Privacy Policy
-          </a>
-          .
+      <div className="flex items-start gap-3 pt-2">
+        <input type="checkbox" name="consent" id="consent_vip" required className="mt-1 flex-shrink-0" style={{ accentColor: "var(--champagne)" }} />
+        <label htmlFor="consent_vip" className="text-xs leading-loose cursor-pointer" style={{ color: dark ? "rgba(247,242,232,0.45)" : "var(--warm-grey)", fontWeight: 300 }}>
+          I consent to receive private-client updates from Lemure Blue in accordance with the{" "}
+          <a href="/privacy-policy" className="underline" style={{ color: dark ? "rgba(196,150,90,0.8)" : "var(--champagne)" }}>Privacy Policy</a>.
         </label>
       </div>
 
-      {error && (
-        <p className="md:col-span-2 text-sm text-red-400">{error}</p>
-      )}
+      {error && <p className="text-sm" style={{ color: "#e07070" }}>{error}</p>}
 
-      <div className="md:col-span-2">
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn-primary w-full"
-        >
-          {loading ? "Submitting..." : "Request VIP Access"}
-        </button>
-      </div>
+      <button type="submit" disabled={loading} className="btn-gold w-full" style={{ opacity: loading ? 0.6 : 1 }}>
+        {loading ? "Submitting..." : "Request VIP Access"}
+      </button>
     </form>
   );
 }
