@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
       const { Resend } = await import("resend");
       const resend = new Resend(process.env.RESEND_API_KEY);
       await resend.emails.send({
-        from: "Lemure Blue <noreply@lemurebleu.com>",
+        from: "Lemure Bleu <noreply@lemurebleu.com>",
         to: email,
         subject: "Your Private Appointment Request Has Been Received",
         html: `
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
               Your private appointment request has been received. Our concierge will contact you shortly to confirm availability.
             </p>
             <p style="color: #888; font-size: 12px; margin-top: 40px; border-top: 1px solid #D8D2C8; padding-top: 20px;">
-              Lemure Blue · Lemurebleu.com
+              Lemure Bleu · Lemurebleu.com
             </p>
           </div>
         `,

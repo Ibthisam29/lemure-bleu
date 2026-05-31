@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Lemure Blue | Rare Gemstone Jewellery & Bespoke Heirlooms",
+  title: "Lemure Bleu | Rare Gemstone Jewellery & Bespoke Heirlooms",
   description:
-    "Lemure Blue is a private luxury jewellery maison offering rare gemstones, bespoke heirlooms, limited-edition pieces, VIP preorders, and private gemstone appointments.",
+    "Lemure Bleu is a private luxury jewellery maison offering rare gemstones, bespoke heirlooms, limited-edition pieces, VIP preorders, and private gemstone appointments.",
   keywords: [
     "luxury jewellery Singapore",
     "bespoke jewellery Singapore",
@@ -17,11 +17,11 @@ export const metadata: Metadata = {
     "collectible gemstones",
   ],
   openGraph: {
-    title: "Lemure Blue | Rare Gemstone Jewellery & Bespoke Heirlooms",
+    title: "Lemure Bleu | Rare Gemstone Jewellery & Bespoke Heirlooms",
     description:
       "A private luxury jewellery maison for bespoke heirlooms and collectible rare stones.",
     url: "https://lemurebleu.com",
-    siteName: "Lemure Blue",
+    siteName: "Lemure Bleu",
     type: "website",
   },
 };

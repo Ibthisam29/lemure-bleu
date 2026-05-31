@@ -11,7 +11,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <h3 className="display mb-2" style={{ color: "var(--ivory)", fontSize: "2.2rem" }}>
-              Lemure Blue
+              Lemure Bleu
             </h3>
             <p className="eyebrow mb-8" style={{ color: "rgba(196,150,90,0.8)", fontSize: "0.5rem" }}>
               Private Jewellery Maison · Singapore
@@ -76,15 +76,15 @@ export default function Footer() {
         <div className="py-8 mb-8" style={{ borderTop: "1px solid rgba(196,150,90,0.12)", borderBottom: "1px solid rgba(196,150,90,0.12)" }}>
           <p className="text-xs leading-loose" style={{ color: "rgba(247,242,232,0.28)", fontWeight: 300 }}>
             <strong style={{ color: "rgba(247,242,232,0.4)", fontWeight: 400 }}>Disclaimer:</strong>{" "}
-            Lemure Blue provides access to collectible gemstones and bespoke jewellery. Gemstones are not guaranteed financial investments.
-            Lemure Blue does not guarantee appreciation, resale value, liquidity, profit, or investment return.
+            Lemure Bleu provides access to collectible gemstones and bespoke jewellery. Gemstones are not guaranteed financial investments.
+            Lemure Bleu does not guarantee appreciation, resale value, liquidity, profit, or investment return.
           </p>
         </div>
 
         {/* Legal */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <p className="text-xs" style={{ color: "rgba(247,242,232,0.25)", fontWeight: 300 }}>
-            © {new Date().getFullYear()} Lemure Blue. All rights reserved.
+            © {new Date().getFullYear()} Lemure Bleu. All rights reserved.
           </p>
           <div className="flex gap-8">
             {[

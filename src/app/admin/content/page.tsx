@@ -7,7 +7,7 @@ const CONTENT_FIELDS = [
   { key: "hero_cta_primary", label: "Primary CTA Text", defaultValue: "Join VIP List" },
   { key: "hero_cta_secondary", label: "Secondary CTA Text", defaultValue: "Book Private Appointment" },
   { key: "maison_title", label: "Maison Section Title", defaultValue: "The Maison of Quiet Luxury" },
-  { key: "maison_copy", label: "Maison Copy", defaultValue: "Lemure Blue creates jewellery designed not only to be worn, but to be inherited." },
+  { key: "maison_copy", label: "Maison Copy", defaultValue: "Lemure Bleu creates jewellery designed not only to be worn, but to be inherited." },
   { key: "footer_whatsapp", label: "WhatsApp Number", defaultValue: "+65 0000 0000" },
   { key: "footer_email", label: "Contact Email", defaultValue: "hello@lemurebleu.com" },
   { key: "footer_instagram", label: "Instagram Handle", defaultValue: "@lemureblue" },

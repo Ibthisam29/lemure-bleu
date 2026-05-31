@@ -36,7 +36,7 @@ export default function Navigation() {
               className="display text-2xl transition-colors duration-300"
               style={{ color: scrolled ? "var(--emerald)" : "var(--ivory)" }}
             >
-              Lemure Blue
+              Lemure Bleu
             </span>
             <span
               className="eyebrow mt-0.5 transition-colors duration-300"

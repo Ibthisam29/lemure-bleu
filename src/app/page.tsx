@@ -92,7 +92,7 @@ export default function HomePage() {
               </h2>
               <span className="rule-emerald block mb-8" />
               <p className="leading-loose mb-4" style={{ color: "var(--warm-grey)", fontWeight: 300, fontSize: "0.95rem" }}>
-                Lemure Blue creates jewellery designed not only to be worn, but to be inherited. Each piece begins with rarity, provenance, and personal legacy.
+                Lemure Bleu creates jewellery designed not only to be worn, but to be inherited. Each piece begins with rarity, provenance, and personal legacy.
               </p>
               <p className="leading-loose" style={{ color: "var(--warm-grey)", fontWeight: 300, fontSize: "0.95rem" }}>
                 Acquire beauty. Preserve legacy. Private access. Limited stones. Timeless value.

@@ -25,7 +25,7 @@ export function middleware(request: NextRequest) {
       return new NextResponse("Unauthorized", {
         status: 401,
         headers: {
-          "WWW-Authenticate": 'Basic realm="Lemure Blue Admin", charset="UTF-8"',
+          "WWW-Authenticate": 'Basic realm="Lemure Bleu Admin", charset="UTF-8"',
         },
       });
     }

@@ -80,7 +80,7 @@ export default function VipForm({ dark = false }: { dark?: boolean }) {
       <div className="flex items-start gap-3 pt-2">
         <input type="checkbox" name="consent" id="consent_vip" required className="mt-1 flex-shrink-0" style={{ accentColor: "var(--champagne)" }} />
         <label htmlFor="consent_vip" className="text-xs leading-loose cursor-pointer" style={{ color: dark ? "rgba(247,242,232,0.45)" : "var(--warm-grey)", fontWeight: 300 }}>
-          I consent to receive private-client updates from Lemure Blue in accordance with the{" "}
+          I consent to receive private-client updates from Lemure Bleu in accordance with the{" "}
           <a href="/privacy-policy" className="underline" style={{ color: dark ? "rgba(196,150,90,0.8)" : "var(--champagne)" }}>Privacy Policy</a>.
         </label>
       </div>

@@ -1,6 +1,6 @@
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
-export const metadata = { title: "Terms & Conditions | Lemure Blue" };
+export const metadata = { title: "Terms & Conditions | Lemure Bleu" };
 export default function Page() {
   return (
     <main>

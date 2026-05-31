@@ -34,7 +34,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         >
           <Link href="/admin" className="block">
             <p className="heading-display text-xl" style={{ color: "var(--ivory)" }}>
-              Lemure Blue
+              Lemure Bleu
             </p>
             <p className="label-luxury mt-1" style={{ fontSize: "0.5rem", color: "rgba(184,138,114,0.7)" }}>
               Admin OS

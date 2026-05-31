@@ -122,7 +122,7 @@ export default function VipPreorderPage() {
             <div className="p-6 mb-6" style={{ background:"var(--ivory-deep)", border:"1px solid var(--stone)" }}>
               <p className="eyebrow-dark mb-3" style={{ fontSize:"0.52rem" }}>Important Disclaimer</p>
               <p className="text-xs leading-loose" style={{ color:"var(--warm-grey)", fontWeight:300 }}>
-                Lemure Blue does not guarantee gemstone appreciation, resale value, profit, or investment return. Preorders provide priority access only, subject to availability and client approval.
+                Lemure Bleu does not guarantee gemstone appreciation, resale value, profit, or investment return. Preorders provide priority access only, subject to availability and client approval.
               </p>
             </div>
 

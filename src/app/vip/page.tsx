@@ -2,7 +2,7 @@ import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import VipForm from "@/components/ui/VipForm";
 
-export const metadata = { title: "VIP Private Circle | Lemure Blue" };
+export const metadata = { title: "VIP Private Circle | Lemure Bleu" };
 
 export default function VipPage() {
   return (

@@ -1,6 +1,6 @@
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
-export const metadata = { title: "Refund Policy | Lemure Blue" };
+export const metadata = { title: "Refund Policy | Lemure Bleu" };
 export default function Page() {
   return (
     <main>
