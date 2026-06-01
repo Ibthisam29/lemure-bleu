@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createAdminClient } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,53 +9,46 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const supabase = createAdminClient();
+    // Use anon key — RLS policy allows anon inserts on vip_leads
+    const { createClient } = await import("@supabase/supabase-js");
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+
     const { error } = await supabase.from("vip_leads").insert({
-      full_name,
-      email,
-      phone,
-      country,
-      preferred_contact,
-      interest_type,
-      budget_range,
-      message,
+      full_name, email, phone, country,
+      preferred_contact, interest_type, budget_range,
+      message: message || null,
       status: "new",
     });
 
-    if (error) throw error;
-
-    // Send notification email via Resend (optional, graceful fail)
-    try {
-      const { Resend } = await import("resend");
-      const resend = new Resend(process.env.RESEND_API_KEY);
-
-      await resend.emails.send({
-        from: "Lemure Bleu <noreply@lemurebleu.com>",
-        to: email,
-        subject: "Your Lemure Bleu VIP Request Has Been Received",
-        html: `
-          <div style="font-family: Georgia, serif; max-width: 560px; margin: 0 auto; padding: 40px; background: #F8F3EA;">
-            <h1 style="font-size: 28px; font-weight: 300; color: #151515; margin-bottom: 16px;">Welcome, ${full_name}</h1>
-            <p style="color: #003F4F; letter-spacing: 0.1em; font-size: 11px; text-transform: uppercase; margin-bottom: 24px;">Lemure Bleu · Private Jewellery Maison</p>
-            <p style="color: #555; line-height: 1.8; margin-bottom: 24px;">
-              Thank you for requesting private access to Lemure Bleu. Our concierge will review your request and contact you shortly.
-            </p>
-            <p style="color: #888; font-size: 12px; margin-top: 40px; border-top: 1px solid #D8D2C8; padding-top: 20px;">
-              Lemurebleu.com · Singapore
-            </p>
-          </div>
-        `,
-      });
-
-      await resend.emails.send({
-        from: "Lemure Bleu System <noreply@lemurebleu.com>",
-        to: process.env.ADMIN_EMAIL || "admin@lemurebleu.com",
-        subject: `New VIP Lead: ${full_name}`,
-        html: `<p>New VIP lead: <strong>${full_name}</strong> (${email})<br>Interest: ${interest_type}<br>Budget: ${budget_range}</p>`,
-      });
-    } catch {
-      // Email failure is non-critical
+    if (error) {
+      console.error("Supabase insert error:", JSON.stringify(error));
+      return NextResponse.json({ error: error.message }, { status: 500 });
     }
+
+    // Email notifications — graceful fail
+    try {
+      if (process.env.RESEND_API_KEY) {
+        const { Resend } = await import("resend");
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        await resend.emails.send({
+          from: "Lemure Bleu <noreply@lemurebleu.com>",
+          to: email,
+          subject: "Your Lemure Bleu VIP Request Has Been Received",
+          html: `<div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;padding:40px;background:#F7F2E8;"><h1 style="font-size:26px;font-weight:300;color:#1C3D35;margin-bottom:12px;">Welcome, ${full_name}</h1><p style="color:#C4965A;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:20px;">Lemure Bleu · Private Jewellery Maison</p><p style="color:#555;line-height:1.8;margin-bottom:20px;">Thank you for requesting private access to Lemure Bleu. Our concierge will review your request and contact you shortly.</p><p style="color:#aaa;font-size:12px;margin-top:40px;border-top:1px solid #CFC8BC;padding-top:20px;">Lemurebleu.com · Singapore</p></div>`,
+        });
+        if (process.env.ADMIN_EMAIL) {
+          await resend.emails.send({
+            from: "Lemure Bleu System <noreply@lemurebleu.com>",
+            to: process.env.ADMIN_EMAIL,
+            subject: `New VIP Lead: ${full_name}`,
+            html: `<p>New VIP lead from <strong>${full_name}</strong> (${email})<br>Phone: ${phone}<br>Country: ${country}<br>Interest: ${interest_type}<br>Budget: ${budget_range}</p><p><a href="https://lemurebleu.com/admin/leads">View in Admin →</a></p>`,
+          });
+        }
+      }
+    } catch { /* non-critical */ }
 
     return NextResponse.json({ success: true });
   } catch (err) {

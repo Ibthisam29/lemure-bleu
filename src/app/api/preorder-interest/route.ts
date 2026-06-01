@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createAdminClient } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,19 +9,27 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const supabase = createAdminClient();
+    const { createClient } = await import("@supabase/supabase-js");
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+
+    const amounts: Record<string, number> = { blue_entry: 300, maison: 1000, legacy: 3000 };
     const { error } = await supabase.from("preorders").insert({
-      full_name,
-      email,
+      full_name, email,
       phone: phone || null,
       preorder_tier,
-      amount: preorder_tier === "blue_entry" ? 300 : preorder_tier === "maison" ? 1000 : 3000,
+      amount: amounts[preorder_tier] || 0,
       currency: "SGD",
       payment_status: "pending_contact",
       allocation_status: "pending",
     });
 
-    if (error) throw error;
+    if (error) {
+      console.error("Preorder insert error:", JSON.stringify(error));
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
 
     const tierLabels: Record<string, string> = {
       blue_entry: "Blue Entry Allocation — SGD 300",
@@ -31,25 +38,29 @@ export async function POST(req: NextRequest) {
     };
 
     try {
-      const { Resend } = await import("resend");
-      const resend = new Resend(process.env.RESEND_API_KEY);
-      await resend.emails.send({
-        from: "Lemure Bleu <noreply@lemurebleu.com>",
-        to: email,
-        subject: "Your Lemure Bleu VIP Preorder Interest Has Been Received",
-        html: `<div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;padding:40px;background:#F8F3EA;"><h1 style="font-size:28px;font-weight:300;color:#151515;margin-bottom:16px;">Thank you, ${full_name}</h1><p style="color:#555;line-height:1.8;margin-bottom:16px;">Your preorder interest for the <strong>${tierLabels[preorder_tier]}</strong> has been received.</p><p style="color:#555;line-height:1.8;margin-bottom:24px;">Our concierge will contact you within 48 hours to confirm availability and provide payment details.</p><p style="color:#888;font-size:11px;margin-top:40px;border-top:1px solid #D8D2C8;padding-top:20px;">This registration does not guarantee financial return or gemstone appreciation.</p><p style="color:#888;font-size:12px;margin-top:12px;">Lemure Bleu · Lemurebleu.com</p></div>`,
-      });
-      await resend.emails.send({
-        from: "Lemure Bleu System <noreply@lemurebleu.com>",
-        to: process.env.ADMIN_EMAIL || "admin@lemurebleu.com",
-        subject: `New Preorder Interest: ${full_name} — ${tierLabels[preorder_tier]}`,
-        html: `<p>New preorder interest:<br><strong>Name:</strong> ${full_name}<br><strong>Email:</strong> ${email}<br><strong>Phone:</strong> ${phone || "Not provided"}<br><strong>Tier:</strong> ${tierLabels[preorder_tier]}</p><p>Contact this client to arrange payment.</p>`,
-      });
+      if (process.env.RESEND_API_KEY) {
+        const { Resend } = await import("resend");
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        await resend.emails.send({
+          from: "Lemure Bleu <noreply@lemurebleu.com>",
+          to: email,
+          subject: "Your Lemure Bleu VIP Preorder Interest Has Been Received",
+          html: `<div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;padding:40px;background:#F7F2E8;"><h1 style="font-size:26px;font-weight:300;color:#1C3D35;margin-bottom:12px;">Thank you, ${full_name}</h1><p style="color:#555;line-height:1.8;margin-bottom:16px;">Your preorder interest for the <strong>${tierLabels[preorder_tier]}</strong> has been received.</p><p style="color:#555;line-height:1.8;margin-bottom:20px;">Our concierge will contact you within 48 hours with payment details.</p><p style="color:#aaa;font-size:11px;margin-top:40px;border-top:1px solid #CFC8BC;padding-top:16px;">This does not guarantee financial return or gemstone appreciation.</p></div>`,
+        });
+        if (process.env.ADMIN_EMAIL) {
+          await resend.emails.send({
+            from: "Lemure Bleu System <noreply@lemurebleu.com>",
+            to: process.env.ADMIN_EMAIL,
+            subject: `New Preorder Interest: ${full_name} — ${tierLabels[preorder_tier]}`,
+            html: `<p>New preorder:<br><strong>${full_name}</strong> (${email})<br>Phone: ${phone || "N/A"}<br>Tier: ${tierLabels[preorder_tier]}</p><p><a href="https://lemurebleu.com/admin/preorders">View in Admin →</a></p>`,
+          });
+        }
+      }
     } catch { /* non-critical */ }
 
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error("Preorder interest error:", err);
+    console.error("Preorder error:", err);
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }
