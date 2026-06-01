@@ -24,7 +24,7 @@ export default async function AdminPurchasesPage() {
           <h1 style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"2.2rem", fontWeight:300, color:"#1C3D35" }}>Purchase Records</h1>
           <p style={{ fontSize:"0.75rem", color:"#8C857A", fontWeight:300, marginTop:"0.25rem" }}>All orders, bookings, and consultations</p>
         </div>
-        <Link href="/admin/purchases/new" style={{ padding:"0.6rem 1.5rem", background:"#C4965A", color:"var(--ivory)", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", textDecoration:"none", fontFamily:"Jost,sans-serif" }}>
+        <Link href="/admin/purchases/new" style={{ padding:"0.6rem 1.5rem", background:"#C4965A", color:"#F7F2E8", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", textDecoration:"none", fontFamily:"Jost,sans-serif" }}>
           + Add Record
         </Link>
       </div>

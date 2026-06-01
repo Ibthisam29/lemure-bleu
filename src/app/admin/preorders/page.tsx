@@ -11,7 +11,7 @@ async function getPreorders(): Promise<Preorder[]> {
 }
 
 const ALLOCATION_COLORS: Record<string, string> = {
-  pending: "#7ec8e3", allocated: "#e3c87e", in_consultation: "var(--champagne)", fulfilled: "#7eca8e", refunded: "#888",
+  pending: "#7ec8e3", allocated: "#e3c87e", in_consultation: "#C4965A", fulfilled: "#7eca8e", refunded: "#888",
 };
 const TIER_LABELS: Record<string, string> = {
   blue_entry: "Blue Entry (SGD 300)", maison: "Maison (SGD 1,000)", legacy: "Legacy (SGD 3,000)",
@@ -25,14 +25,14 @@ export default async function AdminPreordersPage() {
       <div className="mb-8 flex items-center justify-between">
         <div>
           <p className="label-luxury mb-2" style={{ color: "rgba(184,138,114,0.7)" }}>Deposits</p>
-          <h1 className="heading-display text-3xl" style={{ color: "var(--ivory)" }}>Preorders ({preorders.length})</h1>
+          <h1 className="heading-display text-3xl" style={{ color: "#F7F2E8" }}>Preorders ({preorders.length})</h1>
         </div>
         <div className="text-right">
           <p className="label-luxury" style={{ fontSize: "0.55rem", color: "rgba(184,138,114,0.6)" }}>Confirmed Revenue</p>
           <p className="heading-display text-2xl" style={{ color: "#C4965A" }}>SGD {totalRevenue.toLocaleString()}</p>
         </div>
       </div>
-      <div style={{ overflowX:"auto", background:"#FFFFFF", border:"1px solid #CFC8BC" }}>
+      <div style={{ overflowX:"auto", background:"#FFFFFF", border:"1px solid #CFC8BC", borderRadius:0 }}>
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
             <tr style={{ borderBottom: "1px solid #CFC8BC" }}>
@@ -45,7 +45,7 @@ export default async function AdminPreordersPage() {
           <tbody>
             {preorders.map(p => (
               <tr key={p.id} style={{ borderBottom: "1px solid rgba(28,61,53,0.04)" }}>
-                <td className="py-3 px-3 text-sm" style={{ color: "var(--ivory)" }}>{p.full_name}</td>
+                <td className="py-3 px-3 text-sm" style={{ color: "#F7F2E8" }}>{p.full_name}</td>
                 <td className="py-3 px-3 text-xs" style={{ color: "rgba(28,61,53,0.75)" }}>{p.email}</td>
                 <td className="py-3 px-3 text-xs" style={{ color: "rgba(28,61,53,0.75)" }}>{TIER_LABELS[p.preorder_tier] || p.preorder_tier}</td>
                 <td className="py-3 px-3 text-xs font-medium" style={{ color: "#C4965A" }}>SGD {p.amount.toLocaleString()}</td>

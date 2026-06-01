@@ -52,7 +52,7 @@ export default function AdminSectionsPage() {
       {loading ? <p style={{ color:"#8C857A", fontSize:"0.8rem" }}>Loading…</p> : (
         <div style={{ display:"flex", flexDirection:"column", gap:"1rem" }}>
           {sections.map(s => (
-            <div key={s.id} style={{ background:"#FFFFFF", border:`1px solid ${s.visible?"var(--stone)":"rgba(196,150,90,0.3)"}`, padding:"1.5rem", transition:"all 0.2s", opacity:s.visible?1:0.55 }}>
+            <div key={s.id} style={{ background:"#FFFFFF", border:`1px solid ${s.visible?"#CFC8BC":"rgba(196,150,90,0.3)"}`, padding:"1.5rem", transition:"all 0.2s", opacity:s.visible?1:0.55 }}>
               <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom: editing===s.id?"1.5rem":"0" }}>
                 <div>
                   <p style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"1.2rem", color:"#1C3D35", fontWeight:300 }}>{LABELS[s.section_key]||s.section_key}</p>
@@ -62,7 +62,7 @@ export default function AdminSectionsPage() {
                   {/* Visible toggle */}
                   <label style={{ display:"flex", alignItems:"center", gap:"0.4rem", cursor:"pointer" }}>
                     <div onClick={()=>toggleVisible(s.id,!s.visible)}
-                      style={{ width:"36px", height:"18px", borderRadius:"9px", background:s.visible?"var(--emerald)":"var(--stone)", position:"relative", cursor:"pointer", transition:"background 0.2s" }}>
+                      style={{ width:"36px", height:"18px", borderRadius:"9px", background:s.visible?"#1C3D35":"#CFC8BC", position:"relative", cursor:"pointer", transition:"background 0.2s" }}>
                       <div style={{ position:"absolute", top:"2px", left:s.visible?"18px":"2px", width:"14px", height:"14px", borderRadius:"50%", background:"white", transition:"left 0.2s" }} />
                     </div>
                     <span style={{ fontSize:"0.65rem", color:"#8C857A", fontWeight:300 }}>{s.visible?"Visible":"Hidden"}</span>
@@ -91,7 +91,7 @@ export default function AdminSectionsPage() {
                     </div>
                   </div>
                   <button onClick={()=>saveEdit(s.id)} disabled={saving===s.id}
-                    style={{ padding:"0.6rem 1.5rem", background:"#C4965A", color:"var(--ivory)", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", border:"none", cursor:"pointer", fontFamily:"Jost,sans-serif", opacity:saving===s.id?0.6:1 }}>
+                    style={{ padding:"0.6rem 1.5rem", background:"#C4965A", color:"#F7F2E8", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", border:"none", cursor:"pointer", fontFamily:"Jost,sans-serif", opacity:saving===s.id?0.6:1 }}>
                     {saving===s.id?"Saving…":"Save Changes"}
                   </button>
                 </div>

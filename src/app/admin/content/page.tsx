@@ -38,7 +38,7 @@ export default function AdminContentPage() {
   const inputStyle = {
     background: "rgba(28,61,53,0.05)",
     border: "1px solid rgba(184,138,114,0.2)",
-    color: "var(--ivory)",
+    color: "#F7F2E8",
     padding: "0.5rem 0.75rem",
     fontSize: "0.8rem",
     width: "100%",
@@ -49,7 +49,7 @@ export default function AdminContentPage() {
     <div>
       <div className="mb-8">
         <p className="label-luxury mb-2" style={{ color: "rgba(184,138,114,0.7)" }}>CMS</p>
-        <h1 className="heading-display text-3xl" style={{ color: "var(--ivory)" }}>Content Management</h1>
+        <h1 className="heading-display text-3xl" style={{ color: "#F7F2E8" }}>Content Management</h1>
       </div>
 
       <div className="max-w-2xl space-y-5">

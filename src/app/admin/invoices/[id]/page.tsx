@@ -31,7 +31,7 @@ export default async function InvoiceDetailPage({ params }:{ params:{ id:string 
             {invoice.status}
           </span>
           <Link href={`/pay/${invoice.id}`} target="_blank"
-            style={{ padding:"0.5rem 1.25rem", background:"#C4965A", color:"var(--ivory)", fontSize:"0.6rem", letterSpacing:"0.18em", textTransform:"uppercase", textDecoration:"none", fontFamily:"Jost,sans-serif" }}>
+            style={{ padding:"0.5rem 1.25rem", background:"#C4965A", color:"#F7F2E8", fontSize:"0.6rem", letterSpacing:"0.18em", textTransform:"uppercase", textDecoration:"none", fontFamily:"Jost,sans-serif" }}>
             Open QR Payment Page
           </Link>
           <Link href="/admin/invoices/new"
@@ -122,7 +122,7 @@ export default async function InvoiceDetailPage({ params }:{ params:{ id:string 
             {payUrl}
           </code>
           <Link href={`/pay/${invoice.id}`} target="_blank"
-            style={{ padding:"0.5rem 1.25rem", background:"#1C3D35", color:"var(--ivory)", fontSize:"0.6rem", letterSpacing:"0.18em", textTransform:"uppercase", textDecoration:"none", fontFamily:"Jost,sans-serif", flexShrink:0 }}>
+            style={{ padding:"0.5rem 1.25rem", background:"#1C3D35", color:"#F7F2E8", fontSize:"0.6rem", letterSpacing:"0.18em", textTransform:"uppercase", textDecoration:"none", fontFamily:"Jost,sans-serif", flexShrink:0 }}>
             Open ↗
           </Link>
         </div>

@@ -20,9 +20,9 @@ export default async function AdminAppointmentsPage() {
     <div>
       <div className="mb-8">
         <p className="label-luxury mb-2" style={{ color: "rgba(184,138,114,0.7)" }}>Calendar</p>
-        <h1 className="heading-display text-3xl" style={{ color: "var(--ivory)" }}>Appointments ({appointments.length})</h1>
+        <h1 className="heading-display text-3xl" style={{ color: "#F7F2E8" }}>Appointments ({appointments.length})</h1>
       </div>
-      <div style={{ overflowX:"auto", background:"#FFFFFF", border:"1px solid #CFC8BC" }}>
+      <div style={{ overflowX:"auto", background:"#FFFFFF", border:"1px solid #CFC8BC", borderRadius:0 }}>
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
             <tr style={{ borderBottom: "1px solid #CFC8BC" }}>
@@ -36,7 +36,7 @@ export default async function AdminAppointmentsPage() {
             {appointments.map(appt => (
               <tr key={appt.id} style={{ borderBottom: "1px solid rgba(28,61,53,0.04)" }}>
                 <td className="py-3 px-3">
-                  <p className="text-sm" style={{ color: "var(--ivory)" }}>{appt.full_name}</p>
+                  <p className="text-sm" style={{ color: "#F7F2E8" }}>{appt.full_name}</p>
                   <p className="text-xs mt-0.5" style={{ color: "#8C857A" }}>{appt.phone}</p>
                 </td>
                 <td className="py-3 px-3">

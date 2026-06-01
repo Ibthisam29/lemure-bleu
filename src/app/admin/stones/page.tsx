@@ -45,7 +45,7 @@ export default function AdminStonesPage() {
   const inputStyle = {
     background: "rgba(28,61,53,0.05)",
     border: "1px solid rgba(184,138,114,0.2)",
-    color: "var(--ivory)",
+    color: "#F7F2E8",
     padding: "0.5rem 0.75rem",
     fontSize: "0.8rem",
     width: "100%",
@@ -57,7 +57,7 @@ export default function AdminStonesPage() {
       <div className="mb-8 flex items-center justify-between">
         <div>
           <p className="label-luxury mb-2" style={{ color: "rgba(184,138,114,0.7)" }}>CMS</p>
-          <h1 className="heading-display text-3xl" style={{ color: "var(--ivory)" }}>
+          <h1 className="heading-display text-3xl" style={{ color: "#F7F2E8" }}>
             Stone Vault ({stones.length})
           </h1>
         </div>
@@ -72,7 +72,7 @@ export default function AdminStonesPage() {
       {/* Add form */}
       {showForm && (
         <div className="mb-8 p-6" style={{ background: "#FFFFFF", border: "1px solid #CFC8BC" }}>
-          <h3 className="text-sm mb-6" style={{ color: "var(--ivory)" }}>Add New Stone</h3>
+          <h3 className="text-sm mb-6" style={{ color: "#F7F2E8" }}>Add New Stone</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {[
               ["stone_name", "Stone Name *"],
@@ -155,7 +155,7 @@ export default function AdminStonesPage() {
             >
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h3 className="text-sm font-medium" style={{ color: "var(--ivory)" }}>{stone.stone_name}</h3>
+                  <h3 className="text-sm font-medium" style={{ color: "#F7F2E8" }}>{stone.stone_name}</h3>
                   <p className="text-xs mt-0.5" style={{ color: "#8C857A" }}>{stone.origin}</p>
                 </div>
                 <span

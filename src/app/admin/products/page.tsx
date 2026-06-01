@@ -101,7 +101,7 @@ export default function AdminProductsPage() {
           <p style={{ fontSize:"0.75rem", color:"#8C857A", fontWeight:300, marginTop:"0.25rem" }}>Post products with images and videos directly to the website</p>
         </div>
         <button onClick={()=>{setShowForm(!showForm);setEditId(null);setForm(empty);}}
-          style={{ padding:"0.6rem 1.5rem", background:"#C4965A", color:"var(--ivory)", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", border:"none", cursor:"pointer", fontFamily:"Jost,sans-serif" }}>
+          style={{ padding:"0.6rem 1.5rem", background:"#C4965A", color:"#F7F2E8", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", border:"none", cursor:"pointer", fontFamily:"Jost,sans-serif" }}>
           {showForm ? "Cancel" : "+ Add Product"}
         </button>
       </div>
@@ -185,14 +185,14 @@ export default function AdminProductsPage() {
           <div style={{ display:"flex", gap:"2rem", marginBottom:"1.5rem" }}>
             {[["featured","Featured on homepage"],["visible","Visible on website"]].map(([key,lbl])=>(
               <label key={key} style={{ display:"flex", alignItems:"center", gap:"0.5rem", cursor:"pointer" }}>
-                <input type="checkbox" checked={form[key as "featured"|"visible"]} onChange={e=>setForm(p=>({...p,[key]:e.target.checked}))} style={{ accentColor:"var(--champagne)" }} />
+                <input type="checkbox" checked={form[key as "featured"|"visible"]} onChange={e=>setForm(p=>({...p,[key]:e.target.checked}))} style={{ accentColor:"#C4965A" }} />
                 <span style={{ fontSize:"0.75rem", color:"#8C857A", fontWeight:300 }}>{lbl}</span>
               </label>
             ))}
           </div>
 
           <button onClick={handleSave} disabled={saving||!form.title}
-            style={{ padding:"0.75rem 2rem", background:"#C4965A", color:"var(--ivory)", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", border:"none", cursor:"pointer", fontFamily:"Jost,sans-serif", opacity:saving?0.6:1 }}>
+            style={{ padding:"0.75rem 2rem", background:"#C4965A", color:"#F7F2E8", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", border:"none", cursor:"pointer", fontFamily:"Jost,sans-serif", opacity:saving?0.6:1 }}>
             {saving ? "Saving…" : editId ? "Update Product" : "Publish Product"}
           </button>
         </div>

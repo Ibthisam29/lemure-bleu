@@ -137,7 +137,7 @@ export default function NewInvoicePage() {
       {/* Actions */}
       <div style={{ display:"flex", gap:"1rem" }}>
         <button onClick={()=>handleSave("unpaid")} disabled={saving||!form.client_name||!form.client_email}
-          style={{ padding:"0.875rem 2.5rem", background:"#C4965A", color:"var(--ivory)", fontSize:"0.62rem", letterSpacing:"0.22em", textTransform:"uppercase", border:"none", cursor:"pointer", fontFamily:"Jost,sans-serif", opacity:saving?0.6:1 }}>
+          style={{ padding:"0.875rem 2.5rem", background:"#C4965A", color:"#F7F2E8", fontSize:"0.62rem", letterSpacing:"0.22em", textTransform:"uppercase", border:"none", cursor:"pointer", fontFamily:"Jost,sans-serif", opacity:saving?0.6:1 }}>
           {saving?"Saving…":"Create & Send Invoice"}
         </button>
         <button onClick={()=>handleSave("draft")} disabled={saving}

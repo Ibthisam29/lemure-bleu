@@ -48,7 +48,7 @@ export default function AdminCollectionsPage() {
   const inputStyle = {
     background: "rgba(28,61,53,0.05)",
     border: "1px solid rgba(184,138,114,0.2)",
-    color: "var(--ivory)",
+    color: "#F7F2E8",
     padding: "0.5rem 0.75rem",
     fontSize: "0.8rem",
     width: "100%",
@@ -60,7 +60,7 @@ export default function AdminCollectionsPage() {
       <div className="mb-8 flex items-center justify-between">
         <div>
           <p className="label-luxury mb-2" style={{ color: "rgba(184,138,114,0.7)" }}>CMS</p>
-          <h1 className="heading-display text-3xl" style={{ color: "var(--ivory)" }}>
+          <h1 className="heading-display text-3xl" style={{ color: "#F7F2E8" }}>
             Collections ({collections.length})
           </h1>
         </div>
@@ -71,7 +71,7 @@ export default function AdminCollectionsPage() {
 
       {showForm && (
         <div className="mb-8 p-6" style={{ background: "#FFFFFF", border: "1px solid #CFC8BC" }}>
-          <h3 className="text-sm mb-6" style={{ color: "var(--ivory)" }}>New Collection</h3>
+          <h3 className="text-sm mb-6" style={{ color: "#F7F2E8" }}>New Collection</h3>
           <div className="grid grid-cols-2 gap-3">
             <input placeholder="Collection Name *" value={form.collection_name}
               onChange={e => setForm(p => ({ ...p, collection_name: e.target.value }))} style={inputStyle} className="col-span-2" />
@@ -118,7 +118,7 @@ export default function AdminCollectionsPage() {
             <div key={col.id} className="p-5 flex items-center justify-between"
               style={{ background: "#FFFFFF", border: "1px solid #CFC8BC" }}>
               <div>
-                <h3 className="text-sm font-medium mb-1" style={{ color: "var(--ivory)" }}>{col.collection_name}</h3>
+                <h3 className="text-sm font-medium mb-1" style={{ color: "#F7F2E8" }}>{col.collection_name}</h3>
                 <p className="text-xs" style={{ color: "#8C857A" }}>
                   {col.quantity_available}/{col.quantity_total} available · {col.price_range}
                 </p>
