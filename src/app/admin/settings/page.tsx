@@ -10,9 +10,9 @@ export default function AdminSettingsPage() {
 
       <div className="max-w-2xl space-y-8">
         {/* Environment Variables Info */}
-        <div className="p-6" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,138,114,0.12)" }}>
+        <div className="p-6" style={{ background: "var(--ivory)", border: "1px solid rgba(184,138,114,0.12)" }}>
           <h3 className="text-sm font-medium mb-4" style={{ color: "var(--ivory)" }}>Environment Variables</h3>
-          <p className="text-xs leading-relaxed mb-4" style={{ color: "rgba(248,243,234,0.5)" }}>
+          <p className="text-xs leading-relaxed mb-4" style={{ color: "var(--warm-grey)" }}>
             Configure the following in your hosting environment (Vercel / Netlify) or <code className="px-1" style={{ background: "rgba(255,255,255,0.1)" }}>.env.local</code> file:
           </p>
           <div className="space-y-2">
@@ -28,32 +28,32 @@ export default function AdminSettingsPage() {
               "NEXT_PUBLIC_SITE_URL",
             ].map(key => (
               <div key={key} className="flex items-center justify-between py-2"
-                style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                style={{ borderBottom: "1px solid rgba(28,61,53,0.05)" }}>
                 <code className="text-xs" style={{ color: "var(--champagne)" }}>{key}</code>
-                <span className="text-xs" style={{ color: "rgba(248,243,234,0.3)" }}>env only</span>
+                <span className="text-xs" style={{ color: "var(--stone)" }}>env only</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Stripe Webhook */}
-        <div className="p-6" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,138,114,0.12)" }}>
+        <div className="p-6" style={{ background: "var(--ivory)", border: "1px solid rgba(184,138,114,0.12)" }}>
           <h3 className="text-sm font-medium mb-4" style={{ color: "var(--ivory)" }}>Stripe Webhook</h3>
-          <p className="text-xs leading-relaxed" style={{ color: "rgba(248,243,234,0.5)" }}>
+          <p className="text-xs leading-relaxed" style={{ color: "var(--warm-grey)" }}>
             Configure your Stripe webhook endpoint:
           </p>
           <code className="block mt-3 px-3 py-2 text-xs" style={{ background: "rgba(0,0,0,0.4)", color: "#7ec8e3" }}>
             POST https://lemurebleu.com/api/webhooks/stripe
           </code>
-          <p className="text-xs mt-3" style={{ color: "rgba(248,243,234,0.4)" }}>
+          <p className="text-xs mt-3" style={{ color: "var(--warm-grey)" }}>
             Event to listen for: <code style={{ color: "var(--champagne)" }}>checkout.session.completed</code>
           </p>
         </div>
 
         {/* Supabase RLS */}
-        <div className="p-6" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,138,114,0.12)" }}>
+        <div className="p-6" style={{ background: "var(--ivory)", border: "1px solid rgba(184,138,114,0.12)" }}>
           <h3 className="text-sm font-medium mb-3" style={{ color: "var(--ivory)" }}>Supabase Row Level Security</h3>
-          <p className="text-xs leading-relaxed" style={{ color: "rgba(248,243,234,0.5)" }}>
+          <p className="text-xs leading-relaxed" style={{ color: "var(--warm-grey)" }}>
             All public-facing tables (vip_leads, appointments) use INSERT-only policies for anonymous users.
             Admin reads use the service_role key. RLS must be enabled on all tables.
           </p>

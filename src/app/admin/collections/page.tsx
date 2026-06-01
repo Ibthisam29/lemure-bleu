@@ -46,7 +46,7 @@ export default function AdminCollectionsPage() {
   }
 
   const inputStyle = {
-    background: "rgba(255,255,255,0.05)",
+    background: "rgba(28,61,53,0.05)",
     border: "1px solid rgba(184,138,114,0.2)",
     color: "var(--ivory)",
     padding: "0.5rem 0.75rem",
@@ -70,7 +70,7 @@ export default function AdminCollectionsPage() {
       </div>
 
       {showForm && (
-        <div className="mb-8 p-6" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,138,114,0.15)" }}>
+        <div className="mb-8 p-6" style={{ background: "var(--ivory)", border: "1px solid var(--stone)" }}>
           <h3 className="text-sm mb-6" style={{ color: "var(--ivory)" }}>New Collection</h3>
           <div className="grid grid-cols-2 gap-3">
             <input placeholder="Collection Name *" value={form.collection_name}
@@ -103,7 +103,7 @@ export default function AdminCollectionsPage() {
             </button>
             <button onClick={() => { setShowForm(false); setForm(emptyForm); }}
               className="btn-outline py-2 px-6 text-xs"
-              style={{ color: "rgba(248,243,234,0.6)", borderColor: "rgba(248,243,234,0.2)" }}>
+              style={{ color: "rgba(28,61,53,0.75)", borderColor: "rgba(248,243,234,0.2)" }}>
               Cancel
             </button>
           </div>
@@ -111,15 +111,15 @@ export default function AdminCollectionsPage() {
       )}
 
       {loading ? (
-        <p className="text-sm" style={{ color: "rgba(248,243,234,0.4)" }}>Loading...</p>
+        <p className="text-sm" style={{ color: "var(--warm-grey)" }}>Loading...</p>
       ) : (
         <div className="space-y-4">
           {collections.map(col => (
             <div key={col.id} className="p-5 flex items-center justify-between"
-              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,138,114,0.1)" }}>
+              style={{ background: "var(--ivory)", border: "1px solid var(--stone)" }}>
               <div>
                 <h3 className="text-sm font-medium mb-1" style={{ color: "var(--ivory)" }}>{col.collection_name}</h3>
-                <p className="text-xs" style={{ color: "rgba(248,243,234,0.4)" }}>
+                <p className="text-xs" style={{ color: "var(--warm-grey)" }}>
                   {col.quantity_available}/{col.quantity_total} available · {col.price_range}
                 </p>
               </div>
@@ -134,7 +134,7 @@ export default function AdminCollectionsPage() {
             </div>
           ))}
           {collections.length === 0 && (
-            <p className="text-center py-16 text-sm" style={{ color: "rgba(248,243,234,0.3)" }}>
+            <p className="text-center py-16 text-sm" style={{ color: "var(--stone)" }}>
               No collections yet.
             </p>
           )}

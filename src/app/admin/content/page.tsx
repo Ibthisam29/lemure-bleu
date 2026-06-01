@@ -36,7 +36,7 @@ export default function AdminContentPage() {
   }
 
   const inputStyle = {
-    background: "rgba(255,255,255,0.05)",
+    background: "rgba(28,61,53,0.05)",
     border: "1px solid rgba(184,138,114,0.2)",
     color: "var(--ivory)",
     padding: "0.5rem 0.75rem",
@@ -55,7 +55,7 @@ export default function AdminContentPage() {
       <div className="max-w-2xl space-y-5">
         {CONTENT_FIELDS.map(field => (
           <div key={field.key}>
-            <label className="block text-xs mb-1.5" style={{ color: "rgba(248,243,234,0.5)", letterSpacing: "0.05em" }}>
+            <label className="block text-xs mb-1.5" style={{ color: "var(--warm-grey)", letterSpacing: "0.05em" }}>
               {field.label}
             </label>
             {field.defaultValue.length > 80 ? (

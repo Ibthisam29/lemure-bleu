@@ -25,36 +25,36 @@ export default async function AdminLeadsPage() {
           <h1 className="heading-display text-3xl" style={{ color: "var(--ivory)" }}>VIP Leads ({leads.length})</h1>
         </div>
         <a href="/api/admin/export-leads" className="btn-outline py-2 px-4 text-xs"
-          style={{ borderColor: "rgba(184,138,114,0.4)", color: "rgba(248,243,234,0.7)" }}>Export CSV</a>
+          style={{ borderColor: "rgba(184,138,114,0.4)", color: "rgba(28,61,53,0.8)" }}>Export CSV</a>
       </div>
-      <div style={{ overflowX: "auto" }}>
+      <div style={{ overflowX:"auto", background:"var(--ivory)", border:"1px solid var(--stone)" }}>
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
-            <tr style={{ borderBottom: "1px solid rgba(184,138,114,0.15)" }}>
+            <tr style={{ borderBottom: "1px solid var(--stone)" }}>
               {["Name", "Email", "Country", "Interest", "Budget", "Status", "Date"].map(h => (
                 <th key={h} className="text-left py-3 px-3"
-                  style={{ color: "rgba(248,243,234,0.4)", fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 500 }}>{h}</th>
+                  style={{ color: "var(--warm-grey)", fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 500 }}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {leads.map(lead => (
-              <tr key={lead.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+              <tr key={lead.id} style={{ borderBottom: "1px solid rgba(28,61,53,0.04)" }}>
                 <td className="py-3 px-3">
                   <p className="text-sm" style={{ color: "var(--ivory)" }}>{lead.full_name}</p>
-                  <p className="text-xs mt-0.5" style={{ color: "rgba(248,243,234,0.4)" }}>{lead.phone}</p>
+                  <p className="text-xs mt-0.5" style={{ color: "var(--warm-grey)" }}>{lead.phone}</p>
                 </td>
-                <td className="py-3 px-3 text-xs" style={{ color: "rgba(248,243,234,0.65)" }}>{lead.email}</td>
-                <td className="py-3 px-3 text-xs" style={{ color: "rgba(248,243,234,0.55)" }}>{lead.country}</td>
-                <td className="py-3 px-3 text-xs" style={{ color: "rgba(248,243,234,0.55)" }}>{lead.interest_type}</td>
-                <td className="py-3 px-3 text-xs" style={{ color: "rgba(248,243,234,0.55)" }}>{lead.budget_range}</td>
+                <td className="py-3 px-3 text-xs" style={{ color: "rgba(28,61,53,0.8)" }}>{lead.email}</td>
+                <td className="py-3 px-3 text-xs" style={{ color: "rgba(28,61,53,0.7)" }}>{lead.country}</td>
+                <td className="py-3 px-3 text-xs" style={{ color: "rgba(28,61,53,0.7)" }}>{lead.interest_type}</td>
+                <td className="py-3 px-3 text-xs" style={{ color: "rgba(28,61,53,0.7)" }}>{lead.budget_range}</td>
                 <td className="py-3 px-3">
                   <span className="px-2 py-1 text-xs"
                     style={{ background: `${STATUS_COLORS[lead.status] || "#888"}20`, color: STATUS_COLORS[lead.status] || "#888", border: `1px solid ${STATUS_COLORS[lead.status] || "#888"}40` }}>
                     {lead.status.replace("_", " ")}
                   </span>
                 </td>
-                <td className="py-3 px-3 text-xs" style={{ color: "rgba(248,243,234,0.4)" }}>
+                <td className="py-3 px-3 text-xs" style={{ color: "var(--warm-grey)" }}>
                   {new Date(lead.created_at).toLocaleDateString()}
                 </td>
               </tr>
@@ -62,7 +62,7 @@ export default async function AdminLeadsPage() {
           </tbody>
         </table>
         {leads.length === 0 && (
-          <p className="text-center py-16 text-sm" style={{ color: "rgba(248,243,234,0.3)" }}>No VIP leads yet.</p>
+          <p className="text-center py-16 text-sm" style={{ color: "var(--stone)" }}>No VIP leads yet.</p>
         )}
       </div>
     </div>

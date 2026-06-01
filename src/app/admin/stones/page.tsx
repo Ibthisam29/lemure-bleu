@@ -43,7 +43,7 @@ export default function AdminStonesPage() {
   }
 
   const inputStyle = {
-    background: "rgba(255,255,255,0.05)",
+    background: "rgba(28,61,53,0.05)",
     border: "1px solid rgba(184,138,114,0.2)",
     color: "var(--ivory)",
     padding: "0.5rem 0.75rem",
@@ -71,7 +71,7 @@ export default function AdminStonesPage() {
 
       {/* Add form */}
       {showForm && (
-        <div className="mb-8 p-6" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,138,114,0.15)" }}>
+        <div className="mb-8 p-6" style={{ background: "var(--ivory)", border: "1px solid var(--stone)" }}>
           <h3 className="text-sm mb-6" style={{ color: "var(--ivory)" }}>Add New Stone</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {[
@@ -135,7 +135,7 @@ export default function AdminStonesPage() {
             <button
               onClick={() => { setShowForm(false); setForm(emptyForm); }}
               className="btn-outline py-2 px-6 text-xs"
-              style={{ color: "rgba(248,243,234,0.6)", borderColor: "rgba(248,243,234,0.2)" }}
+              style={{ color: "rgba(28,61,53,0.75)", borderColor: "rgba(248,243,234,0.2)" }}
             >
               Cancel
             </button>
@@ -144,19 +144,19 @@ export default function AdminStonesPage() {
       )}
 
       {loading ? (
-        <p className="text-sm" style={{ color: "rgba(248,243,234,0.4)" }}>Loading...</p>
+        <p className="text-sm" style={{ color: "var(--warm-grey)" }}>Loading...</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {stones.map(stone => (
             <div
               key={stone.id}
               className="p-5"
-              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(184,138,114,0.1)" }}
+              style={{ background: "var(--ivory)", border: "1px solid var(--stone)" }}
             >
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <h3 className="text-sm font-medium" style={{ color: "var(--ivory)" }}>{stone.stone_name}</h3>
-                  <p className="text-xs mt-0.5" style={{ color: "rgba(248,243,234,0.5)" }}>{stone.origin}</p>
+                  <p className="text-xs mt-0.5" style={{ color: "var(--warm-grey)" }}>{stone.origin}</p>
                 </div>
                 <span
                   className="px-2 py-1 text-xs"
@@ -169,7 +169,7 @@ export default function AdminStonesPage() {
                   {stone.status}
                 </span>
               </div>
-              <div className="flex gap-3 text-xs" style={{ color: "rgba(248,243,234,0.4)" }}>
+              <div className="flex gap-3 text-xs" style={{ color: "var(--warm-grey)" }}>
                 {stone.carat && <span>{stone.carat} ct</span>}
                 {stone.cut && <span>{stone.cut}</span>}
                 {stone.certificate_lab && <span>{stone.certificate_lab}</span>}
@@ -177,7 +177,7 @@ export default function AdminStonesPage() {
             </div>
           ))}
           {stones.length === 0 && (
-            <p className="col-span-3 text-center py-16 text-sm" style={{ color: "rgba(248,243,234,0.3)" }}>
+            <p className="col-span-3 text-center py-16 text-sm" style={{ color: "var(--stone)" }}>
               No stones yet. Add your first gemstone.
             </p>
           )}

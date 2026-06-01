@@ -57,7 +57,7 @@ export default async function AdminPurchasesPage() {
           </thead>
           <tbody>
             {purchases.map((p:{id:string;client_name:string;client_email:string;client_phone:string;item_title:string;item_type:string;amount:number;currency:string;payment_status:string;invoices:{invoice_number:string}|null;created_at:string;notes:string}) => (
-              <tr key={p.id} style={{ borderBottom:"1px solid rgba(216,210,200,0.5)", transition:"background 0.15s" }}>
+              <tr key={p.id} style={{ borderBottom:"1px solid rgba(207,200,188,0.6)", transition:"background 0.15s" }}>
                 <td style={{ padding:"0.875rem 1rem" }}>
                   <p style={{ fontSize:"0.82rem", color:"var(--emerald)", fontWeight:300 }}>{p.client_name}</p>
                   <p style={{ fontSize:"0.65rem", color:"var(--warm-grey)", fontWeight:300 }}>{p.client_email}</p>

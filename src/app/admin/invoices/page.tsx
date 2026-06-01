@@ -54,7 +54,7 @@ export default async function AdminInvoicesPage() {
           </thead>
           <tbody>
             {invoices.map((inv:{ id:string; invoice_number:string; client_name:string; client_email:string; line_items:{description:string}[]; total:number; status:string; due_date:string; currency:string }) => (
-              <tr key={inv.id} style={{ borderBottom:"1px solid rgba(216,210,200,0.5)" }}>
+              <tr key={inv.id} style={{ borderBottom:"1px solid rgba(207,200,188,0.6)" }}>
                 <td style={{ padding:"0.875rem 1rem" }}>
                   <Link href={`/admin/invoices/${inv.id}`} style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"1rem", color:"var(--emerald)", textDecoration:"none", fontWeight:300 }}>
                     #{inv.invoice_number}

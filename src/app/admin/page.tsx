@@ -23,53 +23,63 @@ export default async function AdminDashboard() {
     }
   } catch {}
 
-  const S = (label:string,value:string|number,sub:string,color:string,href:string) => (
-    <a href={href} key={label} style={{ display:"block", padding:"1.5rem", background:"var(--ivory)", border:"1px solid var(--stone)", textDecoration:"none", transition:"all 0.2s" }}
-      onMouseEnter={e=>(e.currentTarget.style.borderColor="var(--champagne)")}
-      onMouseLeave={e=>(e.currentTarget.style.borderColor="var(--stone)")}>
-      <p style={{ fontSize:"0.55rem", letterSpacing:"0.15em", textTransform:"uppercase", color:"var(--warm-grey)", fontWeight:300, marginBottom:"0.5rem" }}>{label}</p>
-      <p style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"2.2rem", fontWeight:300, color, lineHeight:1, marginBottom:"0.3rem" }}>{value}</p>
-      <p style={{ fontSize:"0.7rem", color:"var(--stone)", fontWeight:300 }}>{sub}</p>
-    </a>
-  );
+  const cards = [
+    { label:"VIP Leads",      value:stats.leads,                           sub:`${stats.pendingLeads} new`,         color:"var(--emerald)", href:"/admin/leads" },
+    { label:"Appointments",   value:stats.appointments,                     sub:`${stats.pendingAppts} pending`,    color:"var(--emerald)", href:"/admin/appointments" },
+    { label:"Preorders",      value:stats.preorders,                        sub:"Deposits received",                color:"var(--emerald)", href:"/admin/preorders" },
+    { label:"Revenue SGD",    value:`$${stats.revenue.toLocaleString()}`,   sub:"Confirmed paid",                   color:"var(--champagne)", href:"/admin/purchases" },
+    { label:"Invoiced SGD",   value:`$${stats.totalInvoiced.toLocaleString()}`, sub:`${stats.unpaidInvoices} unpaid`, color:"var(--champagne)", href:"/admin/invoices" },
+    { label:"Purchases",      value:stats.purchases,                        sub:"All transactions",                 color:"var(--emerald)", href:"/admin/purchases" },
+  ];
+
+  const actions = [
+    { href:"/admin/invoices/new", label:"Create Invoice",    desc:"Bill a client with QR payment" },
+    { href:"/admin/products",     label:"Add Product",       desc:"Post to website with images/video" },
+    { href:"/admin/sections",     label:"Edit Site Sections",desc:"Show/hide/edit website content" },
+    { href:"/admin/leads",        label:"View VIP Leads",    desc:"Manage client pipeline" },
+    { href:"/admin/purchases",    label:"Purchase Records",  desc:"All orders and bookings" },
+    { href:"/admin/appointments", label:"Appointments",      desc:"Review and approve bookings" },
+  ];
 
   return (
     <div>
-      <div style={{ marginBottom:"2.5rem" }}>
-        <p style={{ fontSize:"0.55rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--champagne)", marginBottom:"0.5rem" }}>Overview</p>
-        <h1 style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"2.5rem", fontWeight:300, color:"var(--emerald)" }}>Dashboard</h1>
+      {/* Header */}
+      <div style={{ marginBottom:"2rem" }}>
+        <p style={{ fontSize:"0.52rem", letterSpacing:"0.25em", textTransform:"uppercase", color:"var(--champagne)", marginBottom:"0.4rem" }}>Overview</p>
+        <h1 style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"2.4rem", fontWeight:300, color:"var(--emerald)" }}>Dashboard</h1>
       </div>
 
-      {/* Stats grid */}
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(180px,1fr))", gap:"1rem", marginBottom:"2.5rem" }}>
-        {S("VIP Leads", stats.leads, `${stats.pendingLeads} new`, "var(--emerald)", "/admin/leads")}
-        {S("Appointments", stats.appointments, `${stats.pendingAppts} pending`, "var(--emerald)", "/admin/appointments")}
-        {S("Preorders", stats.preorders, "Deposits received", "var(--emerald)", "/admin/preorders")}
-        {S("Revenue SGD", `$${stats.revenue.toLocaleString()}`, "Confirmed paid", "var(--champagne)", "/admin/purchases")}
-        {S("Invoiced SGD", `$${stats.totalInvoiced.toLocaleString()}`, `${stats.unpaidInvoices} unpaid`, "var(--champagne)", "/admin/invoices")}
-        {S("Purchases", stats.purchases, "All transactions", "var(--emerald)", "/admin/purchases")}
+      {/* Stat cards */}
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(175px,1fr))", gap:"1rem", marginBottom:"2.5rem" }}>
+        {cards.map(card => (
+          <a key={card.label} href={card.href} style={{ display:"block", padding:"1.4rem 1.5rem", background:"var(--ivory)", border:"1px solid var(--stone)", textDecoration:"none", transition:"all 0.2s" }}
+            onMouseEnter={e=>{ e.currentTarget.style.borderColor="var(--emerald)"; e.currentTarget.style.boxShadow="0 4px 20px rgba(28,61,53,0.08)"; }}
+            onMouseLeave={e=>{ e.currentTarget.style.borderColor="var(--stone)"; e.currentTarget.style.boxShadow="none"; }}>
+            <p style={{ fontSize:"0.52rem", letterSpacing:"0.15em", textTransform:"uppercase", color:"var(--warm-grey)", fontWeight:300, marginBottom:"0.6rem" }}>{card.label}</p>
+            <p style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"2.2rem", fontWeight:300, color:card.color, lineHeight:1, marginBottom:"0.3rem" }}>{card.value}</p>
+            <p style={{ fontSize:"0.68rem", color:"var(--stone)", fontWeight:300 }}>{card.sub}</p>
+          </a>
+        ))}
+      </div>
+
+      {/* Divider */}
+      <div style={{ display:"flex", alignItems:"center", gap:"1rem", marginBottom:"1.5rem" }}>
+        <div style={{ height:"1px", flex:1, background:"var(--stone)" }} />
+        <div style={{ width:"4px", height:"4px", background:"var(--champagne)", transform:"rotate(45deg)" }} />
+        <div style={{ height:"1px", flex:1, background:"var(--stone)" }} />
       </div>
 
       {/* Quick actions */}
-      <div style={{ marginBottom:"2rem" }}>
-        <p style={{ fontSize:"0.55rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--warm-grey)", marginBottom:"1rem" }}>Quick Actions</p>
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))", gap:"0.75rem" }}>
-          {[
-            { href:"/admin/invoices/new", label:"Create Invoice", desc:"Bill a client with QR payment" },
-            { href:"/admin/products", label:"Add Product", desc:"Post to website with images/video" },
-            { href:"/admin/sections", label:"Edit Site Sections", desc:"Show/hide/edit website content" },
-            { href:"/admin/leads", label:"View VIP Leads", desc:"Manage client pipeline" },
-            { href:"/admin/purchases", label:"Purchase Records", desc:"All orders and bookings" },
-            { href:"/admin/appointments", label:"Appointments", desc:"Review bookings" },
-          ].map(a => (
-            <a key={a.href} href={a.href} style={{ padding:"1.25rem", background:"var(--ivory)", border:"1px solid var(--stone)", textDecoration:"none", transition:"all 0.2s", display:"block" }}
-              onMouseEnter={e=>{e.currentTarget.style.background="var(--emerald)";e.currentTarget.style.borderColor="var(--emerald)";(e.currentTarget.querySelector(".qa-title") as HTMLElement).style.color="var(--ivory)";(e.currentTarget.querySelector(".qa-desc") as HTMLElement).style.color="rgba(247,242,232,0.5)"}}
-              onMouseLeave={e=>{e.currentTarget.style.background="var(--ivory)";e.currentTarget.style.borderColor="var(--stone)";(e.currentTarget.querySelector(".qa-title") as HTMLElement).style.color="var(--emerald)";(e.currentTarget.querySelector(".qa-desc") as HTMLElement).style.color="var(--warm-grey)"}}>
-              <p className="qa-title" style={{ fontSize:"0.78rem", fontWeight:400, color:"var(--emerald)", marginBottom:"0.25rem", transition:"color 0.2s" }}>{a.label}</p>
-              <p className="qa-desc" style={{ fontSize:"0.68rem", color:"var(--warm-grey)", fontWeight:300, transition:"color 0.2s" }}>{a.desc}</p>
-            </a>
-          ))}
-        </div>
+      <p style={{ fontSize:"0.52rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--warm-grey)", marginBottom:"1rem" }}>Quick Actions</p>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))", gap:"0.75rem" }}>
+        {actions.map(a => (
+          <a key={a.href} href={a.href} style={{ padding:"1.25rem 1.5rem", background:"var(--ivory)", border:"1px solid var(--stone)", textDecoration:"none", transition:"all 0.25s", display:"block" }}
+            onMouseEnter={e=>{ e.currentTarget.style.background="var(--emerald)"; e.currentTarget.style.borderColor="var(--emerald)"; (e.currentTarget.querySelector(".t") as HTMLElement).style.color="var(--ivory)"; (e.currentTarget.querySelector(".d") as HTMLElement).style.color="rgba(247,242,232,0.5)"; }}
+            onMouseLeave={e=>{ e.currentTarget.style.background="var(--ivory)"; e.currentTarget.style.borderColor="var(--stone)"; (e.currentTarget.querySelector(".t") as HTMLElement).style.color="var(--emerald)"; (e.currentTarget.querySelector(".d") as HTMLElement).style.color="var(--warm-grey)"; }}>
+            <p className="t" style={{ fontSize:"0.78rem", fontWeight:400, color:"var(--emerald)", marginBottom:"0.25rem", transition:"color 0.25s" }}>{a.label}</p>
+            <p className="d" style={{ fontSize:"0.68rem", color:"var(--warm-grey)", fontWeight:300, transition:"color 0.25s" }}>{a.desc}</p>
+          </a>
+        ))}
       </div>
     </div>
   );

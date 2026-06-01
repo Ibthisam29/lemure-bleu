@@ -32,22 +32,22 @@ export default async function AdminPreordersPage() {
           <p className="heading-display text-2xl" style={{ color: "var(--champagne)" }}>SGD {totalRevenue.toLocaleString()}</p>
         </div>
       </div>
-      <div style={{ overflowX: "auto" }}>
+      <div style={{ overflowX:"auto", background:"var(--ivory)", border:"1px solid var(--stone)" }}>
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
-            <tr style={{ borderBottom: "1px solid rgba(184,138,114,0.15)" }}>
+            <tr style={{ borderBottom: "1px solid var(--stone)" }}>
               {["Client", "Email", "Tier", "Amount", "Payment", "Allocation", "Date"].map(h => (
                 <th key={h} className="text-left py-3 px-3"
-                  style={{ color: "rgba(248,243,234,0.4)", fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 500 }}>{h}</th>
+                  style={{ color: "var(--warm-grey)", fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 500 }}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {preorders.map(p => (
-              <tr key={p.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+              <tr key={p.id} style={{ borderBottom: "1px solid rgba(28,61,53,0.04)" }}>
                 <td className="py-3 px-3 text-sm" style={{ color: "var(--ivory)" }}>{p.full_name}</td>
-                <td className="py-3 px-3 text-xs" style={{ color: "rgba(248,243,234,0.6)" }}>{p.email}</td>
-                <td className="py-3 px-3 text-xs" style={{ color: "rgba(248,243,234,0.6)" }}>{TIER_LABELS[p.preorder_tier] || p.preorder_tier}</td>
+                <td className="py-3 px-3 text-xs" style={{ color: "rgba(28,61,53,0.75)" }}>{p.email}</td>
+                <td className="py-3 px-3 text-xs" style={{ color: "rgba(28,61,53,0.75)" }}>{TIER_LABELS[p.preorder_tier] || p.preorder_tier}</td>
                 <td className="py-3 px-3 text-xs font-medium" style={{ color: "var(--champagne)" }}>SGD {p.amount.toLocaleString()}</td>
                 <td className="py-3 px-3">
                   <span className="px-2 py-1 text-xs"
@@ -61,7 +61,7 @@ export default async function AdminPreordersPage() {
                     {p.allocation_status.replace("_", " ")}
                   </span>
                 </td>
-                <td className="py-3 px-3 text-xs" style={{ color: "rgba(248,243,234,0.4)" }}>
+                <td className="py-3 px-3 text-xs" style={{ color: "var(--warm-grey)" }}>
                   {new Date(p.created_at).toLocaleDateString()}
                 </td>
               </tr>
@@ -69,7 +69,7 @@ export default async function AdminPreordersPage() {
           </tbody>
         </table>
         {preorders.length === 0 && (
-          <p className="text-center py-16 text-sm" style={{ color: "rgba(248,243,234,0.3)" }}>No preorders yet.</p>
+          <p className="text-center py-16 text-sm" style={{ color: "var(--stone)" }}>No preorders yet.</p>
         )}
       </div>
     </div>
