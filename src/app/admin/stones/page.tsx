@@ -71,7 +71,7 @@ export default function AdminStonesPage() {
 
       {/* Add form */}
       {showForm && (
-        <div className="mb-8 p-6" style={{ background: "var(--ivory)", border: "1px solid var(--stone)" }}>
+        <div className="mb-8 p-6" style={{ background: "#FFFFFF", border: "1px solid #CFC8BC" }}>
           <h3 className="text-sm mb-6" style={{ color: "var(--ivory)" }}>Add New Stone</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {[
@@ -144,19 +144,19 @@ export default function AdminStonesPage() {
       )}
 
       {loading ? (
-        <p className="text-sm" style={{ color: "var(--warm-grey)" }}>Loading...</p>
+        <p className="text-sm" style={{ color: "#8C857A" }}>Loading...</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {stones.map(stone => (
             <div
               key={stone.id}
               className="p-5"
-              style={{ background: "var(--ivory)", border: "1px solid var(--stone)" }}
+              style={{ background: "#FFFFFF", border: "1px solid #CFC8BC" }}
             >
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <h3 className="text-sm font-medium" style={{ color: "var(--ivory)" }}>{stone.stone_name}</h3>
-                  <p className="text-xs mt-0.5" style={{ color: "var(--warm-grey)" }}>{stone.origin}</p>
+                  <p className="text-xs mt-0.5" style={{ color: "#8C857A" }}>{stone.origin}</p>
                 </div>
                 <span
                   className="px-2 py-1 text-xs"
@@ -169,7 +169,7 @@ export default function AdminStonesPage() {
                   {stone.status}
                 </span>
               </div>
-              <div className="flex gap-3 text-xs" style={{ color: "var(--warm-grey)" }}>
+              <div className="flex gap-3 text-xs" style={{ color: "#8C857A" }}>
                 {stone.carat && <span>{stone.carat} ct</span>}
                 {stone.cut && <span>{stone.cut}</span>}
                 {stone.certificate_lab && <span>{stone.certificate_lab}</span>}
@@ -177,7 +177,7 @@ export default function AdminStonesPage() {
             </div>
           ))}
           {stones.length === 0 && (
-            <p className="col-span-3 text-center py-16 text-sm" style={{ color: "var(--stone)" }}>
+            <p className="col-span-3 text-center py-16 text-sm" style={{ color: "#CFC8BC" }}>
               No stones yet. Add your first gemstone.
             </p>
           )}

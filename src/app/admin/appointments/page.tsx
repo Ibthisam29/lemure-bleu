@@ -22,13 +22,13 @@ export default async function AdminAppointmentsPage() {
         <p className="label-luxury mb-2" style={{ color: "rgba(184,138,114,0.7)" }}>Calendar</p>
         <h1 className="heading-display text-3xl" style={{ color: "var(--ivory)" }}>Appointments ({appointments.length})</h1>
       </div>
-      <div style={{ overflowX:"auto", background:"var(--ivory)", border:"1px solid var(--stone)" }}>
+      <div style={{ overflowX:"auto", background:"#FFFFFF", border:"1px solid #CFC8BC" }}>
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
-            <tr style={{ borderBottom: "1px solid var(--stone)" }}>
+            <tr style={{ borderBottom: "1px solid #CFC8BC" }}>
               {["Client", "Date & Time", "Type", "Budget", "Status", "Contact"].map(h => (
                 <th key={h} className="text-left py-3 px-3"
-                  style={{ color: "var(--warm-grey)", fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 500 }}>{h}</th>
+                  style={{ color: "#8C857A", fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 500 }}>{h}</th>
               ))}
             </tr>
           </thead>
@@ -37,14 +37,14 @@ export default async function AdminAppointmentsPage() {
               <tr key={appt.id} style={{ borderBottom: "1px solid rgba(28,61,53,0.04)" }}>
                 <td className="py-3 px-3">
                   <p className="text-sm" style={{ color: "var(--ivory)" }}>{appt.full_name}</p>
-                  <p className="text-xs mt-0.5" style={{ color: "var(--warm-grey)" }}>{appt.phone}</p>
+                  <p className="text-xs mt-0.5" style={{ color: "#8C857A" }}>{appt.phone}</p>
                 </td>
                 <td className="py-3 px-3">
                   <p className="text-xs" style={{ color: "rgba(28,61,53,0.8)" }}>{new Date(appt.preferred_date).toLocaleDateString()}</p>
-                  {appt.preferred_time && <p className="text-xs" style={{ color: "var(--warm-grey)" }}>{appt.preferred_time}</p>}
+                  {appt.preferred_time && <p className="text-xs" style={{ color: "#8C857A" }}>{appt.preferred_time}</p>}
                 </td>
                 <td className="py-3 px-3 text-xs" style={{ color: "rgba(28,61,53,0.75)" }}>{appt.appointment_type.replace("_", " ")}</td>
-                <td className="py-3 px-3 text-xs" style={{ color: "var(--warm-grey)" }}>{appt.budget_range}</td>
+                <td className="py-3 px-3 text-xs" style={{ color: "#8C857A" }}>{appt.budget_range}</td>
                 <td className="py-3 px-3">
                   <span className="px-2 py-1 text-xs"
                     style={{ background: `${STATUS_COLORS[appt.status] || "#888"}20`, color: STATUS_COLORS[appt.status] || "#888", border: `1px solid ${STATUS_COLORS[appt.status] || "#888"}40` }}>
@@ -60,7 +60,7 @@ export default async function AdminAppointmentsPage() {
           </tbody>
         </table>
         {appointments.length === 0 && (
-          <p className="text-center py-16 text-sm" style={{ color: "var(--stone)" }}>No appointments yet.</p>
+          <p className="text-center py-16 text-sm" style={{ color: "#CFC8BC" }}>No appointments yet.</p>
         )}
       </div>
     </div>

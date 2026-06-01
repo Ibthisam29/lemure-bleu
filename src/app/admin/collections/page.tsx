@@ -70,7 +70,7 @@ export default function AdminCollectionsPage() {
       </div>
 
       {showForm && (
-        <div className="mb-8 p-6" style={{ background: "var(--ivory)", border: "1px solid var(--stone)" }}>
+        <div className="mb-8 p-6" style={{ background: "#FFFFFF", border: "1px solid #CFC8BC" }}>
           <h3 className="text-sm mb-6" style={{ color: "var(--ivory)" }}>New Collection</h3>
           <div className="grid grid-cols-2 gap-3">
             <input placeholder="Collection Name *" value={form.collection_name}
@@ -111,15 +111,15 @@ export default function AdminCollectionsPage() {
       )}
 
       {loading ? (
-        <p className="text-sm" style={{ color: "var(--warm-grey)" }}>Loading...</p>
+        <p className="text-sm" style={{ color: "#8C857A" }}>Loading...</p>
       ) : (
         <div className="space-y-4">
           {collections.map(col => (
             <div key={col.id} className="p-5 flex items-center justify-between"
-              style={{ background: "var(--ivory)", border: "1px solid var(--stone)" }}>
+              style={{ background: "#FFFFFF", border: "1px solid #CFC8BC" }}>
               <div>
                 <h3 className="text-sm font-medium mb-1" style={{ color: "var(--ivory)" }}>{col.collection_name}</h3>
-                <p className="text-xs" style={{ color: "var(--warm-grey)" }}>
+                <p className="text-xs" style={{ color: "#8C857A" }}>
                   {col.quantity_available}/{col.quantity_total} available · {col.price_range}
                 </p>
               </div>
@@ -134,7 +134,7 @@ export default function AdminCollectionsPage() {
             </div>
           ))}
           {collections.length === 0 && (
-            <p className="text-center py-16 text-sm" style={{ color: "var(--stone)" }}>
+            <p className="text-center py-16 text-sm" style={{ color: "#CFC8BC" }}>
               No collections yet.
             </p>
           )}

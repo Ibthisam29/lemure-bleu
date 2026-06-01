@@ -55,7 +55,7 @@ export default function AdminContentPage() {
       <div className="max-w-2xl space-y-5">
         {CONTENT_FIELDS.map(field => (
           <div key={field.key}>
-            <label className="block text-xs mb-1.5" style={{ color: "var(--warm-grey)", letterSpacing: "0.05em" }}>
+            <label className="block text-xs mb-1.5" style={{ color: "#8C857A", letterSpacing: "0.05em" }}>
               {field.label}
             </label>
             {field.defaultValue.length > 80 ? (

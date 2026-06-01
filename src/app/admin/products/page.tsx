@@ -9,9 +9,9 @@ type Product = {
   video_url: string; featured: boolean; visible: boolean; sort_order: number;
 };
 
-const labelStyle = { fontSize:"0.55rem", letterSpacing:"0.15em", textTransform:"uppercase" as const, color:"var(--warm-grey)", fontWeight:300, display:"block", marginBottom:"0.4rem" };
-const inputStyle = { width:"100%", padding:"0.6rem 0", background:"transparent", border:"none", borderBottom:"1px solid var(--stone)", color:"var(--emerald)", fontSize:"0.82rem", fontWeight:300, outline:"none", fontFamily:"Jost,sans-serif" };
-const cardStyle = { background:"var(--ivory)", border:"1px solid var(--stone)", padding:"1.25rem" };
+const labelStyle = { fontSize:"0.55rem", letterSpacing:"0.15em", textTransform:"uppercase" as const, color:"#8C857A", fontWeight:300, display:"block", marginBottom:"0.4rem" };
+const inputStyle = { width:"100%", padding:"0.6rem 0", background:"transparent", border:"none", borderBottom:"1px solid #CFC8BC", color:"#1C3D35", fontSize:"0.82rem", fontWeight:300, outline:"none", fontFamily:"Jost,sans-serif" };
+const cardStyle = { background:"#FFFFFF", border:"1px solid #CFC8BC", padding:"1.25rem" };
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -96,12 +96,12 @@ export default function AdminProductsPage() {
     <div>
       <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", marginBottom:"2rem" }}>
         <div>
-          <p style={{ fontSize:"0.55rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--champagne)", marginBottom:"0.4rem" }}>CMS</p>
-          <h1 style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"2.2rem", fontWeight:300, color:"var(--emerald)" }}>Products & Media</h1>
-          <p style={{ fontSize:"0.75rem", color:"var(--warm-grey)", fontWeight:300, marginTop:"0.25rem" }}>Post products with images and videos directly to the website</p>
+          <p style={{ fontSize:"0.55rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"#C4965A", marginBottom:"0.4rem" }}>CMS</p>
+          <h1 style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"2.2rem", fontWeight:300, color:"#1C3D35" }}>Products & Media</h1>
+          <p style={{ fontSize:"0.75rem", color:"#8C857A", fontWeight:300, marginTop:"0.25rem" }}>Post products with images and videos directly to the website</p>
         </div>
         <button onClick={()=>{setShowForm(!showForm);setEditId(null);setForm(empty);}}
-          style={{ padding:"0.6rem 1.5rem", background:"var(--champagne)", color:"var(--ivory)", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", border:"none", cursor:"pointer", fontFamily:"Jost,sans-serif" }}>
+          style={{ padding:"0.6rem 1.5rem", background:"#C4965A", color:"var(--ivory)", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", border:"none", cursor:"pointer", fontFamily:"Jost,sans-serif" }}>
           {showForm ? "Cancel" : "+ Add Product"}
         </button>
       </div>
@@ -109,7 +109,7 @@ export default function AdminProductsPage() {
       {/* Form */}
       {showForm && (
         <div style={{ ...cardStyle, marginBottom:"2rem", borderColor:"rgba(196,150,90,0.4)" }}>
-          <p style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"1.3rem", color:"var(--emerald)", marginBottom:"1.5rem" }}>
+          <p style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"1.3rem", color:"#1C3D35", marginBottom:"1.5rem" }}>
             {editId ? "Edit Product" : "New Product"}
           </p>
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1.5rem", marginBottom:"1.5rem" }}>
@@ -147,18 +147,18 @@ export default function AdminProductsPage() {
             <div style={{ display:"flex", gap:"0.75rem", flexWrap:"wrap", marginBottom:"0.75rem" }}>
               {form.image_urls.map((url,i)=>(
                 <div key={i} style={{ position:"relative", width:"80px", height:"80px" }}>
-                  <img src={url} alt="" style={{ width:"100%", height:"100%", objectFit:"cover", border:"1px solid var(--stone)" }} />
+                  <img src={url} alt="" style={{ width:"100%", height:"100%", objectFit:"cover", border:"1px solid #CFC8BC" }} />
                   <button onClick={()=>setForm(p=>({...p,image_urls:p.image_urls.filter((_,j)=>j!==i)}))}
-                    style={{ position:"absolute", top:"-6px", right:"-6px", width:"18px", height:"18px", borderRadius:"50%", background:"var(--champagne)", color:"white", border:"none", cursor:"pointer", fontSize:"0.6rem", display:"flex", alignItems:"center", justifyContent:"center" }}>×</button>
+                    style={{ position:"absolute", top:"-6px", right:"-6px", width:"18px", height:"18px", borderRadius:"50%", background:"#C4965A", color:"white", border:"none", cursor:"pointer", fontSize:"0.6rem", display:"flex", alignItems:"center", justifyContent:"center" }}>×</button>
                 </div>
               ))}
               <button onClick={()=>fileRef.current?.click()}
-                style={{ width:"80px", height:"80px", border:"1px dashed var(--stone)", background:"transparent", cursor:"pointer", color:"var(--warm-grey)", fontSize:"1.5rem", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                style={{ width:"80px", height:"80px", border:"1px dashed var(--stone)", background:"transparent", cursor:"pointer", color:"#8C857A", fontSize:"1.5rem", display:"flex", alignItems:"center", justifyContent:"center" }}>
                 {uploading ? "…" : "+"}
               </button>
             </div>
             <input ref={fileRef} type="file" accept="image/*" multiple onChange={handleImageUpload} style={{ display:"none" }} />
-            <p style={{ fontSize:"0.65rem", color:"var(--warm-grey)", fontWeight:300 }}>Or paste image URL: <input placeholder="https://..." value="" onChange={e=>{ if(e.target.value) setForm(p=>({...p,image_urls:[...p.image_urls,e.target.value]})); }} style={{ border:"none", borderBottom:"1px solid var(--stone)", outline:"none", fontSize:"0.75rem", width:"280px", padding:"0.2rem 0", fontFamily:"Jost,sans-serif" }} /></p>
+            <p style={{ fontSize:"0.65rem", color:"#8C857A", fontWeight:300 }}>Or paste image URL: <input placeholder="https://..." value="" onChange={e=>{ if(e.target.value) setForm(p=>({...p,image_urls:[...p.image_urls,e.target.value]})); }} style={{ border:"none", borderBottom:"1px solid #CFC8BC", outline:"none", fontSize:"0.75rem", width:"280px", padding:"0.2rem 0", fontFamily:"Jost,sans-serif" }} /></p>
           </div>
 
           {/* Video upload */}
@@ -166,16 +166,16 @@ export default function AdminProductsPage() {
             <label style={labelStyle}>Video (optional)</label>
             {form.video_url ? (
               <div style={{ display:"flex", alignItems:"center", gap:"1rem" }}>
-                <p style={{ fontSize:"0.75rem", color:"var(--emerald)", fontWeight:300 }}>{form.video_url.slice(0,50)}…</p>
-                <button onClick={()=>setForm(p=>({...p,video_url:""}))} style={{ color:"var(--champagne)", background:"none", border:"none", cursor:"pointer", fontSize:"0.7rem" }}>Remove</button>
+                <p style={{ fontSize:"0.75rem", color:"#1C3D35", fontWeight:300 }}>{form.video_url.slice(0,50)}…</p>
+                <button onClick={()=>setForm(p=>({...p,video_url:""}))} style={{ color:"#C4965A", background:"none", border:"none", cursor:"pointer", fontSize:"0.7rem" }}>Remove</button>
               </div>
             ) : (
               <>
                 <button onClick={()=>videoRef.current?.click()}
-                  style={{ padding:"0.5rem 1rem", border:"1px dashed var(--stone)", background:"transparent", cursor:"pointer", color:"var(--warm-grey)", fontSize:"0.7rem", fontFamily:"Jost,sans-serif", marginRight:"1rem" }}>
+                  style={{ padding:"0.5rem 1rem", border:"1px dashed var(--stone)", background:"transparent", cursor:"pointer", color:"#8C857A", fontSize:"0.7rem", fontFamily:"Jost,sans-serif", marginRight:"1rem" }}>
                   Upload Video
                 </button>
-                <input placeholder="or paste video URL" onChange={e=>setForm(p=>({...p,video_url:e.target.value}))} style={{ border:"none", borderBottom:"1px solid var(--stone)", outline:"none", fontSize:"0.75rem", width:"250px", padding:"0.2rem 0", fontFamily:"Jost,sans-serif" }} />
+                <input placeholder="or paste video URL" onChange={e=>setForm(p=>({...p,video_url:e.target.value}))} style={{ border:"none", borderBottom:"1px solid #CFC8BC", outline:"none", fontSize:"0.75rem", width:"250px", padding:"0.2rem 0", fontFamily:"Jost,sans-serif" }} />
                 <input ref={videoRef} type="file" accept="video/*" onChange={handleVideoUpload} style={{ display:"none" }} />
               </>
             )}
@@ -186,13 +186,13 @@ export default function AdminProductsPage() {
             {[["featured","Featured on homepage"],["visible","Visible on website"]].map(([key,lbl])=>(
               <label key={key} style={{ display:"flex", alignItems:"center", gap:"0.5rem", cursor:"pointer" }}>
                 <input type="checkbox" checked={form[key as "featured"|"visible"]} onChange={e=>setForm(p=>({...p,[key]:e.target.checked}))} style={{ accentColor:"var(--champagne)" }} />
-                <span style={{ fontSize:"0.75rem", color:"var(--warm-grey)", fontWeight:300 }}>{lbl}</span>
+                <span style={{ fontSize:"0.75rem", color:"#8C857A", fontWeight:300 }}>{lbl}</span>
               </label>
             ))}
           </div>
 
           <button onClick={handleSave} disabled={saving||!form.title}
-            style={{ padding:"0.75rem 2rem", background:"var(--champagne)", color:"var(--ivory)", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", border:"none", cursor:"pointer", fontFamily:"Jost,sans-serif", opacity:saving?0.6:1 }}>
+            style={{ padding:"0.75rem 2rem", background:"#C4965A", color:"var(--ivory)", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", border:"none", cursor:"pointer", fontFamily:"Jost,sans-serif", opacity:saving?0.6:1 }}>
             {saving ? "Saving…" : editId ? "Update Product" : "Publish Product"}
           </button>
         </div>
@@ -200,36 +200,36 @@ export default function AdminProductsPage() {
 
       {/* Products grid */}
       {loading ? (
-        <p style={{ color:"var(--warm-grey)", fontSize:"0.8rem" }}>Loading…</p>
+        <p style={{ color:"#8C857A", fontSize:"0.8rem" }}>Loading…</p>
       ) : (
         <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:"1rem" }}>
           {products.map(prod => (
             <div key={prod.id} style={{ ...cardStyle, opacity: prod.visible ? 1 : 0.5, transition:"all 0.2s" }}>
               {prod.image_urls?.[0] && (
-                <img src={prod.image_urls[0]} alt={prod.title} style={{ width:"100%", height:"160px", objectFit:"cover", marginBottom:"1rem", border:"1px solid var(--stone)" }} />
+                <img src={prod.image_urls[0]} alt={prod.title} style={{ width:"100%", height:"160px", objectFit:"cover", marginBottom:"1rem", border:"1px solid #CFC8BC" }} />
               )}
               {prod.video_url && !prod.image_urls?.[0] && (
-                <div style={{ width:"100%", height:"160px", background:"var(--emerald)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:"1rem" }}>
+                <div style={{ width:"100%", height:"160px", background:"#1C3D35", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:"1rem" }}>
                   <span style={{ color:"rgba(247,242,232,0.4)", fontSize:"2rem" }}>▶</span>
                 </div>
               )}
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:"0.4rem" }}>
-                <h3 style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"1.1rem", color:"var(--emerald)", fontWeight:300 }}>{prod.title}</h3>
-                {prod.featured && <span style={{ fontSize:"0.5rem", letterSpacing:"0.1em", background:"var(--champagne)", color:"white", padding:"0.2rem 0.5rem" }}>FEATURED</span>}
+                <h3 style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"1.1rem", color:"#1C3D35", fontWeight:300 }}>{prod.title}</h3>
+                {prod.featured && <span style={{ fontSize:"0.5rem", letterSpacing:"0.1em", background:"#C4965A", color:"white", padding:"0.2rem 0.5rem" }}>FEATURED</span>}
               </div>
-              <p style={{ fontSize:"0.65rem", color:"var(--champagne)", marginBottom:"0.5rem", fontWeight:300 }}>{prod.category} · {prod.price_label}</p>
-              {prod.description && <p style={{ fontSize:"0.72rem", color:"var(--warm-grey)", fontWeight:300, marginBottom:"1rem", lineHeight:1.6 }}>{prod.description.slice(0,80)}{prod.description.length>80?"…":""}</p>}
+              <p style={{ fontSize:"0.65rem", color:"#C4965A", marginBottom:"0.5rem", fontWeight:300 }}>{prod.category} · {prod.price_label}</p>
+              {prod.description && <p style={{ fontSize:"0.72rem", color:"#8C857A", fontWeight:300, marginBottom:"1rem", lineHeight:1.6 }}>{prod.description.slice(0,80)}{prod.description.length>80?"…":""}</p>}
 
               <div style={{ display:"flex", gap:"0.5rem", flexWrap:"wrap" }}>
-                <button onClick={()=>startEdit(prod)} style={{ padding:"0.35rem 0.75rem", border:"1px solid var(--emerald)", background:"transparent", color:"var(--emerald)", fontSize:"0.6rem", cursor:"pointer", fontFamily:"Jost,sans-serif", letterSpacing:"0.1em" }}>Edit</button>
-                <button onClick={()=>toggleVisible(prod.id, !prod.visible)} style={{ padding:"0.35rem 0.75rem", border:"1px solid var(--stone)", background:"transparent", color:"var(--warm-grey)", fontSize:"0.6rem", cursor:"pointer", fontFamily:"Jost,sans-serif", letterSpacing:"0.1em" }}>
+                <button onClick={()=>startEdit(prod)} style={{ padding:"0.35rem 0.75rem", border:"1px solid var(--emerald)", background:"transparent", color:"#1C3D35", fontSize:"0.6rem", cursor:"pointer", fontFamily:"Jost,sans-serif", letterSpacing:"0.1em" }}>Edit</button>
+                <button onClick={()=>toggleVisible(prod.id, !prod.visible)} style={{ padding:"0.35rem 0.75rem", border:"1px solid #CFC8BC", background:"transparent", color:"#8C857A", fontSize:"0.6rem", cursor:"pointer", fontFamily:"Jost,sans-serif", letterSpacing:"0.1em" }}>
                   {prod.visible ? "Hide" : "Show"}
                 </button>
                 <button onClick={()=>deleteProduct(prod.id)} style={{ padding:"0.35rem 0.75rem", border:"1px solid #e07070", background:"transparent", color:"#e07070", fontSize:"0.6rem", cursor:"pointer", fontFamily:"Jost,sans-serif", letterSpacing:"0.1em" }}>Delete</button>
               </div>
             </div>
           ))}
-          {products.length===0 && <p style={{ color:"var(--stone)", fontSize:"0.8rem", gridColumn:"1/-1", textAlign:"center", padding:"3rem" }}>No products yet. Add your first product above.</p>}
+          {products.length===0 && <p style={{ color:"#CFC8BC", fontSize:"0.8rem", gridColumn:"1/-1", textAlign:"center", padding:"3rem" }}>No products yet. Add your first product above.</p>}
         </div>
       )}
     </div>

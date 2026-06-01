@@ -9,7 +9,7 @@ const LABELS: Record<string,string> = {
   trust_bar:"Trust Bar", footer:"Footer",
 };
 
-const inputStyle = { width:"100%", padding:"0.6rem 0", background:"transparent", border:"none", borderBottom:"1px solid var(--stone)", color:"var(--emerald)", fontSize:"0.82rem", fontWeight:300, outline:"none", fontFamily:"Jost,sans-serif" };
+const inputStyle = { width:"100%", padding:"0.6rem 0", background:"transparent", border:"none", borderBottom:"1px solid #CFC8BC", color:"#1C3D35", fontSize:"0.82rem", fontWeight:300, outline:"none", fontFamily:"Jost,sans-serif" };
 
 export default function AdminSectionsPage() {
   const [sections, setSections] = useState<Section[]>([]);
@@ -44,19 +44,19 @@ export default function AdminSectionsPage() {
   return (
     <div>
       <div style={{ marginBottom:"2rem" }}>
-        <p style={{ fontSize:"0.55rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--champagne)", marginBottom:"0.4rem" }}>CMS</p>
-        <h1 style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"2.2rem", fontWeight:300, color:"var(--emerald)" }}>Site Sections</h1>
-        <p style={{ fontSize:"0.75rem", color:"var(--warm-grey)", fontWeight:300, marginTop:"0.25rem" }}>Show, hide, or edit content sections on the website</p>
+        <p style={{ fontSize:"0.55rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"#C4965A", marginBottom:"0.4rem" }}>CMS</p>
+        <h1 style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"2.2rem", fontWeight:300, color:"#1C3D35" }}>Site Sections</h1>
+        <p style={{ fontSize:"0.75rem", color:"#8C857A", fontWeight:300, marginTop:"0.25rem" }}>Show, hide, or edit content sections on the website</p>
       </div>
 
-      {loading ? <p style={{ color:"var(--warm-grey)", fontSize:"0.8rem" }}>Loading…</p> : (
+      {loading ? <p style={{ color:"#8C857A", fontSize:"0.8rem" }}>Loading…</p> : (
         <div style={{ display:"flex", flexDirection:"column", gap:"1rem" }}>
           {sections.map(s => (
-            <div key={s.id} style={{ background:"var(--ivory)", border:`1px solid ${s.visible?"var(--stone)":"rgba(196,150,90,0.3)"}`, padding:"1.5rem", transition:"all 0.2s", opacity:s.visible?1:0.55 }}>
+            <div key={s.id} style={{ background:"#FFFFFF", border:`1px solid ${s.visible?"var(--stone)":"rgba(196,150,90,0.3)"}`, padding:"1.5rem", transition:"all 0.2s", opacity:s.visible?1:0.55 }}>
               <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom: editing===s.id?"1.5rem":"0" }}>
                 <div>
-                  <p style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"1.2rem", color:"var(--emerald)", fontWeight:300 }}>{LABELS[s.section_key]||s.section_key}</p>
-                  {s.title && <p style={{ fontSize:"0.72rem", color:"var(--warm-grey)", fontWeight:300, marginTop:"0.2rem" }}>{s.title.slice(0,60)}{s.title.length>60?"…":""}</p>}
+                  <p style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"1.2rem", color:"#1C3D35", fontWeight:300 }}>{LABELS[s.section_key]||s.section_key}</p>
+                  {s.title && <p style={{ fontSize:"0.72rem", color:"#8C857A", fontWeight:300, marginTop:"0.2rem" }}>{s.title.slice(0,60)}{s.title.length>60?"…":""}</p>}
                 </div>
                 <div style={{ display:"flex", gap:"0.5rem", alignItems:"center" }}>
                   {/* Visible toggle */}
@@ -65,10 +65,10 @@ export default function AdminSectionsPage() {
                       style={{ width:"36px", height:"18px", borderRadius:"9px", background:s.visible?"var(--emerald)":"var(--stone)", position:"relative", cursor:"pointer", transition:"background 0.2s" }}>
                       <div style={{ position:"absolute", top:"2px", left:s.visible?"18px":"2px", width:"14px", height:"14px", borderRadius:"50%", background:"white", transition:"left 0.2s" }} />
                     </div>
-                    <span style={{ fontSize:"0.65rem", color:"var(--warm-grey)", fontWeight:300 }}>{s.visible?"Visible":"Hidden"}</span>
+                    <span style={{ fontSize:"0.65rem", color:"#8C857A", fontWeight:300 }}>{s.visible?"Visible":"Hidden"}</span>
                   </label>
                   <button onClick={()=>editing===s.id?setEditing(null):startEdit(s)}
-                    style={{ padding:"0.35rem 0.75rem", border:"1px solid var(--emerald)", background:"transparent", color:"var(--emerald)", fontSize:"0.6rem", cursor:"pointer", fontFamily:"Jost,sans-serif", letterSpacing:"0.1em" }}>
+                    style={{ padding:"0.35rem 0.75rem", border:"1px solid var(--emerald)", background:"transparent", color:"#1C3D35", fontSize:"0.6rem", cursor:"pointer", fontFamily:"Jost,sans-serif", letterSpacing:"0.1em" }}>
                     {editing===s.id?"Cancel":"Edit"}
                   </button>
                 </div>
@@ -78,20 +78,20 @@ export default function AdminSectionsPage() {
                 <div>
                   <div style={{ display:"grid", gap:"1rem", marginBottom:"1rem" }}>
                     <div>
-                      <label style={{ fontSize:"0.55rem", letterSpacing:"0.15em", textTransform:"uppercase", color:"var(--warm-grey)", fontWeight:300, display:"block", marginBottom:"0.3rem" }}>Headline / Title</label>
+                      <label style={{ fontSize:"0.55rem", letterSpacing:"0.15em", textTransform:"uppercase", color:"#8C857A", fontWeight:300, display:"block", marginBottom:"0.3rem" }}>Headline / Title</label>
                       <input value={form.title} onChange={e=>setForm(p=>({...p,title:e.target.value}))} style={inputStyle} />
                     </div>
                     <div>
-                      <label style={{ fontSize:"0.55rem", letterSpacing:"0.15em", textTransform:"uppercase", color:"var(--warm-grey)", fontWeight:300, display:"block", marginBottom:"0.3rem" }}>Subtitle / Eyebrow</label>
+                      <label style={{ fontSize:"0.55rem", letterSpacing:"0.15em", textTransform:"uppercase", color:"#8C857A", fontWeight:300, display:"block", marginBottom:"0.3rem" }}>Subtitle / Eyebrow</label>
                       <input value={form.subtitle} onChange={e=>setForm(p=>({...p,subtitle:e.target.value}))} style={inputStyle} />
                     </div>
                     <div>
-                      <label style={{ fontSize:"0.55rem", letterSpacing:"0.15em", textTransform:"uppercase", color:"var(--warm-grey)", fontWeight:300, display:"block", marginBottom:"0.3rem" }}>Body Text</label>
+                      <label style={{ fontSize:"0.55rem", letterSpacing:"0.15em", textTransform:"uppercase", color:"#8C857A", fontWeight:300, display:"block", marginBottom:"0.3rem" }}>Body Text</label>
                       <textarea value={form.body} onChange={e=>setForm(p=>({...p,body:e.target.value}))} rows={4} style={{...inputStyle, resize:"none"}} />
                     </div>
                   </div>
                   <button onClick={()=>saveEdit(s.id)} disabled={saving===s.id}
-                    style={{ padding:"0.6rem 1.5rem", background:"var(--champagne)", color:"var(--ivory)", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", border:"none", cursor:"pointer", fontFamily:"Jost,sans-serif", opacity:saving===s.id?0.6:1 }}>
+                    style={{ padding:"0.6rem 1.5rem", background:"#C4965A", color:"var(--ivory)", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", border:"none", cursor:"pointer", fontFamily:"Jost,sans-serif", opacity:saving===s.id?0.6:1 }}>
                     {saving===s.id?"Saving…":"Save Changes"}
                   </button>
                 </div>

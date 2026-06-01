@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 
 type LineItem = { description: string; quantity: number; unit_price: number; };
 
-const inputStyle = { width:"100%", padding:"0.6rem 0", background:"transparent", border:"none", borderBottom:"1px solid var(--stone)", color:"var(--emerald)", fontSize:"0.82rem", fontWeight:300, outline:"none", fontFamily:"Jost,sans-serif" };
-const labelStyle:React.CSSProperties = { fontSize:"0.55rem", letterSpacing:"0.15em", textTransform:"uppercase", color:"var(--warm-grey)", fontWeight:300, display:"block", marginBottom:"0.3rem" };
+const inputStyle = { width:"100%", padding:"0.6rem 0", background:"transparent", border:"none", borderBottom:"1px solid #CFC8BC", color:"#1C3D35", fontSize:"0.82rem", fontWeight:300, outline:"none", fontFamily:"Jost,sans-serif" };
+const labelStyle:React.CSSProperties = { fontSize:"0.55rem", letterSpacing:"0.15em", textTransform:"uppercase", color:"#8C857A", fontWeight:300, display:"block", marginBottom:"0.3rem" };
 
 export default function NewInvoicePage() {
   const router = useRouter();
@@ -44,13 +44,13 @@ export default function NewInvoicePage() {
   return (
     <div style={{ maxWidth:"800px" }}>
       <div style={{ marginBottom:"2rem" }}>
-        <p style={{ fontSize:"0.55rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"var(--champagne)", marginBottom:"0.4rem" }}>Payments</p>
-        <h1 style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"2.2rem", fontWeight:300, color:"var(--emerald)" }}>New Invoice</h1>
+        <p style={{ fontSize:"0.55rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"#C4965A", marginBottom:"0.4rem" }}>Payments</p>
+        <h1 style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"2.2rem", fontWeight:300, color:"#1C3D35" }}>New Invoice</h1>
       </div>
 
       {/* Client info */}
-      <div style={{ background:"var(--ivory)", border:"1px solid var(--stone)", padding:"1.75rem", marginBottom:"1.25rem" }}>
-        <p style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"1.1rem", color:"var(--emerald)", marginBottom:"1.25rem" }}>Client Details</p>
+      <div style={{ background:"#FFFFFF", border:"1px solid #CFC8BC", padding:"1.75rem", marginBottom:"1.25rem" }}>
+        <p style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"1.1rem", color:"#1C3D35", marginBottom:"1.25rem" }}>Client Details</p>
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1.25rem" }}>
           <div>
             <label style={labelStyle}>Client Name *</label>
@@ -72,10 +72,10 @@ export default function NewInvoicePage() {
       </div>
 
       {/* Line items */}
-      <div style={{ background:"var(--ivory)", border:"1px solid var(--stone)", padding:"1.75rem", marginBottom:"1.25rem" }}>
+      <div style={{ background:"#FFFFFF", border:"1px solid #CFC8BC", padding:"1.75rem", marginBottom:"1.25rem" }}>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"1.25rem" }}>
-          <p style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"1.1rem", color:"var(--emerald)" }}>Items / Services</p>
-          <button onClick={addItem} style={{ padding:"0.35rem 0.75rem", border:"1px solid var(--champagne)", background:"transparent", color:"var(--champagne)", fontSize:"0.6rem", cursor:"pointer", fontFamily:"Jost,sans-serif", letterSpacing:"0.1em" }}>
+          <p style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"1.1rem", color:"#1C3D35" }}>Items / Services</p>
+          <button onClick={addItem} style={{ padding:"0.35rem 0.75rem", border:"1px solid var(--champagne)", background:"transparent", color:"#C4965A", fontSize:"0.6rem", cursor:"pointer", fontFamily:"Jost,sans-serif", letterSpacing:"0.1em" }}>
             + Add Item
           </button>
         </div>
@@ -83,7 +83,7 @@ export default function NewInvoicePage() {
         {/* Header */}
         <div style={{ display:"grid", gridTemplateColumns:"1fr 80px 100px 80px", gap:"1rem", marginBottom:"0.5rem" }}>
           {["Description","Qty","Unit Price",""].map(h=>(
-            <p key={h} style={{ fontSize:"0.55rem", letterSpacing:"0.1em", textTransform:"uppercase", color:"var(--warm-grey)", fontWeight:300 }}>{h}</p>
+            <p key={h} style={{ fontSize:"0.55rem", letterSpacing:"0.1em", textTransform:"uppercase", color:"#8C857A", fontWeight:300 }}>{h}</p>
           ))}
         </div>
 
@@ -96,40 +96,40 @@ export default function NewInvoicePage() {
             <input type="number" min="0" step="0.01" value={item.unit_price}
               onChange={e=>updateItem(idx,"unit_price",parseFloat(e.target.value)||0)} style={inputStyle} />
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-              <span style={{ fontSize:"0.8rem", color:"var(--emerald)", fontWeight:300 }}>
+              <span style={{ fontSize:"0.8rem", color:"#1C3D35", fontWeight:300 }}>
                 {(item.quantity*item.unit_price).toLocaleString()}
               </span>
               {items.length>1 && (
-                <button onClick={()=>removeItem(idx)} style={{ background:"none", border:"none", color:"var(--stone)", cursor:"pointer", fontSize:"1rem", lineHeight:1 }}>×</button>
+                <button onClick={()=>removeItem(idx)} style={{ background:"none", border:"none", color:"#CFC8BC", cursor:"pointer", fontSize:"1rem", lineHeight:1 }}>×</button>
               )}
             </div>
           </div>
         ))}
 
         {/* Totals */}
-        <div style={{ marginTop:"1.5rem", paddingTop:"1rem", borderTop:"1px solid var(--stone)" }}>
+        <div style={{ marginTop:"1.5rem", paddingTop:"1rem", borderTop:"1px solid #CFC8BC" }}>
           <div style={{ display:"flex", flexDirection:"column", alignItems:"flex-end", gap:"0.5rem" }}>
             <div style={{ display:"flex", gap:"3rem", alignItems:"center" }}>
-              <span style={{ fontSize:"0.72rem", color:"var(--warm-grey)", fontWeight:300 }}>Subtotal</span>
-              <span style={{ fontSize:"0.9rem", color:"var(--emerald)", fontWeight:300 }}>SGD {subtotal.toLocaleString()}</span>
+              <span style={{ fontSize:"0.72rem", color:"#8C857A", fontWeight:300 }}>Subtotal</span>
+              <span style={{ fontSize:"0.9rem", color:"#1C3D35", fontWeight:300 }}>SGD {subtotal.toLocaleString()}</span>
             </div>
             <div style={{ display:"flex", gap:"3rem", alignItems:"center" }}>
-              <span style={{ fontSize:"0.72rem", color:"var(--warm-grey)", fontWeight:300 }}>
+              <span style={{ fontSize:"0.72rem", color:"#8C857A", fontWeight:300 }}>
                 GST % <input type="number" min="0" max="100" value={form.tax} onChange={e=>setForm(p=>({...p,tax:parseFloat(e.target.value)||0}))}
-                  style={{ width:"40px", border:"none", borderBottom:"1px solid var(--stone)", textAlign:"center", fontSize:"0.72rem", fontFamily:"Jost,sans-serif", outline:"none", background:"transparent" }} />
+                  style={{ width:"40px", border:"none", borderBottom:"1px solid #CFC8BC", textAlign:"center", fontSize:"0.72rem", fontFamily:"Jost,sans-serif", outline:"none", background:"transparent" }} />
               </span>
-              <span style={{ fontSize:"0.9rem", color:"var(--emerald)", fontWeight:300 }}>SGD {taxAmt.toFixed(2)}</span>
+              <span style={{ fontSize:"0.9rem", color:"#1C3D35", fontWeight:300 }}>SGD {taxAmt.toFixed(2)}</span>
             </div>
-            <div style={{ display:"flex", gap:"3rem", alignItems:"center", paddingTop:"0.5rem", borderTop:"1px solid var(--stone)" }}>
-              <span style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"1rem", color:"var(--emerald)" }}>Total</span>
-              <span style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"1.4rem", color:"var(--champagne)" }}>SGD {total.toLocaleString()}</span>
+            <div style={{ display:"flex", gap:"3rem", alignItems:"center", paddingTop:"0.5rem", borderTop:"1px solid #CFC8BC" }}>
+              <span style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"1rem", color:"#1C3D35" }}>Total</span>
+              <span style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"1.4rem", color:"#C4965A" }}>SGD {total.toLocaleString()}</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Notes */}
-      <div style={{ background:"var(--ivory)", border:"1px solid var(--stone)", padding:"1.75rem", marginBottom:"1.75rem" }}>
+      <div style={{ background:"#FFFFFF", border:"1px solid #CFC8BC", padding:"1.75rem", marginBottom:"1.75rem" }}>
         <label style={labelStyle}>Notes (shown on invoice)</label>
         <textarea value={form.notes} onChange={e=>setForm(p=>({...p,notes:e.target.value}))} rows={3} placeholder="Payment instructions, thank you note, etc." style={{...inputStyle,resize:"none"}} />
       </div>
@@ -137,11 +137,11 @@ export default function NewInvoicePage() {
       {/* Actions */}
       <div style={{ display:"flex", gap:"1rem" }}>
         <button onClick={()=>handleSave("unpaid")} disabled={saving||!form.client_name||!form.client_email}
-          style={{ padding:"0.875rem 2.5rem", background:"var(--champagne)", color:"var(--ivory)", fontSize:"0.62rem", letterSpacing:"0.22em", textTransform:"uppercase", border:"none", cursor:"pointer", fontFamily:"Jost,sans-serif", opacity:saving?0.6:1 }}>
+          style={{ padding:"0.875rem 2.5rem", background:"#C4965A", color:"var(--ivory)", fontSize:"0.62rem", letterSpacing:"0.22em", textTransform:"uppercase", border:"none", cursor:"pointer", fontFamily:"Jost,sans-serif", opacity:saving?0.6:1 }}>
           {saving?"Saving…":"Create & Send Invoice"}
         </button>
         <button onClick={()=>handleSave("draft")} disabled={saving}
-          style={{ padding:"0.875rem 2.5rem", background:"transparent", color:"var(--emerald)", fontSize:"0.62rem", letterSpacing:"0.22em", textTransform:"uppercase", border:"1px solid var(--emerald)", cursor:"pointer", fontFamily:"Jost,sans-serif" }}>
+          style={{ padding:"0.875rem 2.5rem", background:"transparent", color:"#1C3D35", fontSize:"0.62rem", letterSpacing:"0.22em", textTransform:"uppercase", border:"1px solid var(--emerald)", cursor:"pointer", fontFamily:"Jost,sans-serif" }}>
           Save as Draft
         </button>
       </div>
