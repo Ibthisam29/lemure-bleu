@@ -248,18 +248,26 @@ body {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.6rem 1.25rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  color: rgba(247,242,232,0.55);
+  padding: 0.55rem 1.25rem;
+  font-size: 0.72rem;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: #8C857A;
   text-decoration: none;
   border-left: 2px solid transparent;
-  transition: all 0.2s;
+  transition: all 0.18s;
+  background: transparent;
 }
 .admin-link:hover, .admin-link.active {
-  color: var(--ivory);
-  background: rgba(196,150,90,0.12);
-  border-left-color: var(--champagne);
+  color: #1C3D35;
+  background: rgba(28,61,53,0.07);
+  border-left-color: #C4965A;
+}
+
+/* ── Admin page override ── */
+[data-admin="true"] {
+  background-color: #EDE6D6 !important;
+  color: #1C3D35 !important;
 }
 
 /* ── Animations ── */
