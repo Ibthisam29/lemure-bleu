@@ -17,3 +17,11 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ section: data });
   } catch(e) { return NextResponse.json({ error: String(e) }, { status:500 }); }
 }
+
+// Trigger ISR revalidation after section update
+async function revalidateFrontend() {
+  try {
+    const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+    await fetch(`${base}/api/revalidate`, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({path:"/"}) });
+  } catch { /* non-critical */ }
+}

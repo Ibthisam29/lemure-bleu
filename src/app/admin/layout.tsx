@@ -11,6 +11,8 @@ const NAV = [
     { href: "/admin/sections",    label: "Site Sections",      icon: "◎" },
     { href: "/admin/stones",      label: "Stone Vault",        icon: "◆" },
     { href: "/admin/collections", label: "Collections",        icon: "◉" },
+    { href: "/admin/events",      label: "Events",             icon: "◖" },
+    { href: "/admin/ads",         label: "Ads & Banners",      icon: "◗" },
   ]},
   { section: "Clients", items: [
     { href: "/admin/leads",        label: "VIP Leads",         icon: "◐" },
