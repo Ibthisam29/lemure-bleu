@@ -1,76 +1,52 @@
-import type { Preorder } from "@/types";
+import { A, PageHeader, statusPill } from "@/lib/adminStyles";
 
-async function getPreorders(): Promise<Preorder[]> {
+async function getPreorders() {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return [];
   try {
-    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return [];
     const { createAdminClient } = await import("@/lib/supabase");
-    const supabase = createAdminClient();
-    const { data } = await supabase.from("preorders").select("*").order("created_at", { ascending: false });
-    return (data as Preorder[]) || [];
+    const { data } = await createAdminClient().from("preorders").select("*").order("created_at",{ascending:false});
+    return data || [];
   } catch { return []; }
 }
 
-const ALLOCATION_COLORS: Record<string, string> = {
-  pending: "#7ec8e3", allocated: "#e3c87e", in_consultation: "#C4965A", fulfilled: "#7eca8e", refunded: "#888",
-};
-const TIER_LABELS: Record<string, string> = {
-  blue_entry: "Blue Entry (SGD 300)", maison: "Maison (SGD 1,000)", legacy: "Legacy (SGD 3,000)",
-};
+const TIER_LABELS: Record<string,string> = { blue_entry:"Blue Entry — SGD 300", maison:"Maison — SGD 1,000", legacy:"Legacy — SGD 3,000" };
 
 export default async function AdminPreordersPage() {
   const preorders = await getPreorders();
-  const totalRevenue = preorders.filter(p => p.payment_status === "paid").reduce((s, p) => s + p.amount, 0);
+  const totalRevenue = preorders.filter((p:{payment_status:string})=>p.payment_status==="paid").reduce((s,p:{amount:number})=>s+p.amount,0);
+
   return (
     <div>
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <p className="label-luxury mb-2" style={{ color: "rgba(184,138,114,0.7)" }}>Deposits</p>
-          <h1 className="heading-display text-3xl" style={{ color: "#F7F2E8" }}>Preorders ({preorders.length})</h1>
-        </div>
-        <div className="text-right">
-          <p className="label-luxury" style={{ fontSize: "0.55rem", color: "rgba(184,138,114,0.6)" }}>Confirmed Revenue</p>
-          <p className="heading-display text-2xl" style={{ color: "#C4965A" }}>SGD {totalRevenue.toLocaleString()}</p>
-        </div>
-      </div>
-      <div style={{ overflowX:"auto", background:"#FFFFFF", border:"1px solid #CFC8BC", borderRadius:0 }}>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <PageHeader eyebrow="Payments" title="Preorders" sub={`${preorders.length} registrations · SGD ${totalRevenue.toLocaleString()} confirmed`} />
+
+      <div style={{ ...A.card, padding:0, overflowX:"auto" }}>
+        <table style={{ width:"100%", borderCollapse:"collapse" }}>
           <thead>
-            <tr style={{ borderBottom: "1px solid #CFC8BC" }}>
-              {["Client", "Email", "Tier", "Amount", "Payment", "Allocation", "Date"].map(h => (
-                <th key={h} className="text-left py-3 px-3"
-                  style={{ color: "#8C857A", fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 500 }}>{h}</th>
-              ))}
-            </tr>
+            <tr>{["Client","Email","Tier","Amount","Payment","Allocation","Date"].map(h=><th key={h} style={A.th}>{h}</th>)}</tr>
           </thead>
           <tbody>
-            {preorders.map(p => (
-              <tr key={p.id} style={{ borderBottom: "1px solid rgba(28,61,53,0.04)" }}>
-                <td className="py-3 px-3 text-sm" style={{ color: "#F7F2E8" }}>{p.full_name}</td>
-                <td className="py-3 px-3 text-xs" style={{ color: "rgba(28,61,53,0.75)" }}>{p.email}</td>
-                <td className="py-3 px-3 text-xs" style={{ color: "rgba(28,61,53,0.75)" }}>{TIER_LABELS[p.preorder_tier] || p.preorder_tier}</td>
-                <td className="py-3 px-3 text-xs font-medium" style={{ color: "#C4965A" }}>SGD {p.amount.toLocaleString()}</td>
-                <td className="py-3 px-3">
-                  <span className="px-2 py-1 text-xs"
-                    style={{ background: p.payment_status === "paid" ? "#7eca8e20" : "#88888820", color: p.payment_status === "paid" ? "#7eca8e" : "#aaa", border: `1px solid ${p.payment_status === "paid" ? "#7eca8e40" : "#88888840"}` }}>
-                    {p.payment_status}
-                  </span>
+            {preorders.map((p:{id:string;full_name:string;email:string;phone:string;preorder_tier:string;amount:number;currency:string;payment_status:string;allocation_status:string;created_at:string}) => (
+              <tr key={p.id}
+                onMouseEnter={e=>(e.currentTarget as HTMLElement).style.backgroundColor="#FDFAF5"}
+                onMouseLeave={e=>(e.currentTarget as HTMLElement).style.backgroundColor="transparent"}
+              >
+                <td style={{ ...A.td, paddingLeft:"1rem" }}>
+                  <div style={{ fontSize:"0.82rem", color:A.emerald, fontWeight:300 }}>{p.full_name}</div>
+                  {p.phone && <div style={{ fontSize:"0.62rem", color:A.warmGrey, fontWeight:300 }}>{p.phone}</div>}
                 </td>
-                <td className="py-3 px-3">
-                  <span className="px-2 py-1 text-xs"
-                    style={{ background: `${ALLOCATION_COLORS[p.allocation_status] || "#888"}20`, color: ALLOCATION_COLORS[p.allocation_status] || "#888", border: `1px solid ${ALLOCATION_COLORS[p.allocation_status] || "#888"}40` }}>
-                    {p.allocation_status.replace("_", " ")}
-                  </span>
-                </td>
-                <td className="py-3 px-3 text-xs" style={{ color: "#8C857A" }}>
-                  {new Date(p.created_at).toLocaleDateString()}
+                <td style={A.td}><a href={`mailto:${p.email}`} style={{ fontSize:"0.72rem", color:A.champagne, textDecoration:"none" }}>{p.email}</a></td>
+                <td style={A.td}><div style={{ fontSize:"0.72rem", color:A.emerald, fontWeight:300 }}>{TIER_LABELS[p.preorder_tier]||p.preorder_tier}</div></td>
+                <td style={A.td}><div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.1rem", color:A.champagne }}>{p.currency} {p.amount.toLocaleString()}</div></td>
+                <td style={A.td}><span style={statusPill(p.payment_status)}>{p.payment_status?.replace(/_/g," ")}</span></td>
+                <td style={A.td}><span style={statusPill(p.allocation_status)}>{p.allocation_status?.replace(/_/g," ")}</span></td>
+                <td style={{ ...A.td, paddingRight:"1rem", fontSize:"0.65rem", color:A.warmGrey, fontWeight:300 }}>
+                  {new Date(p.created_at).toLocaleDateString("en-SG")}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {preorders.length === 0 && (
-          <p className="text-center py-16 text-sm" style={{ color: "#CFC8BC" }}>No preorders yet.</p>
-        )}
+        {preorders.length===0 && <div style={{padding:"3rem",textAlign:"center",color:A.stone,fontSize:"0.8rem"}}>No preorders yet.</div>}
       </div>
     </div>
   );

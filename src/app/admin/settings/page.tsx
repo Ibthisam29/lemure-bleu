@@ -1,63 +1,72 @@
-"use client";
+import { A, PageHeader } from "@/lib/adminStyles";
 
 export default function AdminSettingsPage() {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lemurebleu.com";
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "Not set";
+  const hasServiceKey = !!process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const hasResend = !!process.env.RESEND_API_KEY;
+  const hasAdminPwd = !!process.env.ADMIN_PASSWORD;
+
   return (
     <div>
-      <div className="mb-8">
-        <p className="label-luxury mb-2" style={{ color: "rgba(184,138,114,0.7)" }}>System</p>
-        <h1 className="heading-display text-3xl" style={{ color: "#F7F2E8" }}>Settings</h1>
+      <PageHeader eyebrow="System" title="Settings" sub="Environment configuration and system status" />
+
+      {/* System status */}
+      <div style={{ ...A.card, marginBottom:"1.25rem" }}>
+        <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.1rem", color:A.emerald, marginBottom:"1.25rem" }}>System Status</div>
+        <div style={{ display:"grid", gap:"0.6rem" }}>
+          {[
+            { label:"Supabase URL",        value:supabaseUrl.slice(0,40)+"…", ok:supabaseUrl!=="Not set" },
+            { label:"Supabase Service Key", value:hasServiceKey?"Connected — Admin reads enabled":"⚠ Missing — Admin reads disabled", ok:hasServiceKey },
+            { label:"Resend Email API",     value:hasResend?"Connected — Emails enabled":"Not configured — Emails will be skipped", ok:hasResend },
+            { label:"Admin Password",       value:hasAdminPwd?"Set — Login protected":"⚠ Not set — Anyone can access admin", ok:hasAdminPwd },
+            { label:"Site URL",             value:siteUrl, ok:true },
+          ].map(item => (
+            <div key={item.label} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"0.75rem 0", borderBottom:`1px solid ${A.stone}` }}>
+              <span style={{ fontSize:"0.72rem", color:A.warmGrey, fontWeight:300, fontFamily:"'Jost',sans-serif" }}>{item.label}</span>
+              <div style={{ display:"flex", alignItems:"center", gap:"0.6rem" }}>
+                <span style={{ fontSize:"0.72rem", color:A.emerald, fontWeight:300, fontFamily:"'Jost',sans-serif" }}>{item.value}</span>
+                <div style={{ width:"8px", height:"8px", borderRadius:"50%", backgroundColor:item.ok?"#3D7A55":"#B87A20" }} />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="max-w-2xl space-y-8">
-        {/* Environment Variables Info */}
-        <div className="p-6" style={{ background: "#FFFFFF", border: "1px solid rgba(184,138,114,0.12)" }}>
-          <h3 className="text-sm font-medium mb-4" style={{ color: "#F7F2E8" }}>Environment Variables</h3>
-          <p className="text-xs leading-relaxed mb-4" style={{ color: "#8C857A" }}>
-            Configure the following in your hosting environment (Vercel / Netlify) or <code className="px-1" style={{ background: "rgba(28,61,53,0.06)" }}>.env.local</code> file:
-          </p>
-          <div className="space-y-2">
-            {[
-              "STRIPE_SECRET_KEY",
-              "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
-              "STRIPE_WEBHOOK_SECRET",
-              "NEXT_PUBLIC_SUPABASE_URL",
-              "NEXT_PUBLIC_SUPABASE_ANON_KEY",
-              "SUPABASE_SERVICE_ROLE_KEY",
-              "RESEND_API_KEY",
-              "ADMIN_EMAIL",
-              "NEXT_PUBLIC_SITE_URL",
-            ].map(key => (
-              <div key={key} className="flex items-center justify-between py-2"
-                style={{ borderBottom: "1px solid rgba(28,61,53,0.05)" }}>
-                <code className="text-xs" style={{ color: "#C4965A" }}>{key}</code>
-                <span className="text-xs" style={{ color: "#CFC8BC" }}>env only</span>
-              </div>
-            ))}
-          </div>
+      {/* Required Vercel env vars */}
+      <div style={{ ...A.card, marginBottom:"1.25rem" }}>
+        <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.1rem", color:A.emerald, marginBottom:"1rem" }}>Required Environment Variables</div>
+        <div style={{ fontSize:"0.72rem", color:A.warmGrey, fontWeight:300, marginBottom:"1rem", lineHeight:1.7, fontFamily:"'Jost',sans-serif" }}>
+          Set these in Vercel → Project → Settings → Environment Variables, then redeploy.
         </div>
+        <div style={{ display:"grid", gap:"0.5rem" }}>
+          {[
+            ["NEXT_PUBLIC_SUPABASE_URL",    "Your Supabase project URL"],
+            ["NEXT_PUBLIC_SUPABASE_ANON_KEY","Supabase anon/public key"],
+            ["SUPABASE_SERVICE_ROLE_KEY",   "Supabase service role key (admin reads)"],
+            ["RESEND_API_KEY",              "Resend.com API key for email notifications"],
+            ["ADMIN_EMAIL",                 "Your email — receives lead/booking alerts"],
+            ["ADMIN_PASSWORD",              "Password to access /admin"],
+            ["NEXT_PUBLIC_SITE_URL",        "https://lemurebleu.com"],
+          ].map(([key, desc]) => (
+            <div key={key} style={{ backgroundColor:A.ivoryDeep, padding:"0.6rem 0.9rem", borderLeft:`2px solid ${A.stone}` }}>
+              <code style={{ fontSize:"0.65rem", color:A.emerald, fontFamily:"monospace" }}>{key}</code>
+              <div style={{ fontSize:"0.6rem", color:A.warmGrey, fontWeight:300, marginTop:"0.2rem", fontFamily:"'Jost',sans-serif" }}>{desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
 
-        {/* Stripe Webhook */}
-        <div className="p-6" style={{ background: "#FFFFFF", border: "1px solid rgba(184,138,114,0.12)" }}>
-          <h3 className="text-sm font-medium mb-4" style={{ color: "#F7F2E8" }}>Stripe Webhook</h3>
-          <p className="text-xs leading-relaxed" style={{ color: "#8C857A" }}>
-            Configure your Stripe webhook endpoint:
-          </p>
-          <code className="block mt-3 px-3 py-2 text-xs" style={{ background: "rgba(0,0,0,0.4)", color: "#7ec8e3" }}>
-            POST https://lemurebleu.com/api/webhooks/stripe
-          </code>
-          <p className="text-xs mt-3" style={{ color: "#8C857A" }}>
-            Event to listen for: <code style={{ color: "#C4965A" }}>checkout.session.completed</code>
-          </p>
+      {/* Supabase migration */}
+      <div style={{ ...A.card }}>
+        <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.1rem", color:A.emerald, marginBottom:"1rem" }}>Supabase Migration v2</div>
+        <div style={{ fontSize:"0.72rem", color:A.warmGrey, fontWeight:300, marginBottom:"0.75rem", lineHeight:1.7, fontFamily:"'Jost',sans-serif" }}>
+          Run <code style={{ color:A.emerald, fontFamily:"monospace" }}>supabase-migration-v2.sql</code> in your Supabase SQL Editor to add Events and Ads tables:
         </div>
-
-        {/* Supabase RLS */}
-        <div className="p-6" style={{ background: "#FFFFFF", border: "1px solid rgba(184,138,114,0.12)" }}>
-          <h3 className="text-sm font-medium mb-3" style={{ color: "#F7F2E8" }}>Supabase Row Level Security</h3>
-          <p className="text-xs leading-relaxed" style={{ color: "#8C857A" }}>
-            All public-facing tables (vip_leads, appointments) use INSERT-only policies for anonymous users.
-            Admin reads use the service_role key. RLS must be enabled on all tables.
-          </p>
-        </div>
+        <a href="https://supabase.com/dashboard/project/xiikmczdaehbnalmhpdd/sql" target="_blank" rel="noopener noreferrer"
+          style={{ ...A.btnEmerald, textDecoration:"none", display:"inline-block", fontSize:"0.56rem" }}>
+          Open Supabase SQL Editor ↗
+        </a>
       </div>
     </div>
   );

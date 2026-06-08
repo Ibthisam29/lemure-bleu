@@ -1,98 +1,76 @@
-import Link from "next/link";
+import { A, PageHeader, statusPill } from "@/lib/adminStyles";
 
 async function getPurchases() {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return [];
   try {
-    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return [];
     const { createAdminClient } = await import("@/lib/supabase");
     const { data } = await createAdminClient().from("purchases").select("*,invoices(invoice_number)").order("created_at",{ascending:false});
     return data || [];
   } catch { return []; }
 }
 
-const STATUS_COLOR: Record<string,string> = { pending:"#C4963A", paid:"#3D8B5E", partial:"#7A5FA0", refunded:"#aaa", cancelled:"#8B3A3A" };
-const TYPE_LABEL: Record<string,string> = { product:"Product", stone:"Gemstone", preorder:"Preorder", appointment:"Consultation", collection:"Collection", custom:"Custom" };
+const TYPE_LABELS: Record<string,string> = { product:"Product", stone:"Gemstone", preorder:"Preorder", appointment:"Consultation", collection:"Collection", custom:"Custom" };
 
 export default async function AdminPurchasesPage() {
   const purchases = await getPurchases();
-  const totalPaid = purchases.filter((p:{payment_status:string})=>p.payment_status==="paid").reduce((s:number,p:{amount:number})=>s+p.amount,0);
+  const totalPaid = purchases.filter((p:{payment_status:string})=>p.payment_status==="paid").reduce((s,p:{amount:number})=>s+p.amount,0);
+  const totalPending = purchases.filter((p:{payment_status:string})=>p.payment_status==="pending").reduce((s,p:{amount:number})=>s+p.amount,0);
 
   return (
     <div>
-      <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", marginBottom:"2rem" }}>
-        <div>
-          <p style={{ fontSize:"0.55rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"#C4965A", marginBottom:"0.4rem" }}>Client Records</p>
-          <h1 style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"2.2rem", fontWeight:300, color:"#1C3D35" }}>Purchase Records</h1>
-          <p style={{ fontSize:"0.75rem", color:"#8C857A", fontWeight:300, marginTop:"0.25rem" }}>All orders, bookings, and consultations</p>
-        </div>
-        <Link href="/admin/purchases/new" style={{ padding:"0.6rem 1.5rem", background:"#C4965A", color:"#F7F2E8", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", textDecoration:"none", fontFamily:"Jost,sans-serif" }}>
-          + Add Record
-        </Link>
+      <PageHeader eyebrow="Clients" title="Purchase Records" sub="All orders, bookings, and consultations" />
+
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"1rem", marginBottom:"1.5rem" }}>
+        {[
+          { label:"Total Records", value:purchases.length, color:A.emerald },
+          { label:"Revenue Collected", value:`SGD ${totalPaid.toLocaleString()}`, color:"#3D7A55" },
+          { label:"Pending Payment", value:`SGD ${totalPending.toLocaleString()}`, color:A.champagne },
+        ].map(s=>(
+          <div key={s.label} style={A.card}>
+            <div style={{ fontSize:"0.48rem", letterSpacing:"0.18em", textTransform:"uppercase", color:A.warmGrey, marginBottom:"0.5rem", fontFamily:"'Jost',sans-serif" }}>{s.label}</div>
+            <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.8rem", fontWeight:300, color:s.color }}>{s.value}</div>
+          </div>
+        ))}
       </div>
 
-      {/* Summary */}
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"1rem", marginBottom:"2rem" }}>
-        <div style={{ background:"#FFFFFF", border:"1px solid #CFC8BC", padding:"1.25rem" }}>
-          <p style={{ fontSize:"0.55rem", letterSpacing:"0.15em", textTransform:"uppercase", color:"#8C857A", fontWeight:300, marginBottom:"0.4rem" }}>Total Records</p>
-          <p style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"2rem", fontWeight:300, color:"#1C3D35" }}>{purchases.length}</p>
-        </div>
-        <div style={{ background:"#FFFFFF", border:"1px solid #CFC8BC", padding:"1.25rem" }}>
-          <p style={{ fontSize:"0.55rem", letterSpacing:"0.15em", textTransform:"uppercase", color:"#8C857A", fontWeight:300, marginBottom:"0.4rem" }}>Revenue Collected</p>
-          <p style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"2rem", fontWeight:300, color:"#C4965A" }}>SGD {totalPaid.toLocaleString()}</p>
-        </div>
-        <div style={{ background:"#FFFFFF", border:"1px solid #CFC8BC", padding:"1.25rem" }}>
-          <p style={{ fontSize:"0.55rem", letterSpacing:"0.15em", textTransform:"uppercase", color:"#8C857A", fontWeight:300, marginBottom:"0.4rem" }}>Pending</p>
-          <p style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"2rem", fontWeight:300, color:"#C4963A" }}>{purchases.filter((p:{payment_status:string})=>p.payment_status==="pending").length}</p>
-        </div>
-      </div>
-
-      {/* Table */}
-      <div style={{ background:"#FFFFFF", border:"1px solid #CFC8BC", overflowX:"auto" }}>
+      <div style={{ ...A.card, padding:0, overflowX:"auto" }}>
         <table style={{ width:"100%", borderCollapse:"collapse" }}>
           <thead>
-            <tr style={{ borderBottom:"1px solid #CFC8BC" }}>
-              {["Client","Item Purchased / Booked","Type","Amount","Status","Invoice","Date"].map(h=>(
-                <th key={h} style={{ textAlign:"left", padding:"0.75rem 1rem", fontSize:"0.55rem", letterSpacing:"0.15em", textTransform:"uppercase", color:"#8C857A", fontWeight:300 }}>{h}</th>
-              ))}
-            </tr>
+            <tr>{["Client","Item Ordered / Booked","Type","Amount","Payment","Invoice","Date"].map(h=><th key={h} style={A.th}>{h}</th>)}</tr>
           </thead>
           <tbody>
-            {purchases.map((p:{id:string;client_name:string;client_email:string;client_phone:string;item_title:string;item_type:string;amount:number;currency:string;payment_status:string;invoices:{invoice_number:string}|null;created_at:string;notes:string}) => (
-              <tr key={p.id} style={{ borderBottom:"1px solid rgba(207,200,188,0.6)", transition:"background 0.15s" }}>
-                <td style={{ padding:"0.875rem 1rem" }}>
-                  <p style={{ fontSize:"0.82rem", color:"#1C3D35", fontWeight:300 }}>{p.client_name}</p>
-                  <p style={{ fontSize:"0.65rem", color:"#8C857A", fontWeight:300 }}>{p.client_email}</p>
-                  {p.client_phone && <p style={{ fontSize:"0.65rem", color:"#8C857A", fontWeight:300 }}>{p.client_phone}</p>}
+            {purchases.map((p:{id:string;client_name:string;client_email:string;client_phone:string;item_title:string;item_type:string;amount:number;currency:string;payment_status:string;notes:string;created_at:string;invoices:{invoice_number:string}|null}) => (
+              <tr key={p.id}
+                onMouseEnter={e=>(e.currentTarget as HTMLElement).style.backgroundColor="#FDFAF5"}
+                onMouseLeave={e=>(e.currentTarget as HTMLElement).style.backgroundColor="transparent"}
+              >
+                <td style={{ ...A.td, paddingLeft:"1rem" }}>
+                  <div style={{ fontSize:"0.82rem", color:A.emerald, fontWeight:300 }}>{p.client_name}</div>
+                  <div style={{ fontSize:"0.62rem", color:A.warmGrey, fontWeight:300 }}>{p.client_email}</div>
+                  {p.client_phone && <div style={{ fontSize:"0.62rem", color:A.warmGrey, fontWeight:300 }}>{p.client_phone}</div>}
                 </td>
-                <td style={{ padding:"0.875rem 1rem" }}>
-                  <p style={{ fontSize:"0.82rem", color:"#1C3D35", fontWeight:300 }}>{p.item_title}</p>
-                  {p.notes && <p style={{ fontSize:"0.65rem", color:"#8C857A", fontWeight:300 }}>{p.notes.slice(0,40)}</p>}
+                <td style={A.td}>
+                  <div style={{ fontSize:"0.78rem", color:A.emerald, fontWeight:300 }}>{p.item_title}</div>
+                  {p.notes && <div style={{ fontSize:"0.62rem", color:A.warmGrey, fontWeight:300 }}>{p.notes.slice(0,50)}</div>}
                 </td>
-                <td style={{ padding:"0.875rem 1rem" }}>
-                  <span style={{ fontSize:"0.6rem", letterSpacing:"0.1em", textTransform:"uppercase", color:"#8C857A", border:"1px solid #CFC8BC", padding:"0.2rem 0.5rem", fontFamily:"Jost,sans-serif" }}>
-                    {TYPE_LABEL[p.item_type]||p.item_type}
-                  </span>
+                <td style={A.td}>
+                  <span style={statusPill(p.item_type)}>{TYPE_LABELS[p.item_type]||p.item_type}</span>
                 </td>
-                <td style={{ padding:"0.875rem 1rem", fontFamily:"Cormorant Garamond,serif", fontSize:"1.1rem", color:"#1C3D35", fontWeight:300 }}>
-                  {p.currency} {p.amount.toLocaleString()}
+                <td style={A.td}>
+                  <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.1rem", color:A.champagne }}>{p.currency} {p.amount.toLocaleString()}</div>
                 </td>
-                <td style={{ padding:"0.875rem 1rem" }}>
-                  <span style={{ padding:"0.25rem 0.6rem", fontSize:"0.6rem", letterSpacing:"0.08em", textTransform:"uppercase", color:STATUS_COLOR[p.payment_status]||"#aaa", border:`1px solid ${STATUS_COLOR[p.payment_status]||"#aaa"}40`, background:`${STATUS_COLOR[p.payment_status]||"#aaa"}10` }}>
-                    {p.payment_status}
-                  </span>
-                </td>
-                <td style={{ padding:"0.875rem 1rem", fontSize:"0.72rem", color:"#C4965A", fontWeight:300 }}>
+                <td style={A.td}><span style={statusPill(p.payment_status)}>{p.payment_status}</span></td>
+                <td style={{ ...A.td, fontSize:"0.68rem", color:A.warmGrey, fontWeight:300 }}>
                   {p.invoices ? `#${p.invoices.invoice_number}` : "—"}
                 </td>
-                <td style={{ padding:"0.875rem 1rem", fontSize:"0.72rem", color:"#8C857A", fontWeight:300 }}>
-                  {new Date(p.created_at).toLocaleDateString()}
+                <td style={{ ...A.td, paddingRight:"1rem", fontSize:"0.65rem", color:A.warmGrey, fontWeight:300 }}>
+                  {new Date(p.created_at).toLocaleDateString("en-SG")}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {purchases.length===0 && (
-          <p style={{ textAlign:"center", padding:"3rem", color:"#CFC8BC", fontSize:"0.8rem" }}>No purchase records yet.</p>
-        )}
+        {purchases.length===0 && <div style={{padding:"3rem",textAlign:"center",color:A.stone,fontSize:"0.8rem"}}>No purchase records yet.</div>}
       </div>
     </div>
   );

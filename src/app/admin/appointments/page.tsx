@@ -1,67 +1,55 @@
-import type { Appointment } from "@/types";
+import { A, PageHeader, statusPill } from "@/lib/adminStyles";
 
-async function getAppointments(): Promise<Appointment[]> {
+async function getAppointments() {
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return [];
   try {
-    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return [];
     const { createAdminClient } = await import("@/lib/supabase");
-    const supabase = createAdminClient();
-    const { data } = await supabase.from("appointments").select("*").order("preferred_date", { ascending: true });
-    return (data as Appointment[]) || [];
+    const { data } = await createAdminClient().from("appointments").select("*").order("preferred_date",{ascending:true});
+    return data || [];
   } catch { return []; }
 }
 
-const STATUS_COLORS: Record<string, string> = {
-  pending: "#7ec8e3", approved: "#7eca8e", rejected: "#ca7e7e", completed: "#a78eca",
-};
+const TYPE_LABELS: Record<string,string> = { bespoke:"Bespoke Jewellery", bridal:"Bridal", gemstone_sourcing:"Gemstone Sourcing", heirloom:"Heirloom Redesign", vip_preorder:"VIP Preorder", private_auction:"Private Auction / Trade" };
 
 export default async function AdminAppointmentsPage() {
-  const appointments = await getAppointments();
+  const appts = await getAppointments();
+  const pending = appts.filter((a:{status:string})=>a.status==="pending").length;
+
   return (
     <div>
-      <div className="mb-8">
-        <p className="label-luxury mb-2" style={{ color: "rgba(184,138,114,0.7)" }}>Calendar</p>
-        <h1 className="heading-display text-3xl" style={{ color: "#F7F2E8" }}>Appointments ({appointments.length})</h1>
-      </div>
-      <div style={{ overflowX:"auto", background:"#FFFFFF", border:"1px solid #CFC8BC", borderRadius:0 }}>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <PageHeader eyebrow="Clients" title="Appointments" sub={`${appts.length} total · ${pending} pending review`} />
+
+      <div style={{ ...A.card, padding:0, overflowX:"auto" }}>
+        <table style={{ width:"100%", borderCollapse:"collapse" }}>
           <thead>
-            <tr style={{ borderBottom: "1px solid #CFC8BC" }}>
-              {["Client", "Date & Time", "Type", "Budget", "Status", "Contact"].map(h => (
-                <th key={h} className="text-left py-3 px-3"
-                  style={{ color: "#8C857A", fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 500 }}>{h}</th>
-              ))}
-            </tr>
+            <tr>{["Client","Date & Time","Type","Budget","Status","Actions"].map(h=><th key={h} style={A.th}>{h}</th>)}</tr>
           </thead>
           <tbody>
-            {appointments.map(appt => (
-              <tr key={appt.id} style={{ borderBottom: "1px solid rgba(28,61,53,0.04)" }}>
-                <td className="py-3 px-3">
-                  <p className="text-sm" style={{ color: "#F7F2E8" }}>{appt.full_name}</p>
-                  <p className="text-xs mt-0.5" style={{ color: "#8C857A" }}>{appt.phone}</p>
+            {appts.map((a:{id:string;full_name:string;email:string;phone:string;preferred_date:string;preferred_time:string;appointment_type:string;budget_range:string;status:string;message:string}) => (
+              <tr key={a.id}
+                onMouseEnter={e=>(e.currentTarget as HTMLElement).style.backgroundColor="#FDFAF5"}
+                onMouseLeave={e=>(e.currentTarget as HTMLElement).style.backgroundColor="transparent"}
+              >
+                <td style={{ ...A.td, paddingLeft:"1rem" }}>
+                  <div style={{ fontSize:"0.82rem", color:A.emerald, fontWeight:300 }}>{a.full_name}</div>
+                  <a href={`mailto:${a.email}`} style={{ fontSize:"0.62rem", color:A.champagne, textDecoration:"none" }}>{a.email}</a>
+                  {a.phone && <div style={{ fontSize:"0.62rem", color:A.warmGrey, fontWeight:300 }}>{a.phone}</div>}
                 </td>
-                <td className="py-3 px-3">
-                  <p className="text-xs" style={{ color: "rgba(28,61,53,0.8)" }}>{new Date(appt.preferred_date).toLocaleDateString()}</p>
-                  {appt.preferred_time && <p className="text-xs" style={{ color: "#8C857A" }}>{appt.preferred_time}</p>}
+                <td style={A.td}>
+                  <div style={{ fontSize:"0.8rem", color:A.emerald, fontWeight:300 }}>{new Date(a.preferred_date).toLocaleDateString("en-SG",{day:"numeric",month:"short",year:"numeric"})}</div>
+                  {a.preferred_time && <div style={{ fontSize:"0.65rem", color:A.warmGrey, fontWeight:300 }}>{a.preferred_time}</div>}
                 </td>
-                <td className="py-3 px-3 text-xs" style={{ color: "rgba(28,61,53,0.75)" }}>{appt.appointment_type.replace("_", " ")}</td>
-                <td className="py-3 px-3 text-xs" style={{ color: "#8C857A" }}>{appt.budget_range}</td>
-                <td className="py-3 px-3">
-                  <span className="px-2 py-1 text-xs"
-                    style={{ background: `${STATUS_COLORS[appt.status] || "#888"}20`, color: STATUS_COLORS[appt.status] || "#888", border: `1px solid ${STATUS_COLORS[appt.status] || "#888"}40` }}>
-                    {appt.status}
-                  </span>
-                </td>
-                <td className="py-3 px-3">
-                  <a href={`mailto:${appt.email}`} className="text-xs hover:text-champagne transition-colors"
-                    style={{ color: "rgba(184,138,114,0.7)" }}>{appt.email}</a>
+                <td style={A.td}><div style={{ fontSize:"0.75rem", color:A.emerald, fontWeight:300 }}>{TYPE_LABELS[a.appointment_type]||a.appointment_type}</div></td>
+                <td style={A.td}><div style={{ fontSize:"0.72rem", color:A.warmGrey, fontWeight:300 }}>{a.budget_range?.replace(/_/g," ")}</div></td>
+                <td style={A.td}><span style={statusPill(a.status)}>{a.status}</span></td>
+                <td style={{ ...A.td, paddingRight:"1rem" }}>
+                  <a href={`mailto:${a.email}?subject=Re: Your Lemure Bleu Appointment Request`} style={{ fontSize:"0.6rem", color:A.champagne, textDecoration:"none", letterSpacing:"0.08em", textTransform:"uppercase", fontFamily:"'Jost',sans-serif" }}>Contact →</a>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {appointments.length === 0 && (
-          <p className="text-center py-16 text-sm" style={{ color: "#CFC8BC" }}>No appointments yet.</p>
-        )}
+        {appts.length===0 && <div style={{padding:"3rem",textAlign:"center",color:A.stone,fontSize:"0.8rem"}}>No appointments yet.</div>}
       </div>
     </div>
   );

@@ -1,43 +1,31 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { A, PageHeader, statusPill } from "@/lib/adminStyles";
 
-const CATS = ["jewellery","gemstone","collection","service","event"];
+type Product = { id:string; title:string; description:string; category:string; price:number|null; price_label:string; image_urls:string[]; video_url:string; featured:boolean; visible:boolean; sort_order:number; };
 
-type Product = {
-  id: string; title: string; description: string; category: string;
-  price: number | null; price_label: string; image_urls: string[];
-  video_url: string; featured: boolean; visible: boolean; sort_order: number;
-};
-
-const labelStyle = { fontSize:"0.55rem", letterSpacing:"0.15em", textTransform:"uppercase" as const, color:"#8C857A", fontWeight:300, display:"block", marginBottom:"0.4rem" };
-const inputStyle = { width:"100%", padding:"0.6rem 0", background:"transparent", border:"none", borderBottom:"1px solid #CFC8BC", color:"#1C3D35", fontSize:"0.82rem", fontWeight:300, outline:"none", fontFamily:"Jost,sans-serif" };
-const cardStyle = { background:"#FFFFFF", border:"1px solid #CFC8BC", padding:"1.25rem" };
+const empty = { title:"", description:"", category:"jewellery", price:"", price_label:"Price on Request", image_urls:[] as string[], video_url:"", featured:false, visible:true, sort_order:0 };
+const CATS = ["jewellery","gemstone","collection","service","event","bridal","heirloom"];
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [showForm, setShowForm] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [form, setForm] = useState(empty);
+  const [editId, setEditId] = useState<string|null>(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [editId, setEditId] = useState<string|null>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
-  const videoRef = useRef<HTMLInputElement>(null);
+  const [loading, setLoading] = useState(true);
+  const imgRef = useRef<HTMLInputElement>(null);
+  const vidRef = useRef<HTMLInputElement>(null);
 
-  const empty = { title:"", description:"", category:"jewellery", price:"", price_label:"Price on Request", image_urls:[] as string[], video_url:"", featured:false, visible:true, sort_order:0 };
-  const [form, setForm] = useState<typeof empty>(empty);
+  useEffect(() => { fetch("/api/admin/products").then(r=>r.json()).then(d=>{ setProducts(d.products||[]); setLoading(false); }).catch(()=>setLoading(false)); },[]);
 
-  useEffect(() => {
-    fetch("/api/admin/products").then(r=>r.json()).then(d=>{ setProducts(d.products||[]); setLoading(false); }).catch(()=>setLoading(false));
-  },[]);
-
-  async function uploadFiles(files: FileList, type: "image"|"video") {
+  async function uploadFiles(files:FileList, type:"image"|"video") {
     setUploading(true);
-    const urls: string[] = [];
+    const urls:string[] = [];
     for (const file of Array.from(files)) {
-      const fd = new FormData();
-      fd.append("file", file);
-      fd.append("type", type);
-      const res = await fetch("/api/admin/upload", { method:"POST", body:fd });
+      const fd = new FormData(); fd.append("file",file); fd.append("type",type);
+      const res = await fetch("/api/admin/upload",{method:"POST",body:fd});
       const d = await res.json();
       if (d.url) urls.push(d.url);
     }
@@ -45,191 +33,178 @@ export default function AdminProductsPage() {
     return urls;
   }
 
-  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    if (!e.target.files?.length) return;
-    const urls = await uploadFiles(e.target.files, "image");
-    setForm(p => ({ ...p, image_urls: [...p.image_urls, ...urls] }));
-  }
-
-  async function handleVideoUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    if (!e.target.files?.length) return;
-    const urls = await uploadFiles(e.target.files, "video");
-    if (urls[0]) setForm(p => ({ ...p, video_url: urls[0] }));
-  }
-
-  async function handleSave() {
+  async function save() {
     if (!form.title) return;
     setSaving(true);
     try {
-      const body = { ...form, price: form.price ? parseFloat(form.price as unknown as string) : null };
       const url = editId ? `/api/admin/products?id=${editId}` : "/api/admin/products";
-      const method = editId ? "PATCH" : "POST";
-      const res = await fetch(url, { method, headers:{"Content-Type":"application/json"}, body:JSON.stringify(body) });
+      const body = { ...form, price: form.price ? parseFloat(form.price as unknown as string) : null };
+      const res = await fetch(url, { method:editId?"PATCH":"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body) });
       const d = await res.json();
       if (d.product) {
-        if (editId) setProducts(p => p.map(x => x.id===editId ? d.product : x));
-        else setProducts(p => [d.product, ...p]);
+        setProducts(p => editId ? p.map(x=>x.id===editId?d.product:x) : [d.product,...p]);
         setForm(empty); setShowForm(false); setEditId(null);
       }
     } finally { setSaving(false); }
   }
 
-  async function toggleVisible(id: string, visible: boolean) {
-    await fetch(`/api/admin/products?id=${id}`, { method:"PATCH", headers:{"Content-Type":"application/json"}, body:JSON.stringify({visible}) });
-    setProducts(p => p.map(x => x.id===id ? {...x, visible} : x));
+  async function toggle(id:string, field:"visible"|"featured", val:boolean) {
+    await fetch(`/api/admin/products?id=${id}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({[field]:val})});
+    setProducts(p=>p.map(x=>x.id===id?{...x,[field]:val}:x));
   }
 
-  async function deleteProduct(id: string) {
-    if (!confirm("Delete this product?")) return;
-    await fetch(`/api/admin/products?id=${id}`, { method:"DELETE" });
-    setProducts(p => p.filter(x => x.id!==id));
+  async function del(id:string) {
+    if(!confirm("Delete this product permanently?")) return;
+    await fetch(`/api/admin/products?id=${id}`,{method:"DELETE"});
+    setProducts(p=>p.filter(x=>x.id!==id));
   }
 
-  function startEdit(prod: Product) {
-    setForm({ ...prod, price: prod.price?.toString() as unknown as string || "" });
-    setEditId(prod.id);
-    setShowForm(true);
-    window.scrollTo({ top: 0, behavior:"smooth" });
+  function startEdit(prod:Product) {
+    setForm({...prod, price: prod.price?.toString() as unknown as string ?? ""});
+    setEditId(prod.id); setShowForm(true);
+    window.scrollTo({top:0,behavior:"smooth"});
   }
+
+  const F = ({label, children}:{label:string;children:React.ReactNode}) => (
+    <div><label style={A.label}>{label}</label>{children}</div>
+  );
 
   return (
     <div>
-      <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", marginBottom:"2rem" }}>
-        <div>
-          <p style={{ fontSize:"0.55rem", letterSpacing:"0.2em", textTransform:"uppercase", color:"#C4965A", marginBottom:"0.4rem" }}>CMS</p>
-          <h1 style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"2.2rem", fontWeight:300, color:"#1C3D35" }}>Products & Media</h1>
-          <p style={{ fontSize:"0.75rem", color:"#8C857A", fontWeight:300, marginTop:"0.25rem" }}>Post products with images and videos directly to the website</p>
-        </div>
-        <button onClick={()=>{setShowForm(!showForm);setEditId(null);setForm(empty);}}
-          style={{ padding:"0.6rem 1.5rem", background:"#C4965A", color:"#F7F2E8", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", border:"none", cursor:"pointer", fontFamily:"Jost,sans-serif" }}>
-          {showForm ? "Cancel" : "+ Add Product"}
-        </button>
-      </div>
+      <PageHeader eyebrow="Website CMS" title="Products" sub="Published products appear on the website automatically"
+        action={
+          <button onClick={()=>{setShowForm(!showForm);setForm(empty);setEditId(null);}} style={A.btnGold}>
+            {showForm?"Cancel":"+ Add Product"}
+          </button>
+        }
+      />
 
       {/* Form */}
       {showForm && (
-        <div style={{ ...cardStyle, marginBottom:"2rem", borderColor:"rgba(196,150,90,0.4)" }}>
-          <p style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"1.3rem", color:"#1C3D35", marginBottom:"1.5rem" }}>
-            {editId ? "Edit Product" : "New Product"}
-          </p>
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1.5rem", marginBottom:"1.5rem" }}>
-            <div className="col-span-2">
-              <label style={labelStyle}>Title *</label>
-              <input placeholder="Product title" value={form.title} onChange={e=>setForm(p=>({...p,title:e.target.value}))} style={inputStyle} />
-            </div>
-            <div>
-              <label style={labelStyle}>Category</label>
-              <select value={form.category} onChange={e=>setForm(p=>({...p,category:e.target.value}))} style={{...inputStyle, cursor:"pointer"}}>
+        <div style={{ ...A.card, marginBottom:"1.5rem", borderColor:A.champagne }}>
+          <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.2rem", color:A.emerald, marginBottom:"1.5rem" }}>{editId?"Edit Product":"New Product"}</div>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1.25rem", marginBottom:"1.25rem" }}>
+            <div style={{ gridColumn:"1/-1" }}><F label="Title *"><input value={form.title} onChange={e=>setForm(p=>({...p,title:e.target.value}))} placeholder="Product name" style={A.input} /></F></div>
+            <F label="Category">
+              <select value={form.category} onChange={e=>setForm(p=>({...p,category:e.target.value}))} style={{...A.input,cursor:"pointer"}}>
                 {CATS.map(c=><option key={c} value={c}>{c.charAt(0).toUpperCase()+c.slice(1)}</option>)}
               </select>
-            </div>
-            <div>
-              <label style={labelStyle}>Price Label</label>
-              <input placeholder="e.g. Price on Request / SGD 5,000" value={form.price_label} onChange={e=>setForm(p=>({...p,price_label:e.target.value}))} style={inputStyle} />
-            </div>
-            <div>
-              <label style={labelStyle}>Price (numeric, optional)</label>
-              <input type="text" inputMode="numeric" placeholder="5000" value={form.price as unknown as string || ''} onChange={e=>{ const v = e.target.value; setForm(prev => Object.assign({}, prev, {price: v as unknown as number})); }} style={inputStyle} />
-            </div>
-            <div>
-              <label style={labelStyle}>Sort Order</label>
-              <input type="number" value={form.sort_order} onChange={e=>setForm(p=>({...p,sort_order:parseInt(e.target.value)||0}))} style={inputStyle} />
-            </div>
-            <div className="col-span-2">
-              <label style={labelStyle}>Description</label>
-              <textarea placeholder="Product description..." value={form.description} onChange={e=>setForm(p=>({...p,description:e.target.value}))} rows={3} style={{...inputStyle, resize:"none"}} />
-            </div>
+            </F>
+            <F label="Price Label"><input value={form.price_label} onChange={e=>setForm(p=>({...p,price_label:e.target.value}))} placeholder="e.g. Price on Request / SGD 5,000" style={A.input} /></F>
+            <F label="Price (numeric, for sorting)"><input type="text" inputMode="numeric" value={form.price as unknown as string||""} onChange={e=>{ const v=e.target.value; setForm(prev=>Object.assign({},prev,{price:v as unknown as number})); }} placeholder="5000" style={A.input} /></F>
+            <F label="Sort Order"><input type="number" value={form.sort_order} onChange={e=>setForm(p=>({...p,sort_order:parseInt(e.target.value)||0}))} style={A.input} /></F>
+            <div style={{ gridColumn:"1/-1" }}><F label="Description"><textarea value={form.description} onChange={e=>setForm(p=>({...p,description:e.target.value}))} rows={3} placeholder="Product description" style={{...A.input,resize:"none",display:"block"}} /></F></div>
           </div>
 
-          {/* Image upload */}
-          <div style={{ marginBottom:"1.5rem" }}>
-            <label style={labelStyle}>Images</label>
-            <div style={{ display:"flex", gap:"0.75rem", flexWrap:"wrap", marginBottom:"0.75rem" }}>
+          {/* Images */}
+          <F label="Product Images">
+            <div style={{ display:"flex", gap:"0.6rem", flexWrap:"wrap", marginBottom:"0.75rem", marginTop:"0.4rem" }}>
               {form.image_urls.map((url,i)=>(
                 <div key={i} style={{ position:"relative", width:"80px", height:"80px" }}>
-                  <img src={url} alt="" style={{ width:"100%", height:"100%", objectFit:"cover", border:"1px solid #CFC8BC" }} />
-                  <button onClick={()=>setForm(p=>({...p,image_urls:p.image_urls.filter((_,j)=>j!==i)}))}
-                    style={{ position:"absolute", top:"-6px", right:"-6px", width:"18px", height:"18px", borderRadius:"50%", background:"#C4965A", color:"white", border:"none", cursor:"pointer", fontSize:"0.6rem", display:"flex", alignItems:"center", justifyContent:"center" }}>×</button>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={url} alt="" style={{ width:"100%", height:"100%", objectFit:"cover", border:`1px solid ${A.stone}` }} />
+                  <button onClick={()=>setForm(p=>({...p,image_urls:p.image_urls.filter((_,j)=>j!==i)}))} style={{ position:"absolute", top:"-6px", right:"-6px", width:"18px", height:"18px", borderRadius:"50%", background:A.champagne, color:"white", border:"none", cursor:"pointer", fontSize:"0.65rem", display:"flex", alignItems:"center", justifyContent:"center" }}>×</button>
                 </div>
               ))}
-              <button onClick={()=>fileRef.current?.click()}
-                style={{ width:"80px", height:"80px", border:"1px dashed var(--stone)", background:"transparent", cursor:"pointer", color:"#8C857A", fontSize:"1.5rem", display:"flex", alignItems:"center", justifyContent:"center" }}>
-                {uploading ? "…" : "+"}
+              <button onClick={()=>imgRef.current?.click()} disabled={uploading}
+                style={{ width:"80px", height:"80px", border:`1px dashed ${A.stone}`, background:"transparent", cursor:"pointer", color:A.warmGrey, fontSize:"1.5rem", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                {uploading?"…":"+"}
               </button>
+              <input ref={imgRef} type="file" accept="image/*" multiple onChange={async e=>{ if(e.target.files){ const u=await uploadFiles(e.target.files,"image"); setForm(p=>({...p,image_urls:[...p.image_urls,...u]})); }}} style={{display:"none"}} />
             </div>
-            <input ref={fileRef} type="file" accept="image/*" multiple onChange={handleImageUpload} style={{ display:"none" }} />
-            <p style={{ fontSize:"0.65rem", color:"#8C857A", fontWeight:300 }}>Or paste image URL: <input placeholder="https://..." value="" onChange={e=>{ if(e.target.value) setForm(p=>({...p,image_urls:[...p.image_urls,e.target.value]})); }} style={{ border:"none", borderBottom:"1px solid #CFC8BC", outline:"none", fontSize:"0.75rem", width:"280px", padding:"0.2rem 0", fontFamily:"Jost,sans-serif" }} /></p>
-          </div>
+            <input placeholder="Or paste image URL and press Enter" style={{...A.input,fontSize:"0.75rem"}} onKeyDown={e=>{ if(e.key==="Enter"&&e.currentTarget.value){ setForm(p=>({...p,image_urls:[...p.image_urls,e.currentTarget.value]})); e.currentTarget.value=""; }}} />
+          </F>
 
-          {/* Video upload */}
-          <div style={{ marginBottom:"1.5rem" }}>
-            <label style={labelStyle}>Video (optional)</label>
-            {form.video_url ? (
-              <div style={{ display:"flex", alignItems:"center", gap:"1rem" }}>
-                <p style={{ fontSize:"0.75rem", color:"#1C3D35", fontWeight:300 }}>{form.video_url.slice(0,50)}…</p>
-                <button onClick={()=>setForm(p=>({...p,video_url:""}))} style={{ color:"#C4965A", background:"none", border:"none", cursor:"pointer", fontSize:"0.7rem" }}>Remove</button>
+          {/* Video */}
+          <div style={{ marginTop:"1rem" }}>
+            <F label="Video">
+              <div style={{ display:"flex", gap:"0.75rem", alignItems:"center", marginTop:"0.4rem", flexWrap:"wrap" }}>
+                {form.video_url ? (
+                  <>
+                    <span style={{ fontSize:"0.72rem", color:A.emerald, fontWeight:300 }}>🎬 {form.video_url.slice(0,40)}…</span>
+                    <button onClick={()=>setForm(p=>({...p,video_url:""}))} style={{...A.btnDanger, padding:"0.3rem 0.6rem"}}>Remove</button>
+                  </>
+                ) : (
+                  <>
+                    <button onClick={()=>vidRef.current?.click()} disabled={uploading} style={{...A.btnOutline, fontSize:"0.56rem"}}>Upload Video</button>
+                    <input ref={vidRef} type="file" accept="video/*" onChange={async e=>{ if(e.target.files){ const u=await uploadFiles(e.target.files,"video"); if(u[0]) setForm(p=>({...p,video_url:u[0]})); }}} style={{display:"none"}} />
+                    <input placeholder="Or paste video URL" onChange={e=>setForm(p=>({...p,video_url:e.target.value}))} style={{...A.input,width:"200px",fontSize:"0.75rem"}} />
+                  </>
+                )}
               </div>
-            ) : (
-              <>
-                <button onClick={()=>videoRef.current?.click()}
-                  style={{ padding:"0.5rem 1rem", border:"1px dashed var(--stone)", background:"transparent", cursor:"pointer", color:"#8C857A", fontSize:"0.7rem", fontFamily:"Jost,sans-serif", marginRight:"1rem" }}>
-                  Upload Video
-                </button>
-                <input placeholder="or paste video URL" onChange={e=>setForm(p=>({...p,video_url:e.target.value}))} style={{ border:"none", borderBottom:"1px solid #CFC8BC", outline:"none", fontSize:"0.75rem", width:"250px", padding:"0.2rem 0", fontFamily:"Jost,sans-serif" }} />
-                <input ref={videoRef} type="file" accept="video/*" onChange={handleVideoUpload} style={{ display:"none" }} />
-              </>
-            )}
+            </F>
           </div>
 
           {/* Toggles */}
-          <div style={{ display:"flex", gap:"2rem", marginBottom:"1.5rem" }}>
-            {[["featured","Featured on homepage"],["visible","Visible on website"]].map(([key,lbl])=>(
-              <label key={key} style={{ display:"flex", alignItems:"center", gap:"0.5rem", cursor:"pointer" }}>
-                <input type="checkbox" checked={form[key as "featured"|"visible"]} onChange={e=>setForm(p=>({...p,[key]:e.target.checked}))} style={{ accentColor:"#C4965A" }} />
-                <span style={{ fontSize:"0.75rem", color:"#8C857A", fontWeight:300 }}>{lbl}</span>
+          <div style={{ display:"flex", gap:"2rem", marginTop:"1.25rem", marginBottom:"1.25rem" }}>
+            {[["featured","Featured on homepage"],["visible","Published on website"]].map(([k,l])=>(
+              <label key={k} style={{ display:"flex", alignItems:"center", gap:"0.5rem", cursor:"pointer" }}>
+                <input type="checkbox" checked={form[k as "featured"|"visible"]} onChange={e=>setForm(p=>({...p,[k]:e.target.checked}))} style={{accentColor:A.champagne,width:"14px",height:"14px"}} />
+                <span style={{...A.label, marginBottom:0, textTransform:"none", letterSpacing:"0.03em", fontSize:"0.72rem"}}>{l}</span>
               </label>
             ))}
           </div>
 
-          <button onClick={handleSave} disabled={saving||!form.title}
-            style={{ padding:"0.75rem 2rem", background:"#C4965A", color:"#F7F2E8", fontSize:"0.6rem", letterSpacing:"0.2em", textTransform:"uppercase", border:"none", cursor:"pointer", fontFamily:"Jost,sans-serif", opacity:saving?0.6:1 }}>
-            {saving ? "Saving…" : editId ? "Update Product" : "Publish Product"}
-          </button>
+          <div style={{ display:"flex", gap:"0.75rem" }}>
+            <button onClick={save} disabled={saving||!form.title} style={{...A.btnGold, opacity:(saving||!form.title)?0.5:1}}>
+              {saving?"Saving…":editId?"Update Product":"Publish Product"}
+            </button>
+            <button onClick={()=>{setShowForm(false);setForm(empty);setEditId(null);}} style={A.btnOutline}>Cancel</button>
+          </div>
         </div>
       )}
 
-      {/* Products grid */}
-      {loading ? (
-        <p style={{ color:"#8C857A", fontSize:"0.8rem" }}>Loading…</p>
-      ) : (
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:"1rem" }}>
+      {/* Products list */}
+      {loading ? <div style={{color:A.warmGrey,fontSize:"0.8rem"}}>Loading…</div> : (
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))", gap:"1rem" }}>
           {products.map(prod => (
-            <div key={prod.id} style={{ ...cardStyle, opacity: prod.visible ? 1 : 0.5, transition:"all 0.2s" }}>
-              {prod.image_urls?.[0] && (
-                <img src={prod.image_urls[0]} alt={prod.title} style={{ width:"100%", height:"160px", objectFit:"cover", marginBottom:"1rem", border:"1px solid #CFC8BC" }} />
-              )}
-              {prod.video_url && !prod.image_urls?.[0] && (
-                <div style={{ width:"100%", height:"160px", background:"#1C3D35", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:"1rem" }}>
-                  <span style={{ color:"rgba(247,242,232,0.4)", fontSize:"2rem" }}>▶</span>
+            <div key={prod.id} style={{ ...A.card, padding:0, overflow:"hidden", opacity:prod.visible?1:0.6 }}>
+              {/* Thumbnail */}
+              <div style={{ height:"180px", backgroundColor:A.emerald, position:"relative", overflow:"hidden" }}>
+                {prod.image_urls?.[0] ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={prod.image_urls[0]} alt={prod.title} style={{width:"100%",height:"100%",objectFit:"cover"}} />
+                ) : prod.video_url ? (
+                  <video src={prod.video_url} muted style={{width:"100%",height:"100%",objectFit:"cover"}} />
+                ) : (
+                  <div style={{height:"100%",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                    <div style={{width:"40px",height:"40px",transform:"rotate(45deg)",border:"1px solid rgba(196,150,90,.3)"}} />
+                  </div>
+                )}
+                {/* Badges */}
+                <div style={{ position:"absolute", top:"8px", left:"8px", display:"flex", gap:"4px" }}>
+                  {prod.featured && <span style={{backgroundColor:A.champagne,color:"white",fontSize:"0.45rem",letterSpacing:"0.1em",textTransform:"uppercase",padding:"0.15rem 0.4rem",fontFamily:"'Jost',sans-serif"}}>Featured</span>}
+                  <span style={statusPill(prod.visible?"published":"draft")}>{prod.visible?"Live":"Hidden"}</span>
                 </div>
-              )}
-              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:"0.4rem" }}>
-                <h3 style={{ fontFamily:"Cormorant Garamond,serif", fontSize:"1.1rem", color:"#1C3D35", fontWeight:300 }}>{prod.title}</h3>
-                {prod.featured && <span style={{ fontSize:"0.5rem", letterSpacing:"0.1em", background:"#C4965A", color:"white", padding:"0.2rem 0.5rem" }}>FEATURED</span>}
+                {/* Image count */}
+                {prod.image_urls?.length > 1 && (
+                  <div style={{ position:"absolute", bottom:"8px", right:"8px", backgroundColor:"rgba(0,0,0,.5)", color:"white", fontSize:"0.55rem", padding:"0.15rem 0.4rem", fontFamily:"'Jost',sans-serif" }}>
+                    {prod.image_urls.length} photos
+                  </div>
+                )}
               </div>
-              <p style={{ fontSize:"0.65rem", color:"#C4965A", marginBottom:"0.5rem", fontWeight:300 }}>{prod.category} · {prod.price_label}</p>
-              {prod.description && <p style={{ fontSize:"0.72rem", color:"#8C857A", fontWeight:300, marginBottom:"1rem", lineHeight:1.6 }}>{prod.description.slice(0,80)}{prod.description.length>80?"…":""}</p>}
-
-              <div style={{ display:"flex", gap:"0.5rem", flexWrap:"wrap" }}>
-                <button onClick={()=>startEdit(prod)} style={{ padding:"0.35rem 0.75rem", border:"1px solid var(--emerald)", background:"transparent", color:"#1C3D35", fontSize:"0.6rem", cursor:"pointer", fontFamily:"Jost,sans-serif", letterSpacing:"0.1em" }}>Edit</button>
-                <button onClick={()=>toggleVisible(prod.id, !prod.visible)} style={{ padding:"0.35rem 0.75rem", border:"1px solid #CFC8BC", background:"transparent", color:"#8C857A", fontSize:"0.6rem", cursor:"pointer", fontFamily:"Jost,sans-serif", letterSpacing:"0.1em" }}>
-                  {prod.visible ? "Hide" : "Show"}
-                </button>
-                <button onClick={()=>deleteProduct(prod.id)} style={{ padding:"0.35rem 0.75rem", border:"1px solid #e07070", background:"transparent", color:"#e07070", fontSize:"0.6rem", cursor:"pointer", fontFamily:"Jost,sans-serif", letterSpacing:"0.1em" }}>Delete</button>
+              <div style={{ padding:"1rem" }}>
+                <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.1rem", color:A.emerald, marginBottom:"0.2rem" }}>{prod.title}</div>
+                <div style={{ fontSize:"0.6rem", color:A.champagne, letterSpacing:"0.1em", textTransform:"uppercase", marginBottom:"0.4rem", fontFamily:"'Jost',sans-serif" }}>{prod.category}</div>
+                <div style={{ fontSize:"0.75rem", color:A.warmGrey, fontWeight:300, marginBottom:"1rem", lineHeight:1.5 }}>{prod.price_label}</div>
+                <div style={{ display:"flex", gap:"0.4rem", flexWrap:"wrap" }}>
+                  <button onClick={()=>startEdit(prod)} style={{...A.btnOutline, padding:"0.3rem 0.7rem", fontSize:"0.54rem"}}>Edit</button>
+                  <button onClick={()=>toggle(prod.id,"visible",!prod.visible)} style={{...A.btnOutline, padding:"0.3rem 0.7rem", fontSize:"0.54rem", borderColor:A.stone, color:A.warmGrey}}>
+                    {prod.visible?"Hide":"Publish"}
+                  </button>
+                  <button onClick={()=>toggle(prod.id,"featured",!prod.featured)} style={{...A.btnOutline, padding:"0.3rem 0.7rem", fontSize:"0.54rem", borderColor:A.champagne, color:A.champagne}}>
+                    {prod.featured?"Unfeature":"Feature"}
+                  </button>
+                  <button onClick={()=>del(prod.id)} style={{...A.btnDanger, padding:"0.3rem 0.7rem", fontSize:"0.54rem"}}>Delete</button>
+                </div>
               </div>
             </div>
           ))}
-          {products.length===0 && <p style={{ color:"#CFC8BC", fontSize:"0.8rem", gridColumn:"1/-1", textAlign:"center", padding:"3rem" }}>No products yet. Add your first product above.</p>}
+          {products.length===0 && (
+            <div style={{gridColumn:"1/-1",padding:"3rem",textAlign:"center",color:A.stone,fontSize:"0.8rem",border:`1px dashed ${A.stone}`}}>
+              No products yet. Click "+ Add Product" to create your first listing.
+            </div>
+          )}
         </div>
       )}
     </div>
