@@ -1,4 +1,5 @@
-import { A, PageHeader, statusPill } from "@/lib/adminStyles";
+import { A, statusPill } from "@/lib/adminStyles";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 async function getPurchases() {
   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return [];
@@ -40,10 +41,7 @@ export default async function AdminPurchasesPage() {
           </thead>
           <tbody>
             {purchases.map((p:{id:string;client_name:string;client_email:string;client_phone:string;item_title:string;item_type:string;amount:number;currency:string;payment_status:string;notes:string;created_at:string;invoices:{invoice_number:string}|null}) => (
-              <tr key={p.id}
-                onMouseEnter={e=>(e.currentTarget as HTMLElement).style.backgroundColor="#FDFAF5"}
-                onMouseLeave={e=>(e.currentTarget as HTMLElement).style.backgroundColor="transparent"}
-              >
+              <tr key={p.id} >
                 <td style={{ ...A.td, paddingLeft:"1rem" }}>
                   <div style={{ fontSize:"0.82rem", color:A.emerald, fontWeight:300 }}>{p.client_name}</div>
                   <div style={{ fontSize:"0.62rem", color:A.warmGrey, fontWeight:300 }}>{p.client_email}</div>

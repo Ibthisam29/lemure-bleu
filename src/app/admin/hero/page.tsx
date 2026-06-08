@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { A, PageHeader } from "@/lib/adminStyles";
+import { A } from "@/lib/adminStyles";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 const inp = A.input;
 const lbl = A.label;

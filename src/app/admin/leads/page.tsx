@@ -1,4 +1,5 @@
-import { A, PageHeader, statusPill } from "@/lib/adminStyles";
+import { A, statusPill } from "@/lib/adminStyles";
+import { PageHeader } from "@/components/admin/PageHeader";
 import Link from "next/link";
 
 async function getLeads() {
@@ -44,10 +45,7 @@ export default async function AdminLeadsPage() {
           </thead>
           <tbody>
             {leads.map((l:{id:string;full_name:string;email:string;phone:string;country:string;interest_type:string;budget_range:string;status:string;created_at:string;message:string}) => (
-              <tr key={l.id} style={{ transition:"background .15s" }}
-                onMouseEnter={e=>(e.currentTarget as HTMLElement).style.backgroundColor="#FDFAF5"}
-                onMouseLeave={e=>(e.currentTarget as HTMLElement).style.backgroundColor="transparent"}
-              >
+              <tr key={l.id} style={{ transition:"background .15s" }} >
                 <td style={{ ...A.td, paddingLeft:"1rem" }}>
                   <div style={{ fontSize:"0.82rem", color:A.emerald, fontWeight:300 }}>{l.full_name}</div>
                   <div style={{ fontSize:"0.62rem", color:A.warmGrey, fontWeight:300 }}>{l.country}</div>

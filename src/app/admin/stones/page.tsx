@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { A, PageHeader, statusPill } from "@/lib/adminStyles";
+import { A, statusPill } from "@/lib/adminStyles";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 type Stone = { id:string;stone_name:string;stone_type:string;origin:string;carat:number;cut:string;colour:string;clarity:string;treatment:string;certificate_lab:string;certificate_number:string;description:string;image_url:string;price_label:string;price_visibility:string;status:string;visible:boolean; };
 

@@ -1,4 +1,5 @@
-import { A, PageHeader, statusPill } from "@/lib/adminStyles";
+import { A, statusPill } from "@/lib/adminStyles";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 async function getAppointments() {
   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return [];
@@ -26,10 +27,7 @@ export default async function AdminAppointmentsPage() {
           </thead>
           <tbody>
             {appts.map((a:{id:string;full_name:string;email:string;phone:string;preferred_date:string;preferred_time:string;appointment_type:string;budget_range:string;status:string;message:string}) => (
-              <tr key={a.id}
-                onMouseEnter={e=>(e.currentTarget as HTMLElement).style.backgroundColor="#FDFAF5"}
-                onMouseLeave={e=>(e.currentTarget as HTMLElement).style.backgroundColor="transparent"}
-              >
+              <tr key={a.id} >
                 <td style={{ ...A.td, paddingLeft:"1rem" }}>
                   <div style={{ fontSize:"0.82rem", color:A.emerald, fontWeight:300 }}>{a.full_name}</div>
                   <a href={`mailto:${a.email}`} style={{ fontSize:"0.62rem", color:A.champagne, textDecoration:"none" }}>{a.email}</a>

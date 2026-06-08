@@ -1,4 +1,5 @@
-import React from "react";
+import type { CSSProperties } from "react";
+
 // Shared style tokens for admin pages
 export const A = {
   // Colors
@@ -24,7 +25,7 @@ export const A = {
     backgroundColor: "#FFFFFF",
     border: "1px solid #CFC8BC",
     padding: "1.5rem",
-  } as React.CSSProperties,
+  } as CSSProperties,
 
   input: {
     width: "100%",
@@ -38,7 +39,7 @@ export const A = {
     fontFamily: "'Jost', sans-serif",
     borderRadius: 0,
     transition: "border-color .2s",
-  } as React.CSSProperties,
+  } as CSSProperties,
 
   label: {
     display: "block",
@@ -49,7 +50,7 @@ export const A = {
     fontWeight: 400,
     marginBottom: "0.35rem",
     fontFamily: "'Jost', sans-serif",
-  } as React.CSSProperties,
+  } as CSSProperties,
 
   pageTitle: (title: string, eyebrow: string, sub?: string) => ({ title, eyebrow, sub }),
 
@@ -64,7 +65,7 @@ export const A = {
     cursor: "pointer",
     fontFamily: "'Jost', sans-serif",
     fontWeight: 400,
-  } as React.CSSProperties,
+  } as CSSProperties,
 
   btnEmerald: {
     padding: "0.6rem 1.5rem",
@@ -77,7 +78,7 @@ export const A = {
     cursor: "pointer",
     fontFamily: "'Jost', sans-serif",
     fontWeight: 400,
-  } as React.CSSProperties,
+  } as CSSProperties,
 
   btnOutline: {
     padding: "0.5rem 1rem",
@@ -90,7 +91,7 @@ export const A = {
     cursor: "pointer",
     fontFamily: "'Jost', sans-serif",
     fontWeight: 300,
-  } as React.CSSProperties,
+  } as CSSProperties,
 
   btnDanger: {
     padding: "0.5rem 1rem",
@@ -103,7 +104,7 @@ export const A = {
     cursor: "pointer",
     fontFamily: "'Jost', sans-serif",
     fontWeight: 300,
-  } as React.CSSProperties,
+  } as CSSProperties,
 
   th: {
     textAlign: "left" as const,
@@ -116,13 +117,13 @@ export const A = {
     fontFamily: "'Jost', sans-serif",
     backgroundColor: "#F7F2E8",
     borderBottom: "1px solid #CFC8BC",
-  } as React.CSSProperties,
+  } as CSSProperties,
 
   td: {
     padding: "0.85rem 0.9rem",
     borderBottom: "1px solid rgba(207,200,188,.5)",
     verticalAlign: "top" as const,
-  } as React.CSSProperties,
+  } as CSSProperties,
 };
 
 export const statusPill = (status: string) => {
@@ -160,16 +161,6 @@ export const statusPill = (status: string) => {
     backgroundColor: s.bg,
     color: s.color,
     border: `1px solid ${s.color}30`,
-  } as React.CSSProperties;
+  } as CSSProperties;
 };
 
-export const PageHeader = ({ eyebrow, title, sub, action }: { eyebrow:string; title:string; sub?:string; action?: React.ReactNode }) => (
-  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:"2rem" }}>
-    <div>
-      <div style={{ fontSize:"0.5rem", letterSpacing:"0.25em", textTransform:"uppercase", color:"#C4965A", marginBottom:"0.35rem", fontFamily:"'Jost',sans-serif", fontWeight:500 }}>{eyebrow}</div>
-      <h1 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2.2rem", fontWeight:300, color:"#1C3D35", lineHeight:1.1, margin:0 }}>{title}</h1>
-      {sub && <div style={{ fontSize:"0.7rem", color:"#8C857A", fontWeight:300, marginTop:"0.3rem", fontFamily:"'Jost',sans-serif" }}>{sub}</div>}
-    </div>
-    {action && <div style={{ flexShrink:0 }}>{action}</div>}
-  </div>
-);

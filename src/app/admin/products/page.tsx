@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { A, PageHeader, statusPill } from "@/lib/adminStyles";
+import { A, statusPill } from "@/lib/adminStyles";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 type Product = { id:string; title:string; description:string; category:string; price:number|null; price_label:string; image_urls:string[]; video_url:string; featured:boolean; visible:boolean; sort_order:number; };
 

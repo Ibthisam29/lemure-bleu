@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import { A, PageHeader } from "@/lib/adminStyles";
+import { A } from "@/lib/adminStyles";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 type Section = { id:string; section_key:string; title:string; subtitle:string; body:string; visible:boolean; };
 const LABELS: Record<string,{name:string;desc:string}> = {

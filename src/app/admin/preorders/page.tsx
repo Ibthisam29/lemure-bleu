@@ -1,4 +1,5 @@
-import { A, PageHeader, statusPill } from "@/lib/adminStyles";
+import { A, statusPill } from "@/lib/adminStyles";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 async function getPreorders() {
   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return [];
@@ -26,10 +27,7 @@ export default async function AdminPreordersPage() {
           </thead>
           <tbody>
             {preorders.map((p:{id:string;full_name:string;email:string;phone:string;preorder_tier:string;amount:number;currency:string;payment_status:string;allocation_status:string;created_at:string}) => (
-              <tr key={p.id}
-                onMouseEnter={e=>(e.currentTarget as HTMLElement).style.backgroundColor="#FDFAF5"}
-                onMouseLeave={e=>(e.currentTarget as HTMLElement).style.backgroundColor="transparent"}
-              >
+              <tr key={p.id} >
                 <td style={{ ...A.td, paddingLeft:"1rem" }}>
                   <div style={{ fontSize:"0.82rem", color:A.emerald, fontWeight:300 }}>{p.full_name}</div>
                   {p.phone && <div style={{ fontSize:"0.62rem", color:A.warmGrey, fontWeight:300 }}>{p.phone}</div>}

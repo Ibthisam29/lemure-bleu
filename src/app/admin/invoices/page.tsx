@@ -1,4 +1,5 @@
-import { A, PageHeader, statusPill } from "@/lib/adminStyles";
+import { A, statusPill } from "@/lib/adminStyles";
+import { PageHeader } from "@/components/admin/PageHeader";
 import Link from "next/link";
 
 async function getInvoices() {
@@ -46,10 +47,7 @@ export default async function AdminInvoicesPage() {
           </thead>
           <tbody>
             {invoices.map((inv:{id:string;invoice_number:string;client_name:string;client_email:string;line_items:{description:string}[];total:number;currency:string;status:string;due_date:string}) => (
-              <tr key={inv.id}
-                onMouseEnter={e=>(e.currentTarget as HTMLElement).style.backgroundColor="#FDFAF5"}
-                onMouseLeave={e=>(e.currentTarget as HTMLElement).style.backgroundColor="transparent"}
-              >
+              <tr key={inv.id} >
                 <td style={{ ...A.td, paddingLeft:"1rem" }}>
                   <Link href={`/admin/invoices/${inv.id}`} style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1rem", color:A.emerald, textDecoration:"none" }}>#{inv.invoice_number}</Link>
                 </td>

@@ -1,4 +1,5 @@
-import { A, PageHeader } from "@/lib/adminStyles";
+import { A } from "@/lib/adminStyles";
+import { PageHeader } from "@/components/admin/PageHeader";
 
 export default function AdminSettingsPage() {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lemurebleu.com";
