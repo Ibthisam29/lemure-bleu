@@ -4,7 +4,7 @@ import Footer from "@/components/layout/Footer";
 
 async function getInvoice(id: string) {
   try {
-    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return null;
+    
     const { createAdminClient } = await import("@/lib/supabase");
     const { data } = await createAdminClient().from("invoices").select("*").eq("id",id).single();
     return data;

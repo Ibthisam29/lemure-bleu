@@ -3,7 +3,7 @@ import { PageHeader } from "@/components/admin/PageHeader";
 import Link from "next/link";
 
 async function getInvoices() {
-  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return [];
+  
   try {
     const { createAdminClient } = await import("@/lib/supabase");
     const { data } = await createAdminClient().from("invoices").select("*").order("created_at",{ascending:false});

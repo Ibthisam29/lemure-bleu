@@ -9,7 +9,7 @@ const SAMPLE = [
 
 async function getCollections() {
   try {
-    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return SAMPLE;
+    
     const { createAdminClient } = await import("@/lib/supabase");
     const { data } = await createAdminClient().from("collections").select("*").eq("status","published").order("launch_date",{ascending:false});
     return data && data.length > 0 ? data.map((d: typeof SAMPLE[0], i: number) => ({...d, bg: i===0?"var(--emerald)":"#2A1A0A"})) : SAMPLE;

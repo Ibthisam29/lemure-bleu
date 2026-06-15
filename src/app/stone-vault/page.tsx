@@ -20,7 +20,7 @@ const STATUS: Record<string,{label:string,color:string}> = {
 
 async function getStones() {
   try {
-    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return SAMPLE_STONES;
+    
     const { createAdminClient } = await import("@/lib/supabase");
     const { data } = await createAdminClient().from("stones").select("*").order("created_at",{ascending:false});
     return data && data.length > 0 ? data : SAMPLE_STONES;

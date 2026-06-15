@@ -2,7 +2,7 @@ import { A, statusPill } from "@/lib/adminStyles";
 import { PageHeader } from "@/components/admin/PageHeader";
 
 async function getPurchases() {
-  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return [];
+  
   try {
     const { createAdminClient } = await import("@/lib/supabase");
     const { data } = await createAdminClient().from("purchases").select("*,invoices(invoice_number)").order("created_at",{ascending:false});
