@@ -318,3 +318,11 @@ body {
     border-top: 1px solid rgba(196,150,90,0.2);
   }
 }
+
+/* ── ADMIN OS: Force light theme — override any dark base resets ── */
+[class*="admin"],
+div[style*="EDE6D6"],
+div[style*="F7F2E8"],
+aside[style*="F7F2E8"] {
+  color-scheme: light !important;
+}
