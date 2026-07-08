@@ -19,12 +19,12 @@ export async function POST(req: NextRequest) {
       status: "new",
     });
 
-    // Email — never blocks the response
+    // Email notification — non-blocking
     try {
       if (process.env.RESEND_API_KEY) {
         const { Resend } = await import("resend");
         const resend = new Resend(process.env.RESEND_API_KEY);
-        const promises = [
+        const tasks = [
           resend.emails.send({
             from: "Lemure Bleu <noreply@lemurebleu.com>",
             to: email,
@@ -33,21 +33,21 @@ export async function POST(req: NextRequest) {
           }),
         ];
         if (process.env.ADMIN_EMAIL) {
-          promises.push(resend.emails.send({
+          tasks.push(resend.emails.send({
             from: "Lemure Bleu <noreply@lemurebleu.com>",
             to: process.env.ADMIN_EMAIL,
             subject: `New VIP Lead: ${full_name}`,
-            html: `<p><b>New VIP lead on lemurebleu.com</b></p><p>Name: ${full_name}<br>Email: ${email}<br>Phone: ${phone}<br>Country: ${country}<br>Interest: ${interest_type}<br>Budget: ${budget_range}</p><p><a href="https://lemurebleu.com/admin/leads">View in Admin →</a></p>`,
+            html: `<p><b>New VIP lead</b><br>Name: ${full_name}<br>Email: ${email}<br>Phone: ${phone}<br>Country: ${country}<br>Interest: ${interest_type || "—"}<br>Budget: ${budget_range || "—"}</p><p><a href="https://lemurebleu.com/admin/leads">View in Admin →</a></p>`,
           }));
         }
-        await Promise.allSettled(promises);
+        await Promise.allSettled(tasks);
       }
-    } catch { /* non-critical */ }
+    } catch { /* email failure never blocks form success */ }
 
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error("VIP register error:", err);
-    const msg = err instanceof Error ? err.message : String(err);
-    return NextResponse.json({ error: `Failed to save: ${msg}` }, { status: 500 });
+    const msg = err instanceof Error ? err.message : "Submission failed";
+    console.error("[vip-register]", msg);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
