@@ -18,6 +18,8 @@ const NAV_GROUPS = [
     { href: "/admin/ads",          icon: "◇", text: "Ads & Banners" },
   ]},
   { label: "Clients", links: [
+    { href: "/admin/partners",    icon: "◈", text: "Partners & Vendors" },
+    { href: "/admin/waitlist",    icon: "◉", text: "Guest Waitlist" },
     { href: "/admin/leads",        icon: "◐", text: "VIP Leads" },
     { href: "/admin/appointments", icon: "◑", text: "Appointments" },
     { href: "/admin/purchases",    icon: "◒", text: "Purchase Records" },
