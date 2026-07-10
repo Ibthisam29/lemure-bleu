@@ -12,32 +12,32 @@ export async function getSectionContent(key: string) {
 export async function getAllSections() {
   try {
     const { data } = await db().from("site_sections").select("*").eq("visible", true);
-    const map: Record<string, {title:string;subtitle:string;body:string;visible:boolean}> = {};
-    (data||[]).forEach((s:any) => { map[s.section_key] = s; });
+    const map: Record<string, { section_key: string; title: string; subtitle: string; body: string; visible: boolean }> = {};
+    (data || []).forEach((s: Record<string, string>) => { map[s.section_key] = s as unknown as { section_key: string; title: string; subtitle: string; body: string; visible: boolean }; });
     return map;
   } catch { return {}; }
 }
 export async function getFeaturedProducts() {
-  try { const { data } = await db().from("products").select("*").eq("visible", true).order("featured",{ascending:false}).limit(6); return data||[]; }
+  try { const { data } = await db().from("products").select("*").eq("visible", true).limit(6); return data || []; }
   catch { return []; }
 }
 export async function getAllProducts() {
-  try { const { data } = await db().from("products").select("*").eq("visible", true).order("created_at",{ascending:false}); return data||[]; }
+  try { const { data } = await db().from("products").select("*").eq("visible", true).order("created_at", { ascending: false }); return data || []; }
   catch { return []; }
 }
 export async function getVisibleStones() {
-  try { const { data } = await db().from("stones").select("*").order("created_at",{ascending:false}); return data||[]; }
+  try { const { data } = await db().from("stones").select("*").order("created_at", { ascending: false }); return data || []; }
   catch { return []; }
 }
 export async function getPublishedCollections() {
-  try { const { data } = await db().from("collections").select("*").eq("status","published"); return data||[]; }
+  try { const { data } = await db().from("collections").select("*").eq("status", "published"); return data || []; }
   catch { return []; }
 }
 export async function getEvents() {
-  try { const { data } = await db().from("events").select("*").eq("visible",true).order("event_date"); return data||[]; }
+  try { const { data } = await db().from("events").select("*").eq("visible", true).order("event_date"); return data || []; }
   catch { return []; }
 }
 export async function getAds(position: string) {
-  try { const { data } = await db().from("ads").select("*").eq("visible",true).eq("position",position); return data||[]; }
+  try { const { data } = await db().from("ads").select("*").eq("visible", true).eq("position", position); return data || []; }
   catch { return []; }
 }
