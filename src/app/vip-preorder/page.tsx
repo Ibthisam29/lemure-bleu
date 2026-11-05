@@ -16,16 +16,19 @@ export default function VipPreorderPage() {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ full_name:"", email:"", phone:"" });
   const [error, setError] = useState("");
+  const [billing, setBilling] = useState<"one_time"|"monthly">("one_time");
 
   async function handleSubmit() {
     if (!selected||!agreed||!form.full_name||!form.email) return;
-    setLoading(true);
+    setLoading(true); setError("");
     try {
-      const res = await fetch("/api/preorder-interest",{ method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({...form, preorder_tier:selected}) });
-      if (!res.ok) throw new Error();
-      setSubmitted(true);
-    } catch { setError("Something went wrong. Please contact hello@lemurebleu.com"); }
-    finally { setLoading(false); }
+      const res = await fetch("/api/stripe/create-checkout",{ method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({...form, preorder_tier:selected, billing}) });
+      const data = await res.json();
+      if (!res.ok || !data.url) throw new Error(data.error);
+      window.location.href = data.url;
+      return;
+    } catch (e) { setError((e instanceof Error && e.message) || "Something went wrong. Please contact hello@lemurebleu.com"); }
+    setLoading(false);
   }
 
   const selectedTier = TIERS.find(t => t.id===selected);
@@ -66,7 +69,7 @@ export default function VipPreorderPage() {
           <h1 className="display mb-3" style={{ fontSize:"clamp(2.5rem,6vw,5.5rem)", color:"var(--ivory)" }}>Reserve Priority Access</h1>
           <h1 className="display-italic mb-8" style={{ fontSize:"clamp(2.5rem,6vw,5.5rem)", color:"var(--champ-lt)" }}>Stone Vault</h1>
           <span className="rule-champagne mx-auto block mb-6" style={{ opacity:0.5 }} />
-          <p className="text-sm" style={{ color:"rgba(247,242,232,0.5)", fontWeight:300 }}>Register interest. Our concierge contacts you to arrange payment securely.</p>
+          <p className="text-sm" style={{ color:"rgba(247,242,232,0.5)", fontWeight:300 }}>Choose your allocation and pay securely via Stripe.</p>
         </div>
       </section>
 
@@ -113,6 +116,12 @@ export default function VipPreorderPage() {
               </div>
             </div>
 
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              {([["one_time","One-time payment"],["monthly","Monthly subscription"]] as const).map(([v,l])=>(
+                <button key={v} type="button" onClick={()=>setBilling(v)} className="py-3 text-xs"
+                  style={{ border:`1px solid ${billing===v?"var(--champagne)":"var(--stone)"}`, background:billing===v?"var(--emerald)":"transparent", color:billing===v?"var(--ivory)":"var(--warm-grey)" }}>{l}</button>
+              ))}
+            </div>
             <div className="space-y-6 mb-8">
               <input placeholder="Full Name *" value={form.full_name} onChange={e=>setForm(p=>({...p,full_name:e.target.value}))} className="input-field" />
               <input placeholder="Email Address *" type="email" value={form.email} onChange={e=>setForm(p=>({...p,email:e.target.value}))} className="input-field" />
@@ -139,9 +148,9 @@ export default function VipPreorderPage() {
               disabled={!selected||!agreed||!form.full_name||!form.email||loading}
               className="btn-gold w-full"
               style={{ opacity:(!selected||!agreed||!form.full_name||!form.email||loading)?0.4:1, cursor:(!selected||!agreed||!form.full_name||!form.email)?'not-allowed':'pointer' }}>
-              {loading?"Submitting...":!selected?"Select a Preorder Tier":!form.full_name||!form.email?"Enter Your Details":!agreed?"Please Accept Terms":"Register Preorder Interest"}
+              {loading?"Redirecting...":!selected?"Select a Preorder Tier":!form.full_name||!form.email?"Enter Your Details":!agreed?"Please Accept Terms":(billing==="monthly"?"Subscribe Securely":"Pay Securely")}
             </button>
-            <p className="text-center text-xs mt-4" style={{ color:"var(--stone)", fontWeight:300 }}>Payment arranged by concierge · No card details required now</p>
+            <p className="text-center text-xs mt-4" style={{ color:"var(--stone)", fontWeight:300 }}>Secure payment by Stripe · Card details never touch our servers</p>
           </div>
         </div>
       </section>
